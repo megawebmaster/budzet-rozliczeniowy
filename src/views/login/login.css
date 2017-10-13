@@ -1,0 +1,7 @@
+#root .ui.container {
+	height: 100%;
+}
+div.login-form {
+	height: 100%;
+	background-color: #f7f7f7;
+}
