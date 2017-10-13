@@ -31,16 +31,16 @@ class MonthBudget extends Component {
       {menuItem: 'Budżet', render: this.renderBudgetPane},
     ];
     const {match: {params}} = this.props;
-    const month = params.month;
+    const { month, year } = params;
 
     return (
       <div>
         <Helmet>
-          <title>Budżet - {this.format(`month.${month}`, month)} 2017</title>
+          <title>Budżet - {this.format(`month.${month}`, month)} {year}</title>
         </Helmet>
         <Message>
           <MessageHeader>
-            Miesiąc budżetowy: {this.format(`month.${month}`, month)} 2017
+            Miesiąc budżetowy: {this.format(`month.${month}`, month)} {year}
           </MessageHeader>
         </Message>
         <Tab panes={panes} menu={{ attached: true, tabular: true, className: 'two item' }} />
