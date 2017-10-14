@@ -5,13 +5,11 @@ import { NavLink } from 'react-router-dom';
 import { Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'semantic-ui-react';
 import './header.css';
 
-const mapStateToProps = (state) => ({
-  isLoggedIn: state.userReducer.loggedIn,
-});
+const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => ({});
 
-const Header = ({ isLoggedIn, year }) => (
+const Header = ({ year }) => (
   <Menu tabular size="large" className="main-menu">
     <MenuItem header>Our Company</MenuItem>
     <MenuItem content="Budżet" name="budget" as={NavLink} activeClassName="active" to={`/${year}/budget`} />
@@ -19,19 +17,17 @@ const Header = ({ isLoggedIn, year }) => (
     <Menu.Menu position="right">
       <Dropdown item text={`Rok: ${year.toString()}`}>
         <DropdownMenu>
-          <DropdownItem as={NavLink} to="/2017" text="2017" />
-          <DropdownItem as={NavLink} to="/2016" text="2016" />
-          <DropdownItem as={NavLink} to="/2015" text="2015" />
+          <DropdownItem as={NavLink} to="/2017/budget" text="2017" />
+          <DropdownItem as={NavLink} to="/2016/budget" text="2016" />
+          <DropdownItem as={NavLink} to="/2015/budget" text="2015" />
         </DropdownMenu>
       </Dropdown>
-      { !isLoggedIn && <MenuItem name="Log in" icon="power" as={NavLink} to="/login" /> }
-      { isLoggedIn && <MenuItem name="Logout" icon="power" as={NavLink} to="/login" /> }
+      <MenuItem name="Logout" icon="power" as={NavLink} to="/" exact />
     </Menu.Menu>
   </Menu>
 );
 
 Header.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
   year: PropTypes.number.isRequired,
 };
 

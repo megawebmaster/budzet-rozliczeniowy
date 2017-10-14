@@ -6,7 +6,7 @@ import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
 import './login.css';
 
 const mapStateToProps = (state) => ({
-  isLoggedIn: state.userReducer.loggedIn,
+  isLoggedIn: state.user.loggedIn,
 });
 
 const mapDispatchToProps = (dispatch) => ({});
@@ -31,7 +31,7 @@ class LoginForm extends React.Component {
               <Segment stacked>
                 <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
                 <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
-                <Button color="teal" fluid size="large" as={NavLink} to="/">Login</Button>
+                <Button color="teal" fluid size="large" as={NavLink} to="/2017/budget">Login</Button>
               </Segment>
             </Form>
             <Message>

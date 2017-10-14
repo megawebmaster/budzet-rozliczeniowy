@@ -1,4 +1,4 @@
-#root .ui.container {
+#root, #root .ui.container {
 	height: 100%;
 }
 div.login-form {
