@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
-import Header from './components/header/Header';
+
+import BudgetLayout from './layouts/budget/BudgetLayout';
+import SpendingLayout from './layouts/spending/SpendingLayout';
+
 import Landing from './views/landing/Landing';
 import { Login } from './views/login';
 import { NotFound } from './views/errors';
-import BudgetLayout from './layouts/budget/BudgetLayout';
 import { Accounts, IrregularBudget, MonthBudget, YearBudget } from './views/budget';
 
 const mapStateToProps = (state) => ({
@@ -19,6 +21,7 @@ export const App = ({ userLoggedIn }) => {
   const currentMonth = today.getMonth() + 1;
   const currentYear = today.getFullYear();
   const baseBudgetUrl = (year) => `/${year}/budget/${year === currentYear ? currentMonth : 'summary'}`;
+  const baseSpendingUrl = (year) => `/${year}/spending/${year === currentYear ? currentMonth : 1}`;
 
   return (
     <BrowserRouter>
@@ -40,11 +43,13 @@ export const App = ({ userLoggedIn }) => {
                     </Switch>
                   </BudgetLayout>
                 </Route>
-                <Route path="/:year/spendings">
-                  <div>
-                    <Header year={year} />
-                    <p>Spendings</p>
-                  </div>
+                <Route path="/:year/spending">
+                  <SpendingLayout year={year}>
+                    <Switch>
+                      <Route path="/:year/spending/:month" render={() => <p>Rozliczenie</p>} />
+                      <Redirect from="/:year/spending" to={baseSpendingUrl(year)} />
+                    </Switch>
+                  </SpendingLayout>
                 </Route>
               </Switch>
             );

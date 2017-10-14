@@ -13,7 +13,7 @@ const Header = ({ year }) => (
   <Menu tabular size="large" className="main-menu">
     <MenuItem header>Our Company</MenuItem>
     <MenuItem content="Budżet" name="budget" as={NavLink} activeClassName="active" to={`/${year}/budget`} />
-    <MenuItem content="Rozliczenie" name="spendings" as={NavLink} activeClassName="active" to={`/${year}/spendings`} />
+    <MenuItem content="Rozliczenie" name="spending" as={NavLink} activeClassName="active" to={`/${year}/spending`} />
     <Menu.Menu position="right">
       <Dropdown item text={`Rok: ${year.toString()}`}>
         <DropdownMenu>
