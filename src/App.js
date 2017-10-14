@@ -11,6 +11,7 @@ import Landing from './views/landing/Landing';
 import { Login } from './views/login';
 import { NotFound } from './views/errors';
 import { Accounts, IrregularBudget, MonthBudget, YearBudget } from './views/budget';
+import { Spending } from './views/spending';
 
 const mapStateToProps = (state) => ({
   userLoggedIn: state.user.loggedIn,
@@ -46,7 +47,7 @@ export const App = ({ userLoggedIn }) => {
                 <Route path="/:year/spending">
                   <SpendingLayout year={year}>
                     <Switch>
-                      <Route path="/:year/spending/:month" render={() => <p>Rozliczenie</p>} />
+                      <Route path="/:year/spending/:month" component={Spending} />
                       <Redirect from="/:year/spending" to={baseSpendingUrl(year)} />
                     </Switch>
                   </SpendingLayout>

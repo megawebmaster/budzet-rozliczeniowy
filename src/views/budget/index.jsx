@@ -23,4 +23,4 @@ const YearBudget = asyncComponent({
   LoadingComponent: () => <Segment loading />,
 });
 
-export {Accounts, IrregularBudget, MonthBudget, YearBudget};
+export { Accounts, IrregularBudget, MonthBudget, YearBudget };
