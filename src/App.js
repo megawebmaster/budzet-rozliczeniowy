@@ -29,8 +29,9 @@ const messages = {
 
 export default ({store}) => {
   const today = new Date();
-  const month = today.getMonth() + 1;
-  const year = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+  const currentYear = today.getFullYear();
+  const baseBudgetUrl = (year) => `/${year}/budget/${year === currentYear.toString() ? currentMonth : 'summary'}`;
 
   return (
     <IntlProvider key="pl" locale="pl" messages={messages}>
@@ -38,22 +39,30 @@ export default ({store}) => {
         <BrowserRouter>
           <Container fluid>
             <Switch>
-              <Route path="/budget" component={Header} />
-            </Switch>
-            <Switch>
-              <Route path="/budget/:year" render={({ match: {params}}) => (
-                <BudgetLayout year={params.year}>
-                  <Switch>
-                    <Route path="/budget/:year/accounts" component={Accounts} />
-                    <Route path="/budget/:year/irregular" component={IrregularBudget} exact />
-                    <Route path="/budget/:year/:month" component={MonthBudget} />
-                    <Route path="/budget/:year" component={YearBudget} exact />
-                    <Redirect from="/budget" to={`/budget/${year}/${month}`} />
-                  </Switch>
-                </BudgetLayout>
+              <Route path="/:year" render={({ match: {params}}) => (
+                <Switch>
+                  <Route path="/:year/budget">
+                    <BudgetLayout year={params.year}>
+                      <Switch>
+                        <Route path="/:year/budget/accounts" component={Accounts} />
+                        <Route path="/:year/budget/irregular" component={IrregularBudget} />
+                        <Route path="/:year/budget/summary" component={YearBudget} />
+                        <Route path="/:year/budget/:month" component={MonthBudget} />
+                        <Redirect from="/:year/budget" to={baseBudgetUrl(params.year)} />
+                      </Switch>
+                    </BudgetLayout>
+                  </Route>
+                  <Route path="/:year/spendings">
+                    <div>
+                      <Header year={params.year} />
+                      <p>Spendings</p>
+                    </div>
+                  </Route>
+                  <Redirect from="/:year" to={`/${params.year}/budget`} />
+                </Switch>
               )} />
               <Route path="/login" component={Login} />
-              <Redirect from="/" to={`/budget/${year}/${month}`} />
+              <Redirect from="/" to={`/${currentYear}/budget/${currentMonth}`} />
               <Route component={NotFound} />
             </Switch>
           </Container>
