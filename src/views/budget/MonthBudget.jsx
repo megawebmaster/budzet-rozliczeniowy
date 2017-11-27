@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { Button, Segment, SegmentGroup, Tab, TabPane } from 'semantic-ui-react';
+import { Segment, Tab, TabPane } from 'semantic-ui-react';
 import './month-budget.css';
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  year: state.location.payload.year,
+  month: state.location.payload.month,
+});
 
 const mapDispatchToProps = (dispatch) => ({});
 
@@ -30,28 +33,28 @@ class MonthBudget extends Component {
       { menuItem: 'Podsumowanie', render: this.renderSummaryPane },
       { menuItem: 'Budżet', render: this.renderBudgetPane },
     ];
-    const { match: { params } } = this.props;
-    const { month, year } = params;
+    const { month, year } = this.props;
 
     return (
       <div>
         <Helmet>
-          <title>Budżet - {this.format(`month.${month}`, month)} {year}</title>
+          <title>Budżet - {this.format(`month.${month}`, month)} {`${year}`}</title>
         </Helmet>
-        <SegmentGroup horizontal>
-          <Segment>
-            <h3>
-              Miesiąc budżetowy: {this.format(`month.${month}`, month)} {year}
-            </h3>
-          </Segment>
-          <Button as={NavLink} to={`/${year}/spending/${month}`} size="big" attached="right" className="spending"
-                  content="Rozliczenie" labelPosition="right" icon="arrow right" />
-        </SegmentGroup>
+        <Segment>
+          <h3>
+            Miesiąc budżetowy: {this.format(`month.${month}`, month)} {year}
+          </h3>
+        </Segment>
         <Tab panes={panes} menu={{ attached: true, tabular: true, className: 'two item' }} />
       </div>
     );
   }
 }
+
+MonthBudget.propTypes = {
+  month: PropTypes.number.isRequired,
+  year: PropTypes.number.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(MonthBudget));
 

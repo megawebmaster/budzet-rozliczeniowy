@@ -1,5 +1,5 @@
 import React  from 'react';
-import { NavLink } from 'react-router-dom';
+import Link from 'redux-first-router-link';
 import { Segment, Menu, MenuItem } from 'semantic-ui-react';
 
 const Landing = () => (
@@ -7,10 +7,10 @@ const Landing = () => (
     <Menu tabular size="large" className="main-menu">
       <MenuItem header>Our Company</MenuItem>
       <Menu.Menu position="right">
-        <MenuItem name="Log in" icon="lock" as={NavLink} to="/login" />
+        <MenuItem name="Log in" icon="lock" as={Link} to={{ type: 'LOGIN' }} />
       </Menu.Menu>
     </Menu>
-    <Segment padded="horizontal">
+    <Segment padded={true}>
       Zaloguj się lub zarejestruj.
     </Segment>
   </div>

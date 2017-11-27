@@ -1,7 +1,13 @@
 import React  from 'react';
+import { connect } from 'react-redux';
 import { Grid, GridRow, GridColumn } from 'semantic-ui-react';
+
 import Header from '../../components/header/Header';
 import MonthList from '../../components/MonthList';
+
+const mapStateToProps = (state) => ({
+  year: state.location.payload.year,
+});
 
 const SpendingLayout = ({ children, year }) => (
   <div>
@@ -9,7 +15,7 @@ const SpendingLayout = ({ children, year }) => (
     <Grid padded="horizontally">
       <GridRow>
         <GridColumn width={3}>
-          <MonthList basePath={`/${year}/spending`} />
+          <MonthList baseRoute={{ type: 'SPENDING', payload: { year } }} />
         </GridColumn>
         <GridColumn width={13}>
           {children}
@@ -19,5 +25,5 @@ const SpendingLayout = ({ children, year }) => (
   </div>
 );
 
-export default SpendingLayout;
+export default connect(mapStateToProps)(SpendingLayout);
 

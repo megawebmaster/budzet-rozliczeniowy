@@ -1,24 +1,11 @@
 import React from 'react';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import Link from 'redux-first-router-link';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+
 import './login.css';
 
-const mapStateToProps = (state) => ({
-  isLoggedIn: state.user.loggedIn,
-});
-
-const mapDispatchToProps = (dispatch) => ({});
 
 class LoginForm extends React.Component {
-  componentWillMount() {
-    const { isLoggedIn, history } = this.props;
-    if (isLoggedIn) {
-      history.replace('/');
-    }
-  }
-
   render() {
     return (
       <div className="login-form">
@@ -31,7 +18,7 @@ class LoginForm extends React.Component {
               <Segment stacked>
                 <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
                 <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
-                <Button color="teal" fluid size="large" as={NavLink} to="/2017/budget">Login</Button>
+                <Button color="teal" fluid size="large" as={Link} to="/2017/budget/11">Login</Button>
               </Segment>
             </Form>
             <Message>
@@ -44,5 +31,5 @@ class LoginForm extends React.Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm));
+export default LoginForm;
 

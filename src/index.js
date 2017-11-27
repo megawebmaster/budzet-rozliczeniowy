@@ -1,24 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { render } from 'react-snapshot';
 import { Provider } from 'react-redux';
-import createSagaMiddleware from 'redux-saga';
 import { addLocaleData, IntlProvider } from 'react-intl';
 import pl from 'react-intl/locale-data/pl';
 
-import { applyMiddleware, createStore } from 'redux';
-import rootReducer from './stores/rootReducer';
-import rootSaga from './stores/rootSaga';
-
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import store from './stores';
 
 import 'semantic-ui-css/semantic.min.css';
 
 addLocaleData([...pl]);
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(rootReducer, {}, applyMiddleware(sagaMiddleware));
-sagaMiddleware.run(rootSaga);
 
 const root = document.getElementById('root');
 const messages = {
@@ -34,6 +26,12 @@ const messages = {
   'month.10': 'Październik',
   'month.11': 'Listopad',
   'month.12': 'Grudzień',
+  'spending-grid.headers.category': 'Kategoria',
+  'spending-grid.headers.price': 'Cena',
+  'spending-grid.headers.day': 'Dzień',
+  'spending-grid.headers.description': 'Opis',
+  'spending-row.category': 'Wybierz kategorię',
+  'spending-row.price': 'Cena',
 };
 
 const composeApp = (AppComponent, store, messages) => (
@@ -44,17 +42,16 @@ const composeApp = (AppComponent, store, messages) => (
   </IntlProvider>
 );
 
-render(composeApp(App, store, messages), root);
+ReactDOM.render(composeApp(App, store, messages), root);
 
 if (module.hot) {
   module.hot.accept('./App', () => {
     const NextApp = require('./App').default;
+    ReactDOM.unmountComponentAtNode(root);
     ReactDOM.render(composeApp(NextApp, store, messages), root);
   });
-  module.hot.accept('./stores/rootReducer', () => {
-    const nextReducer = require('./stores/rootReducer').default;
-
-    store.replaceReducer(nextReducer);
+  module.hot.accept('./stores/index', () => {
+    store.replaceReducer(require('./stores/index').rootReducer);
   });
   // TODO: Add HMR for locales (when loaded from external file)
 }
