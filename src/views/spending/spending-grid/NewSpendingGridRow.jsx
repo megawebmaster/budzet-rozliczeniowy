@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-// import { isNumber } from 'lodash';
-import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button, Loader } from 'semantic-ui-react';
+import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button } from 'semantic-ui-react';
 
 import * as SpendingActions from '../../../stores/spending/SpendingAction';
 import './spending-grid-row.css';
@@ -13,52 +12,58 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveItem: (row, month) => dispatch(SpendingActions.saveItem(row, month))
+  addItem: (row, month) => dispatch(SpendingActions.addItem(row, month))
 });
 
-class SpendingGridRow extends Component {
+class NewSpendingGridRow extends Component {
+  newRowState = {
+    category: '',
+    price: '',
+    day: '',
+    description: '',
+  };
+
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
-  onKeyPress = (event) => {
+  addItem = (event) => {
     if (event.charCode === 13) {
       event.preventDefault();
       event.stopPropagation();
-      this.saveItem();
+      this.props.addItem(this.state, this.props.month);
+      this.reset();
+      this.categoryField.focus();
     }
-  };
-
-  saveItem = () => {
-    this.props.saveItem(this.state, this.props.month);
   };
 
   // formatPrice = (value) => isNumber(value) ? (Math.round(value * 100) / 100).toFixed(2) : '';
 
   updateCategory = (_event, data) => {
     this.setState({ category: data.value });
-    this.saveItem();
   };
   updatePrice = (_event, data) => {
     this.setState({ price: data.value });
-    this.saveItem();
   };
   updateDay = (_event, data) => {
     this.setState({ day: data.value });
-    this.saveItem();
   };
   updateDescription = (_event, data) => {
     this.setState({ description: data.value });
-    this.saveItem();
+  };
+
+  reset = () => {
+    this.setState({ ...this.newRowState, id: `new_${Date.now()}` });
   };
 
   componentWillMount() {
-    this.setState(this.props.row);
+    this.reset();
   }
 
   render() {
-    const { categories, row: { saving } } = this.props;
+    const { categories } = this.props;
     const { category, price, day, description } = this.state;
 
     // TODO: Add proper validations: price as double, day as available day
+    // TODO: Move each cell to separate component - it will ease updating :)
     return (
       <TableRow className="spending-row">
         <TableCell>
@@ -69,21 +74,21 @@ class SpendingGridRow extends Component {
         <TableCell>
           <Input className="input-price" fluid label={{ basic: true, content: 'zł' }} labelPosition="right"
                  value={price} placeholder={this.format('spending-row.price', 'Cena')} onChange={this.updatePrice}
-                 onKeyPress={this.onKeyPress} />
+                 onKeyPress={this.addItem} />
         </TableCell>
         <TableCell>
-          <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.onKeyPress} />
+          <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.addItem} />
         </TableCell>
         <TableCell>
-          <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.onKeyPress} />
+          <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.addItem} />
         </TableCell>
         <TableCell textAlign="center">
-          { saving ? <Loader active inline="centered" /> : <Button color="red" icon="trash" tabIndex="-1" /> }
+          <Button color="green" icon="plus" tabIndex="-1" />
         </TableCell>
       </TableRow>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SpendingGridRow));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(NewSpendingGridRow));
 

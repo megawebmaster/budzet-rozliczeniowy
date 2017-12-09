@@ -33,16 +33,13 @@ const initialState = {
     rows: {
       9: [
         { id: 1, category: 5, price: 121.43, day: 7, description: 'Płatność za mieszkanie' },
-        { id: 'new' }
       ],
       10: [
         { id: 2, category: 4, price: 7.00, day: 3, description: 'Na poprawę humoru' },
-        { id: 'new' }
       ],
       11: [
         { id: 1, category: 1, price: 10.00, day: 1, description: '' },
         { id: 2, category: 4, price: 5.00, day: 3, description: 'Drobnostki' },
-        { id: 'new' }
       ]
     }
   }
