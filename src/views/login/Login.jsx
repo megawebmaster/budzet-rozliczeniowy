@@ -18,7 +18,8 @@ class LoginForm extends React.Component {
               <Segment stacked>
                 <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
                 <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
-                <Button color="teal" fluid size="large" as={Link} to="/2017/budget/11">Login</Button>
+                <Button color="teal" fluid size="large" as={Link}
+                        to={{ type: 'BUDGET', payload: {month: (new Date().getMonth() + 1)}}}>Login</Button>
               </Segment>
             </Form>
             <Message>

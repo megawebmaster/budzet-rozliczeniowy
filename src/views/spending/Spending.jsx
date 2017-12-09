@@ -5,15 +5,13 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Segment } from 'semantic-ui-react';
 
-import SpendingGrid from './spending-grid/SpendingGrid';
+import SpendingGrid from '../../components/spending-grid/SpendingGrid';
 import './spending.css';
 
 const mapStateToProps = (state) => ({
   year: state.location.payload.year,
   month: state.location.payload.month,
 });
-
-const mapDispatchToProps = (dispatch) => ({});
 
 class Spending extends Component {
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
@@ -42,5 +40,5 @@ Spending.propTypes = {
   year: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Spending));
+export default connect(mapStateToProps)(injectIntl(Spending));
 
