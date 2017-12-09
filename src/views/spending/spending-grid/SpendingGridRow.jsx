@@ -13,7 +13,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveItem: (row, month) => dispatch(SpendingActions.saveItem(row, month))
+  saveItem: (row, month) => dispatch(SpendingActions.saveItem(row, month)),
+  removeItem: (row, month) => dispatch(SpendingActions.removeItem(row, month)),
 });
 
 class SpendingGridRow extends Component {
@@ -29,6 +30,10 @@ class SpendingGridRow extends Component {
 
   saveItem = () => {
     this.props.saveItem(this.state, this.props.month);
+  };
+
+  removeItem = () => {
+    this.props.removeItem(this.state, this.props.month);
   };
 
   // formatPrice = (value) => isNumber(value) ? (Math.round(value * 100) / 100).toFixed(2) : '';
@@ -78,7 +83,9 @@ class SpendingGridRow extends Component {
           <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.onKeyPress} />
         </TableCell>
         <TableCell textAlign="center">
-          { saving ? <Loader active inline="centered" /> : <Button color="red" icon="trash" tabIndex="-1" /> }
+          { saving ?
+            <Loader active inline="centered" /> :
+            <Button color="red" icon="trash" tabIndex="-1" onClick={this.removeItem} /> }
         </TableCell>
       </TableRow>
     );

@@ -9,5 +9,6 @@ export default function* rootSaga() {
     takeLatest(UserAction.LOAD_USER, UserSaga.loadUser),
     takeLatest(SpendingActions.ADD_ITEM, SpendingSaga.addItem),
     takeLatest(SpendingActions.SAVE_ITEM, SpendingSaga.saveItem),
+    takeLatest(SpendingActions.REMOVE_ITEM, SpendingSaga.removeItem),
   ]);
 }

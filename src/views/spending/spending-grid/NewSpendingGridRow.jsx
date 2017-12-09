@@ -12,7 +12,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addItem: (row, month) => dispatch(SpendingActions.addItem(row, month))
+  addItem: (row, month) => dispatch(SpendingActions.addItem(row, month)),
 });
 
 class NewSpendingGridRow extends Component {
@@ -68,7 +68,7 @@ class NewSpendingGridRow extends Component {
       <TableRow className="spending-row">
         <TableCell>
           <Dropdown fluid value={category} selection search options={categories} onChange={this.updateCategory}
-                    placeholder={this.format('spending-row.category', 'Wybierz kategorię')}
+                    openOnFocus={false} placeholder={this.format('spending-row.category', 'Wybierz kategorię')}
                     searchInput={<DropdownSearchInput inputRef={(input) => this.categoryField = input} />}  />
         </TableCell>
         <TableCell>
@@ -83,7 +83,7 @@ class NewSpendingGridRow extends Component {
           <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.addItem} />
         </TableCell>
         <TableCell textAlign="center">
-          <Button color="green" icon="plus" tabIndex="-1" />
+          <Button color="green" icon="plus" tabIndex="-1" onClick={this.addItem} />
         </TableCell>
       </TableRow>
     );

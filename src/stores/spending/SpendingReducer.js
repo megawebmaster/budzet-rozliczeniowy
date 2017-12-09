@@ -20,6 +20,11 @@ export default (state = initialState, action) => {
         rows.splice(idx, 1, { ...rows[idx], saving: false });
       }
       return { ...state, rows: { ...state.rows, [action.payload.month]: rows }};
+    case Actions.REMOVE_ITEM:
+      rows = state.rows[action.payload.month].slice();
+      idx = rows.findIndex(item => item.id === action.payload.row.id);
+      rows.splice(idx, 1);
+      return { ...state, rows: { ...state.rows, [action.payload.month]: rows }};
     case Actions.SAVING_ROW:
       rows = state.rows[action.payload.month].slice();
       idx = rows.findIndex(item => item.id === action.payload.row.id);

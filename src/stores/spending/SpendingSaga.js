@@ -62,6 +62,18 @@ class SpendingSaga {
     //   data = json.results[0];
     // }
   }
+
+  static* removeItem(action) {
+    console.log('removing', action.payload.row);
+    yield call(delay, 1000); // TODO: To be removed - just a test
+    console.log('removed', action.payload.row);
+    // const response = yield fetch('https://randomuser.me/api/?inc=picture,name,email,phone,id,dob');
+    // const response = {
+    //   status: 200,
+    //   data: action.payload.row,
+    // };
+    // TODO: If something goes wrong - retry or add back the row with the info
+  }
 }
 
 export default SpendingSaga;
