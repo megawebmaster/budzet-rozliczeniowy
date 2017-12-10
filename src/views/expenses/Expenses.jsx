@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Segment } from 'semantic-ui-react';
 
-import SpendingGrid from '../../components/spending-grid/SpendingGrid';
-import './spending.css';
+import ExpensesGrid from '../../components/expenses-grid/ExpensesGrid';
+import './expenses.css';
 
 const mapStateToProps = (state) => ({
   year: state.location.payload.year,
   month: state.location.payload.month,
 });
 
-class Spending extends Component {
+class Expenses extends Component {
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
@@ -29,16 +29,16 @@ class Spending extends Component {
             Rozliczenie: {this.format(`month.${month}`, month)} {year}
           </h3>
         </Segment>
-        <SpendingGrid />
+        <ExpensesGrid />
       </div>
     );
   }
 }
 
-Spending.propTypes = {
+Expenses.propTypes = {
   month: PropTypes.number.isRequired,
   year: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps)(injectIntl(Spending));
+export default connect(mapStateToProps)(injectIntl(Expenses));
 

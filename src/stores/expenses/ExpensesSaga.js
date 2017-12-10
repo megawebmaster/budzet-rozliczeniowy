@@ -1,8 +1,8 @@
 import { delay } from 'redux-saga';
 import { put, call } from 'redux-saga/effects';
-import * as Actions from './SpendingAction';
+import * as Actions from './ExpensesAction';
 
-class SpendingSaga {
+class ExpensesSaga {
   static* saveItem(action) {
     yield call(delay, 1000);
     console.log('saving', action.payload.row);
@@ -18,7 +18,7 @@ class SpendingSaga {
       status: 200,
       data: action.payload.row,
     };
-    yield SpendingSaga.handleSaveResponse(action, response);
+    yield ExpensesSaga.handleSaveResponse(action, response);
   }
 
   static* addItem(action) {
@@ -27,7 +27,7 @@ class SpendingSaga {
       status: 200,
       data: action.payload.row,
     };
-    yield SpendingSaga.handleSaveResponse(action, response);
+    yield ExpensesSaga.handleSaveResponse(action, response);
   }
 
   static* handleSaveResponse(action, response) {
@@ -78,4 +78,4 @@ class SpendingSaga {
   }
 }
 
-export default SpendingSaga;
+export default ExpensesSaga;

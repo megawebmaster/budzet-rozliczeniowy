@@ -1,14 +1,14 @@
 import { all, takeLatest } from 'redux-saga/effects';
 import UserSaga from './user/UserSaga';
-import SpendingSaga from './spending/SpendingSaga';
+import ExpensesSaga from './expenses/ExpensesSaga';
 import * as UserAction from './user/UserAction';
-import * as SpendingActions from './spending/SpendingAction';
+import * as ExpensesActions from './expenses/ExpensesAction';
 
 export default function* rootSaga() {
   yield all([
     takeLatest(UserAction.LOAD_USER, UserSaga.loadUser),
-    takeLatest(SpendingActions.ADD_ITEM, SpendingSaga.addItem),
-    takeLatest(SpendingActions.SAVE_ITEM, SpendingSaga.saveItem),
-    takeLatest(SpendingActions.REMOVE_ITEM, SpendingSaga.removeItem),
+    takeLatest(ExpensesActions.ADD_ITEM, ExpensesSaga.addItem),
+    takeLatest(ExpensesActions.SAVE_ITEM, ExpensesSaga.saveItem),
+    takeLatest(ExpensesActions.REMOVE_ITEM, ExpensesSaga.removeItem),
   ]);
 }

@@ -1,12 +1,12 @@
-import Spending from './Spending';
+import Expenses from './Expenses';
 // import React from 'react';
 // import { asyncComponent } from 'react-async-component';
 // import { Segment } from 'semantic-ui-react';
 //
-// const Spending = asyncComponent({
-//   name: 'SpendingAsync',
-//   resolve: () => import('./Spending'),
+// const Expenses = asyncComponent({
+//   name: 'ExpensesAsync',
+//   resolve: () => import('./Expenses'),
 //   LoadingComponent: () => <Segment loading />,
 // });
 
-export { Spending };
+export { Expenses };

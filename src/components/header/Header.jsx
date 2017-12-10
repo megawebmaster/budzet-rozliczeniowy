@@ -22,7 +22,7 @@ const Header = ({ year, month, page }) => {
       <MenuItem name="budget" as={NavLink} activeClassName="active" to={{ type: 'BUDGET', payload }}>
         Budżet
       </MenuItem>
-      <MenuItem name="spending" as={NavLink} activeClassName="active" to={{ type: 'SPENDING', payload }}>
+      <MenuItem name="expenses" as={NavLink} activeClassName="active" to={{ type: 'EXPENSES', payload }}>
         Rozliczenie
       </MenuItem>
       <Menu.Menu position="right">

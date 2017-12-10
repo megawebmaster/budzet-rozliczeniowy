@@ -3,15 +3,15 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Table, TableBody, TableHeader, TableRow, TableHeaderCell } from 'semantic-ui-react';
 
-import SpendingGridRow from './SpendingGridRow';
-import NewSpendingGridRow from './NewSpendingGridRow';
+import ExpensesGridRow from './ExpensesGridRow';
+import NewExpensesGridRow from './NewExpensesGridRow';
 
 const mapStateToProps = (state) => ({
   month: state.location.payload.month,
-  rows: (state.spending[state.location.payload.year] || [])[state.location.payload.month] || [],
+  rows: (state.expenses[state.location.payload.year] || [])[state.location.payload.month] || [],
 });
 
-class SpendingGrid extends Component {
+class ExpensesGrid extends Component {
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
@@ -22,27 +22,27 @@ class SpendingGrid extends Component {
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>
-              {this.format('spending-grid.headers.category', 'Category')}
+              {this.format('expenses-grid.headers.category', 'Category')}
             </TableHeaderCell>
             <TableHeaderCell width={2} textAlign="center">
-              {this.format('spending-grid.headers.price', 'Price')}
+              {this.format('expenses-grid.headers.price', 'Price')}
             </TableHeaderCell>
             <TableHeaderCell width={1} textAlign="center">
-              {this.format('spending-grid.headers.day', 'Day')}
+              {this.format('expenses-grid.headers.day', 'Day')}
             </TableHeaderCell>
             <TableHeaderCell width={8}>
-              {this.format('spending-grid.headers.description', 'Description')}
+              {this.format('expenses-grid.headers.description', 'Description')}
             </TableHeaderCell>
             <TableHeaderCell width={1} />
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rows.map(row => <SpendingGridRow key={`spending-row-${row.id}`} row={row} />)}
-          <NewSpendingGridRow />
+          {rows.map(row => <ExpensesGridRow key={`expenses-row-${row.id}`} row={row} />)}
+          <NewExpensesGridRow />
         </TableBody>
       </Table>
     );
   }
 }
 
-export default connect(mapStateToProps)(injectIntl(SpendingGrid));
+export default connect(mapStateToProps)(injectIntl(ExpensesGrid));

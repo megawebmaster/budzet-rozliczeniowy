@@ -9,13 +9,13 @@ const mapStateToProps = (state) => ({
   year: state.location.payload.year,
 });
 
-const SpendingLayout = ({ children, year }) => (
+const ExpensesLayout = ({ children, year }) => (
   <div>
     <Header year={year} />
     <Grid padded="horizontally">
       <GridRow>
         <GridColumn width={3}>
-          <MonthList baseRoute={{ type: 'SPENDING', payload: { year } }} />
+          <MonthList baseRoute={{ type: 'EXPENSES', payload: { year } }} />
         </GridColumn>
         <GridColumn width={13}>
           {children}
@@ -25,5 +25,5 @@ const SpendingLayout = ({ children, year }) => (
   </div>
 );
 
-export default connect(mapStateToProps)(SpendingLayout);
+export default connect(mapStateToProps)(ExpensesLayout);
 

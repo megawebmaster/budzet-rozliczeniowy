@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 
 import BudgetLayout from './layouts/budget/BudgetLayout';
-import SpendingLayout from './layouts/spending/SpendingLayout';
+import ExpensesLayout from './layouts/expenses/ExpensesLayout';
 
 import Landing from './views/landing/Landing';
 import { Login } from './views/login';
 import { NotFound } from './views/errors';
 import { Accounts, IrregularBudget, MonthBudget, YearBudget } from './views/budget';
-import { Spending } from './views/spending';
+import { Expenses } from './views/expenses';
 
 const mapStateToProps = (state) => ({
   page: state.location.type,
@@ -41,10 +41,10 @@ const pages = {
       <Accounts />
     </BudgetLayout>
   ),
-  SPENDING: () => (
-    <SpendingLayout>
-      <Spending />
-    </SpendingLayout>
+  EXPENSES: () => (
+    <ExpensesLayout>
+      <Expenses />
+    </ExpensesLayout>
   ),
 };
 

@@ -1,4 +1,4 @@
-import * as Actions from './SpendingAction';
+import * as Actions from './ExpensesAction';
 
 const initialState = {};
 

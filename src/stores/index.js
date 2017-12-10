@@ -9,7 +9,7 @@ import routesMap from './../routes';
 import user from './user/UserReducer';
 import categories from './categories/CategoriesReducer';
 import budget from './budget/BudgetReducer';
-import spending from './spending/SpendingReducer';
+import expenses from './expenses/ExpensesReducer';
 
 const history = createHistory();
 const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = connectRoutes(history, routesMap);
@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
   user,
   categories,
   budget,
-  spending,
+  expenses,
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -138,7 +138,7 @@ const initialState = {
       },
     },
   },
-  spending: {
+  expenses: {
     2017: {
       10: [
         { id: 2, category: 4, price: 7.00, day: 3, description: 'Na poprawę humoru' },

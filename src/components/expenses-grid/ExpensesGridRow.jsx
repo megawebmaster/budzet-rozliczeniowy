@@ -4,8 +4,8 @@ import { injectIntl } from 'react-intl';
 // import { isNumber } from 'lodash';
 import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button, Loader } from 'semantic-ui-react';
 
-import * as SpendingActions from '../../stores/spending/SpendingAction';
-import './spending-grid-row.css';
+import * as ExpensesActions from '../../stores/expenses/ExpensesAction';
+import './expenses-grid-row.css';
 
 const mapStateToProps = (state) => {
   const categories = [];
@@ -23,11 +23,11 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  saveItem: (row, year, month) => dispatch(SpendingActions.saveItem(row, year, month)),
-  removeItem: (row, year, month) => dispatch(SpendingActions.removeItem(row, year, month)),
+  saveItem: (row, year, month) => dispatch(ExpensesActions.saveItem(row, year, month)),
+  removeItem: (row, year, month) => dispatch(ExpensesActions.removeItem(row, year, month)),
 });
 
-class SpendingGridRow extends Component {
+class ExpensesGridRow extends Component {
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   onKeyPress = (event) => {
@@ -75,15 +75,15 @@ class SpendingGridRow extends Component {
 
     // TODO: Add proper validations: price as double, day as available day
     return (
-      <TableRow className="spending-row">
+      <TableRow className="expenses-row">
         <TableCell>
           <Dropdown fluid value={category} selection search options={categories} onChange={this.updateCategory}
-                    placeholder={this.format('spending-row.category', 'Wybierz kategorię')}
+                    placeholder={this.format('expenses-row.category', 'Wybierz kategorię')}
                     searchInput={<DropdownSearchInput inputRef={(input) => this.categoryField = input} />}  />
         </TableCell>
         <TableCell>
           <Input className="input-price" fluid label={{ basic: true, content: 'zł' }} labelPosition="right"
-                 value={price} placeholder={this.format('spending-row.price', 'Cena')} onChange={this.updatePrice}
+                 value={price} placeholder={this.format('expenses-row.price', 'Cena')} onChange={this.updatePrice}
                  onKeyPress={this.onKeyPress} />
         </TableCell>
         <TableCell>
@@ -102,5 +102,5 @@ class SpendingGridRow extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SpendingGridRow));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ExpensesGridRow));
 

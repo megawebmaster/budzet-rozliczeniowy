@@ -45,8 +45,8 @@ export default {
     path: '/:year/budget/:month',
     thunk: loginUnauthenticated
   },
-  SPENDING: {
-    path: '/:year/spending/:month',
+  EXPENSES: {
+    path: '/:year/expenses/:month',
     thunk: loginUnauthenticated
   },
 };

@@ -26,12 +26,12 @@ const messages = {
   'month.10': 'Październik',
   'month.11': 'Listopad',
   'month.12': 'Grudzień',
-  'spending-grid.headers.category': 'Kategoria',
-  'spending-grid.headers.price': 'Cena',
-  'spending-grid.headers.day': 'Dzień',
-  'spending-grid.headers.description': 'Opis',
-  'spending-row.category': 'Wybierz kategorię',
-  'spending-row.price': 'Cena',
+  'expenses-grid.headers.category': 'Kategoria',
+  'expenses-grid.headers.price': 'Cena',
+  'expenses-grid.headers.day': 'Dzień',
+  'expenses-grid.headers.description': 'Opis',
+  'expenses-row.category': 'Wybierz kategorię',
+  'expenses-row.price': 'Cena',
 };
 
 const composeApp = (AppComponent, store, messages) => (
