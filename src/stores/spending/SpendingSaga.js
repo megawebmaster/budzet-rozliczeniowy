@@ -35,6 +35,7 @@ class SpendingSaga {
       yield put({
         type: Actions.ADD_ITEM_SUCCESS,
         payload: {
+          year: action.payload.year,
           month: action.payload.month,
           row: response.data,
         },
@@ -45,6 +46,7 @@ class SpendingSaga {
       yield put({
         type: Actions.ADD_ITEM_FAIL,
         payload: {
+          year: action.payload.year,
           month: action.payload.month,
           row: action.payload.row,
         },

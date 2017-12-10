@@ -7,14 +7,24 @@ import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button, Load
 import * as SpendingActions from '../../stores/spending/SpendingAction';
 import './spending-grid-row.css';
 
-const mapStateToProps = (state) => ({
-  month: state.location.payload.month,
-  categories: state.spending.categories,
-});
+const mapStateToProps = (state) => {
+  const categories = [];
+  state.categories.expenses.forEach(category => {
+    category.children.forEach(subcategory => {
+      categories.push({ text: `${category.text} - ${subcategory.text}`, value: subcategory.value });
+    })
+  });
+
+  return ({
+    year: state.location.payload.year,
+    month: state.location.payload.month,
+    categories,
+  });
+};
 
 const mapDispatchToProps = dispatch => ({
-  saveItem: (row, month) => dispatch(SpendingActions.saveItem(row, month)),
-  removeItem: (row, month) => dispatch(SpendingActions.removeItem(row, month)),
+  saveItem: (row, year, month) => dispatch(SpendingActions.saveItem(row, year, month)),
+  removeItem: (row, year, month) => dispatch(SpendingActions.removeItem(row, year, month)),
 });
 
 class SpendingGridRow extends Component {

@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Segment, Tab, TabPane } from 'semantic-ui-react';
+
+import Budget from '../../components/budget/Budget';
 import './month-budget.css';
 
 const mapStateToProps = (state) => ({
@@ -14,25 +16,25 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({});
 
 class MonthBudget extends Component {
-  renderSummaryPane() {
-    return (
-      <TabPane>Tutaj będzie podsumowanie</TabPane>
-    );
-  }
-
-  renderBudgetPane() {
-    return (
-      <TabPane>Tutaj będzie budżet</TabPane>
-    );
-  }
+  // renderSummaryPane() {
+  //   return (
+  //     <TabPane>Tutaj będzie podsumowanie</TabPane>
+  //   );
+  // }
+  //
+  // renderBudgetPane() {
+  //   return (
+  //     <TabPane>Tutaj będzie budżet</TabPane>
+  //   );
+  // }
 
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
-    const panes = [
-      { menuItem: 'Podsumowanie', render: this.renderSummaryPane },
-      { menuItem: 'Budżet', render: this.renderBudgetPane },
-    ];
+    // const panes = [
+    //   { menuItem: 'Podsumowanie', render: this.renderSummaryPane },
+    //   { menuItem: 'Budżet', render: this.renderBudgetPane },
+    // ];
     const { month, year } = this.props;
 
     return (
@@ -45,7 +47,8 @@ class MonthBudget extends Component {
             Miesiąc budżetowy: {this.format(`month.${month}`, month)} {year}
           </h3>
         </Segment>
-        <Tab panes={panes} menu={{ attached: true, tabular: true, className: 'two item' }} />
+        <Budget />
+        {/*<Tab panes={panes} menu={{ attached: true, tabular: true, className: 'two item' }} />*/}
       </div>
     );
   }

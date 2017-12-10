@@ -8,7 +8,7 @@ import NewSpendingGridRow from './NewSpendingGridRow';
 
 const mapStateToProps = (state) => ({
   month: state.location.payload.month,
-  rows: state.spending.rows[state.location.payload.month] || [],
+  rows: (state.spending[state.location.payload.year] || [])[state.location.payload.month] || [],
 });
 
 class SpendingGrid extends Component {
