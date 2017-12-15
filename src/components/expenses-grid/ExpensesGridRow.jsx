@@ -1,34 +1,14 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 // import { isNumber } from 'lodash';
 import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button, Loader } from 'semantic-ui-react';
 
-import * as ExpensesActions from '../../stores/expenses/ExpensesAction';
 import './expenses-grid-row.css';
 
-const mapStateToProps = (state) => {
-  const categories = [];
-  state.categories.expenses.forEach(category => {
-    category.children.forEach(subcategory => {
-      categories.push({ text: `${category.name} - ${subcategory.name}`, value: subcategory.id });
-    })
-  });
-
-  return ({
-    year: state.location.payload.year,
-    month: state.location.payload.month,
-    categories,
-  });
-};
-
-const mapDispatchToProps = dispatch => ({
-  saveItem: (row, year, month) => dispatch(ExpensesActions.saveItem(row, year, month)),
-  removeItem: (row, year, month) => dispatch(ExpensesActions.removeItem(row, year, month)),
-});
 
 class ExpensesGridRow extends Component {
-  format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
+  translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   onKeyPress = (event) => {
     if (event.charCode === 13) {
@@ -39,11 +19,13 @@ class ExpensesGridRow extends Component {
   };
 
   saveItem = () => {
-    this.props.saveItem(this.state, this.props.month);
+    const { year, month } = this.props;
+    this.props.onSaveItem(this.state, year, month);
   };
 
   removeItem = () => {
-    this.props.removeItem(this.state, this.props.month);
+    const { year, month } = this.props;
+    this.props.onRemoveItem(this.state, year, month);
   };
 
   // formatPrice = (value) => isNumber(value) ? (Math.round(value * 100) / 100).toFixed(2) : '';
@@ -78,12 +60,12 @@ class ExpensesGridRow extends Component {
       <TableRow className="expenses-row">
         <TableCell>
           <Dropdown fluid value={category} selection search options={categories} onChange={this.updateCategory}
-                    placeholder={this.format('expenses-row.category', 'Wybierz kategorię')}
+                    placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
                     searchInput={<DropdownSearchInput inputRef={(input) => this.categoryField = input} />}  />
         </TableCell>
         <TableCell>
           <Input className="input-price" fluid label={{ basic: true, content: 'zł' }} labelPosition="right"
-                 value={price} placeholder={this.format('expenses-row.price', 'Cena')} onChange={this.updatePrice}
+                 value={price} placeholder={this.translate('expenses-row.price', 'Cena')} onChange={this.updatePrice}
                  onKeyPress={this.onKeyPress} />
         </TableCell>
         <TableCell>
@@ -102,5 +84,14 @@ class ExpensesGridRow extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ExpensesGridRow));
+ExpensesGridRow.propTypes = {
+  categories: PropTypes.array.isRequired,
+  month: PropTypes.number.isRequired,
+  onRemoveItem: PropTypes.func,
+  onSaveItem: PropTypes.func.isRequired,
+  row: PropTypes.object.isRequired,
+  year: PropTypes.number.isRequired,
+};
+
+export default injectIntl(ExpensesGridRow);
 

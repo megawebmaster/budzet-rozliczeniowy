@@ -1,28 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button } from 'semantic-ui-react';
 
-import * as ExpensesActions from '../../stores/expenses/ExpensesAction';
 import './expenses-grid-row.css';
-
-const mapStateToProps = (state) => {
-  const categories = [];
-  state.categories.expenses.forEach(category => {
-    category.children.forEach(subcategory => {
-      categories.push({ text: `${category.name} - ${subcategory.name}`, value: subcategory.id });
-    })
-  });
-
-  return {
-    month: state.location.payload.month,
-    categories,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  addItem: (row, month) => dispatch(ExpensesActions.addItem(row, month)),
-});
 
 class NewExpensesGridRow extends Component {
   newRowState = {
@@ -38,7 +19,8 @@ class NewExpensesGridRow extends Component {
     if (event.charCode === 13) {
       event.preventDefault();
       event.stopPropagation();
-      this.props.addItem(this.state, this.props.month);
+      const { onAddItem, month, year } = this.props;
+      onAddItem(this.state, year, month);
       this.reset();
       this.categoryField.focus();
     }
@@ -99,5 +81,12 @@ class NewExpensesGridRow extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(NewExpensesGridRow));
+NewExpensesGridRow.propTypes = {
+  categories: PropTypes.array.isRequired,
+  month: PropTypes.number.isRequired,
+  onAddItem: PropTypes.func.isRequired,
+  year: PropTypes.number.isRequired,
+};
+
+export default injectIntl(NewExpensesGridRow);
 

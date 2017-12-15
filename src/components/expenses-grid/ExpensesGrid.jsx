@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Table, TableBody, TableHeader, TableRow, TableHeaderCell } from 'semantic-ui-react';
 
-import ExpensesGridRow from './ExpensesGridRow';
-import NewExpensesGridRow from './NewExpensesGridRow';
+import ExpensesGridRow from '../../containers/expenses/ExpensesGridRow';
+import NewExpensesGridRow from '../../containers/expenses/NewExpensesGridRow';
 
 const mapStateToProps = (state) => ({
-  month: state.location.payload.month,
   rows: (state.expenses[state.location.payload.year] || [])[state.location.payload.month] || [],
 });
 
 class ExpensesGrid extends Component {
-  format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
+  translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
     const { rows } = this.props;
@@ -22,16 +22,16 @@ class ExpensesGrid extends Component {
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>
-              {this.format('expenses-grid.headers.category', 'Category')}
+              {this.translate('expenses-grid.headers.category', 'Category')}
             </TableHeaderCell>
             <TableHeaderCell width={2} textAlign="center">
-              {this.format('expenses-grid.headers.price', 'Price')}
+              {this.translate('expenses-grid.headers.price', 'Price')}
             </TableHeaderCell>
             <TableHeaderCell width={1} textAlign="center">
-              {this.format('expenses-grid.headers.day', 'Day')}
+              {this.translate('expenses-grid.headers.day', 'Day')}
             </TableHeaderCell>
             <TableHeaderCell width={8}>
-              {this.format('expenses-grid.headers.description', 'Description')}
+              {this.translate('expenses-grid.headers.description', 'Description')}
             </TableHeaderCell>
             <TableHeaderCell width={1} />
           </TableRow>
@@ -44,5 +44,9 @@ class ExpensesGrid extends Component {
     );
   }
 }
+
+ExpensesGrid.propTypes = {
+  rows: PropTypes.array.isRequired,
+};
 
 export default connect(mapStateToProps)(injectIntl(ExpensesGrid));
