@@ -1,40 +1,55 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Button, Input, Table, TableBody, TableHeader, TableFooter, TableHeaderCell, TableRow, TableCell } from 'semantic-ui-react';
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = (dispatch) => ({});
-
 class BudgetTable extends Component {
-  format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
+  translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
+  format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
 
   render() {
-    const { label, categories, className } = this.props;
+    const { label, categories, data, className } = this.props;
+    const categoryIds = categories.map(category => category.id.toString());
+    const { planned, real } = Object.keys(data).reduce((result, categoryId) => {
+      if (categoryIds.indexOf(categoryId) > -1) {
+        result.planned += data[categoryId].planned;
+        result.real += data[categoryId].real;
+      }
+
+      return result;
+    }, {
+      planned: 0.0,
+      real: 0.0,
+    });
+
     return (
       <Table className={className} singleLine striped compact>
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>{label}</TableHeaderCell>
-            <TableHeaderCell width={4}>Planowane (10,00 zł)</TableHeaderCell>
-            <TableHeaderCell width={4}>Rzeczywiste (20,00 zł)</TableHeaderCell>
+            <TableHeaderCell width={4}>
+              {this.format('budget.table.header-planned', 'Planowane ({value} zł)', { value: planned })}
+            </TableHeaderCell>
+            <TableHeaderCell width={4}>
+              {this.format('budget.table.header-real', 'Rzeczywiste ({value} zł)', { value: real })}
+            </TableHeaderCell>
           </TableRow>
         </TableHeader>
         <TableBody>
           { categories.map(category =>
-            <TableRow key={`budget-row-${category.value}`}>
-              <TableCell>{category.text}</TableCell>
-              <TableCell><Input fluid value="10,00 zł" /></TableCell>
-              <TableCell><Input fluid value="20,00 zł" /></TableCell>
+            <TableRow key={`budget-row-${category.id}`}>
+              <TableCell>{category.name}</TableCell>
+              <TableCell><Input fluid value={(data[category.id] || { planned: 0.0 }).planned} /></TableCell>
+              <TableCell><Input fluid value={(data[category.id] || { real: 0.0 }).real} /></TableCell>
             </TableRow>
           )}
         </TableBody>
         <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>
-              <Button fluid icon="plus" size="tiny" content="Dodaj podkategorię" basic style={{ textAlign: 'left' }} />
+              {/*TODO: Maybe it's worth to extract this button?*/}
+              <Button fluid icon="plus" size="tiny" basic style={{ textAlign: 'left' }}
+                      content={this.translate('budget.table.add-subcategory', 'Dodaj podkategorię')} />
             </TableCell>
           </TableRow>
         </TableFooter>
@@ -44,10 +59,12 @@ class BudgetTable extends Component {
 }
 
 BudgetTable.propTypes = {
-  label: PropTypes.string.isRequired,
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
+  data: PropTypes.object.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(BudgetTable));
+export default injectIntl(BudgetTable);
 

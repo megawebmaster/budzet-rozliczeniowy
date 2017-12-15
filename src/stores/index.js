@@ -26,22 +26,22 @@ const sagaMiddleware = createSagaMiddleware();
 const initialState = {
   categories: {
     income: [
-      {text: 'Wynagrodzenie', value: 6},
-      {text: 'Premie', value: 7},
-      {text: 'Odsetki bankowe', value: 8},
+      {name: 'Wynagrodzenie', id: 6},
+      {name: 'Premie', id: 7},
+      {name: 'Odsetki bankowe', id: 8},
     ],
     expenses: [
       {
-        text: 'Jedzenie', children: [
-          {text: 'Dom', value: 1},
-          {text: 'Praca', value: 2},
-          {text: 'Miasto', value: 3},
-          {text: 'Słodycze', value: 4},
+        name: 'Jedzenie', id: 9, children: [
+          {name: 'Dom', id: 1},
+          {name: 'Praca', id: 2},
+          {name: 'Miasto', id: 3},
+          {name: 'Słodycze', id: 4},
         ],
       },
       {
-        text: 'Mieszkanie', children: [
-          {text: 'Czynsz', value: 5},
+        name: 'Mieszkanie', id: 10, children: [
+          {name: 'Czynsz', id: 5},
         ],
       },
     ]

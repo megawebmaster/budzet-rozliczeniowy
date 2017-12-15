@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
   const categories = [];
   state.categories.expenses.forEach(category => {
     category.children.forEach(subcategory => {
-      categories.push({ text: `${category.text} - ${subcategory.text}`, value: subcategory.value });
+      categories.push({ text: `${category.name} - ${subcategory.name}`, value: subcategory.id });
     })
   });
 

@@ -32,6 +32,16 @@ const messages = {
   'expenses-grid.headers.description': 'Opis',
   'expenses-row.category': 'Wybierz kategorię',
   'expenses-row.price': 'Cena',
+  'budget.income': 'Przychody',
+  'budget.expenses': 'Wydatki',
+  'budget.table.add-category': 'Dodaj kategorię',
+  'budget.table.add-subcategory': 'Dodaj podkategorię',
+  'budget.table.header-planned': 'Planowane ({value} zł)',
+  'budget.table.header-real': 'Rzeczywiste ({value} zł)',
+  'budget.summary.label': 'Podsumowanie',
+  'budget.summary.planned': 'Planowane: {value} zł',
+  'budget.summary.real': 'Rzeczywiste: {value} zł',
+  'budget.summary.to-use': 'Pozostało do dyspozycji',
 };
 
 const composeApp = (AppComponent, store, messages) => (

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Segment, Tab, TabPane } from 'semantic-ui-react';
 
-import Budget from '../../components/budget/Budget';
+import Budget from '../../containers/budget/Budget';
 import './month-budget.css';
 
 const mapStateToProps = (state) => ({
