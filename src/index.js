@@ -42,6 +42,8 @@ const messages = {
   'budget.summary.planned': 'Planowane: {value} zł',
   'budget.summary.real': 'Rzeczywiste: {value} zł',
   'budget.summary.to-use': 'Pozostało do dyspozycji',
+  'budget.summary.left-planned': '{value} zł',
+  'budget.summary.left-real': '{value} zł',
 };
 
 const composeApp = (AppComponent, store, messages) => (

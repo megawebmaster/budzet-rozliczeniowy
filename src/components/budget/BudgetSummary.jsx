@@ -8,7 +8,7 @@ class BudgetSummary extends Component {
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
 
   render() {
-    const { className, planned, real } = this.props;
+    const { className, expenses, leftToUse } = this.props;
     return (
       <Table className={className} attached="bottom" singleLine striped compact>
         <TableHeader>
@@ -17,18 +17,22 @@ class BudgetSummary extends Component {
               {this.translate('budget.summary.label', 'Podsumowanie')}
             </TableHeaderCell>
             <TableHeaderCell width={4}>
-              {this.format('budget.summary.planned', 'Planowane: {value} zł', { value: planned })}
+              {this.format('budget.summary.planned', 'Planowane: {value} zł', { value: expenses.planned })}
             </TableHeaderCell>
             <TableHeaderCell width={4}>
-              {this.format('budget.summary.real', 'Rzeczywiste: {value} zł', { value: real })}
+              {this.format('budget.summary.real', 'Rzeczywiste: {value} zł', { value: expenses.real })}
             </TableHeaderCell>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
             <TableCell>{this.translate('budget.summary.to-use', 'Pozostało do dyspozycji')}</TableCell>
-            <TableCell>0.00 zł</TableCell>
-            <TableCell>0.00 zł</TableCell>
+            <TableCell>
+              {this.format('budget.summary.left-planned', '{value} zł', { value: leftToUse.planned })}
+            </TableCell>
+            <TableCell>
+              {this.format('budget.summary.left-real', '{value} zł', { value: leftToUse.real })}
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -36,10 +40,15 @@ class BudgetSummary extends Component {
   }
 }
 
-BudgetSummary.propTypes = {
-  className: PropTypes.string,
+const expenseShape = PropTypes.shape({
   planned: PropTypes.number.isRequired,
   real: PropTypes.number.isRequired,
+});
+
+BudgetSummary.propTypes = {
+  className: PropTypes.string,
+  expenses: expenseShape.isRequired,
+  leftToUse: expenseShape.isRequired,
 };
 
 export default injectIntl(BudgetSummary);
