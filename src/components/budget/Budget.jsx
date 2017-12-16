@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Segment, Button } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 
 import IncomeBudgetTable from '../../containers/budget/IncomeBudgetTable';
 import ExpensesBudgetTable from '../../containers/budget/ExpensesBudgetTable';
 import BudgetSummary from '../../containers/budget/BudgetSummary';
 import './budget.css';
+import AddCategoryButton from './AddCategoryButton';
 
 class Budget extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
@@ -23,8 +24,8 @@ class Budget extends Component {
         <Segment attached>
           { expensesCategories.map(category =>
             <ExpensesBudgetTable key={`category-${category.id}`} label={category.name} categoryId={category.id} />)}
-          <Button icon="plus" size="large" fluid basic style={{ textAlign: 'left' }}
-                  content={this.translate('budget.table.add-category', 'Dodaj kategorię')} />
+          <AddCategoryButton label={this.translate('budget.table.add-category', 'Dodaj kategorię')} size="large"
+                             onAdd={(category) => console.log('adding category:', category)}/>
         </Segment>
         <BudgetSummary className="segment yellow" />
       </div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { Segment, Tab, TabPane } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 
 import Budget from '../../containers/budget/Budget';
 import './month-budget.css';

@@ -44,6 +44,8 @@ const messages = {
   'budget.summary.to-use': 'Pozostało do dyspozycji',
   'budget.summary.left-planned': '{value} zł',
   'budget.summary.left-real': '{value} zł',
+  'add-category-button.save': 'Dodaj',
+  'add-category-button.cancel': 'Anuluj',
 };
 
 const composeApp = (AppComponent, store, messages) => (

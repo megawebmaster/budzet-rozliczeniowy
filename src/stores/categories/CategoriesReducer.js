@@ -1,4 +1,4 @@
-import * as Actions from './CategoriesAction';
+// import * as Actions from './CategoriesAction';
 
 const initialState = {
   income: [],

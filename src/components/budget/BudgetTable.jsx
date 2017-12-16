@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, Input, Table, TableBody, TableHeader, TableFooter, TableHeaderCell, TableRow, TableCell } from 'semantic-ui-react';
+import { Input, Table, TableBody, TableHeader, TableFooter, TableHeaderCell, TableRow, TableCell } from 'semantic-ui-react';
+import AddCategoryButton from './AddCategoryButton';
 
 class BudgetTable extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
@@ -47,9 +48,8 @@ class BudgetTable extends Component {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>
-              {/*TODO: Maybe it's worth to extract this button?*/}
-              <Button fluid icon="plus" size="tiny" basic style={{ textAlign: 'left' }}
-                      content={this.translate('budget.table.add-subcategory', 'Dodaj podkategorię')} />
+              <AddCategoryButton label={this.translate('budget.table.add-subcategory', 'Dodaj podkategorię')}
+                                 size="tiny" onAdd={(category) => console.log('adding subcategory:', category)} />
             </TableCell>
           </TableRow>
         </TableFooter>
