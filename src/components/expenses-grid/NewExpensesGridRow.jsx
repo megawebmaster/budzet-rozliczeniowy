@@ -30,8 +30,8 @@ class NewExpensesGridRow extends Component {
   updateCategory = (_event, data) => {
     this.setState({ category: data.value });
   };
-  updatePrice = (_event, data) => {
-    this.setState({ price: data.value });
+  updatePrice = (value) => {
+    this.setState({ price: value });
   };
   updateDay = (_event, data) => {
     this.setState({ day: data.value });

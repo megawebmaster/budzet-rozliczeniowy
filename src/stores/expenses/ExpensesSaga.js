@@ -3,6 +3,7 @@ import { put, call } from 'redux-saga/effects';
 import * as Actions from './ExpensesAction';
 
 class ExpensesSaga {
+  // TODO: Handling errors in the UI
   static* saveItem(action) {
     yield call(delay, 1000);
     console.log('saving', action.payload.row);

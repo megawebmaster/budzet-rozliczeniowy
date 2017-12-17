@@ -6,14 +6,15 @@ import { Segment } from 'semantic-ui-react';
 import IncomeBudgetTable from '../../containers/budget/IncomeBudgetTable';
 import ExpensesBudgetTable from '../../containers/budget/ExpensesBudgetTable';
 import BudgetSummary from '../../containers/budget/BudgetSummary';
-import './budget.css';
 import AddCategoryButton from './AddCategoryButton';
+
+import './budget.css';
 
 class Budget extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
-    const { expensesCategories } = this.props;
+    const { expensesCategories, onAddExpensesCategory } = this.props;
 
     return (
       <div>
@@ -25,7 +26,7 @@ class Budget extends Component {
           { expensesCategories.map(category =>
             <ExpensesBudgetTable key={`category-${category.id}`} label={category.name} categoryId={category.id} />)}
           <AddCategoryButton label={this.translate('budget.table.add-category', 'Dodaj kategorię')} size="large"
-                             onAdd={(category) => console.log('adding category:', category)}/>
+                             onAdd={onAddExpensesCategory}/>
         </Segment>
         <BudgetSummary className="segment yellow" />
       </div>
@@ -35,6 +36,7 @@ class Budget extends Component {
 
 Budget.propTypes = {
   expensesCategories: PropTypes.array.isRequired,
+  onAddExpensesCategory: PropTypes.func.isRequired,
 };
 
 export default injectIntl(Budget);

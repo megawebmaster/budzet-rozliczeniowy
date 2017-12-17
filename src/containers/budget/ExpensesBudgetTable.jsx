@@ -2,25 +2,28 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import * as CategoriesActions from '../../stores/categories/CategoriesAction';
 import BudgetTable from '../../components/budget/BudgetTable';
 
 const mapStateToProps = (state, ownProps) => ({
   categories: (state.categories.expenses.find((category) => category.id === ownProps.categoryId) || {}).children,
-  data: (state.budget[state.location.payload.year] || { expenses: {} }).expenses[state.location.payload.month] || {}
+  data: (state.budget[state.location.payload.year] || { expenses: {} }).expenses[state.location.payload.month] || {},
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  addSubcategory: (name) => dispatch(CategoriesActions.addExpensesSubcategory(ownProps.categoryId, name)),
+  updatePlanned: (categoryId, value) => { console.log('update for planned', categoryId, value); },
+  updateReal: (categoryId, value) => { console.log('update for real', categoryId, value); },
+});
 
+// TODO: Move it to functional style
 class ExpensesBudgetTable extends Component {
-  addCategory = (categoryName) => {
-    // TODO: Dispatch correct action for adding category
-    console.log('add new category: ', categoryName);
-  };
-
   render() {
-    const { label, categories, data, className } = this.props;
+    const { label, categories, data, className, addSubcategory, updatePlanned, updateReal } = this.props;
+
     return <BudgetTable className={className} label={label} categories={categories} data={data}
-                        editableRealValues={false} onAdd={this.addCategory} />
+                        editableRealValues={false} onAdd={addSubcategory} onUpdatePlanned={updatePlanned}
+                        onUpdateReal={updateReal} />
   }
 }
 
