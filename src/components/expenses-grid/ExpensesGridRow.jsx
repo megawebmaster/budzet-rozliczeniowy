@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-// import { isNumber } from 'lodash';
-import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button, Loader } from 'semantic-ui-react';
+import { Input, TableRow, TableCell, Dropdown, DropdownSearchInput, Button, Loader } from 'semantic-ui-react';
 
+import PriceInput from '../price-input/PriceInput';
 import './expenses-grid-row.css';
 
 
@@ -27,8 +27,6 @@ class ExpensesGridRow extends Component {
     const { year, month } = this.props;
     this.props.onRemoveItem(this.state, year, month);
   };
-
-  // formatPrice = (value) => isNumber(value) ? (Math.round(value * 100) / 100).toFixed(2) : '';
 
   updateCategory = (_event, data) => {
     this.setState({ category: data.value });
@@ -64,9 +62,8 @@ class ExpensesGridRow extends Component {
                     searchInput={<DropdownSearchInput inputRef={(input) => this.categoryField = input} />}  />
         </TableCell>
         <TableCell>
-          <Input className="input-price" fluid label={{ basic: true, content: 'zł' }} labelPosition="right"
-                 value={price} placeholder={this.translate('expenses-row.price', 'Cena')} onChange={this.updatePrice}
-                 onKeyPress={this.onKeyPress} />
+          <PriceInput value={price} placeholder={this.translate('expenses-row.price', 'Cena')}
+                      onChange={this.updatePrice} onKeyPress={this.onKeyPress} />
         </TableCell>
         <TableCell>
           <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.onKeyPress} />

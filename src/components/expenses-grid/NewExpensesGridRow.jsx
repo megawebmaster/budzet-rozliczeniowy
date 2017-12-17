@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button } from 'semantic-ui-react';
 
+import PriceInput from '../price-input/PriceInput';
 import './expenses-grid-row.css';
 
 class NewExpensesGridRow extends Component {
   newRowState = {
     category: '',
-    price: '',
+    price: null,
     day: '',
     description: '',
   };
@@ -25,8 +26,6 @@ class NewExpensesGridRow extends Component {
       this.categoryField.focus();
     }
   };
-
-  // formatPrice = (value) => isNumber(value) ? (Math.round(value * 100) / 100).toFixed(2) : '';
 
   updateCategory = (_event, data) => {
     this.setState({ category: data.value });
@@ -63,9 +62,8 @@ class NewExpensesGridRow extends Component {
                     searchInput={<DropdownSearchInput inputRef={(input) => this.categoryField = input} />}  />
         </TableCell>
         <TableCell>
-          <Input className="input-price" fluid label={{ basic: true, content: 'zł' }} labelPosition="right"
-                 value={price} placeholder={this.format('expenses-row.price', 'Cena')} onChange={this.updatePrice}
-                 onKeyPress={this.addItem} />
+          <PriceInput value={price} placeholder={this.format('expenses-row.price', 'Cena')} onChange={this.updatePrice}
+                      onKeyPress={this.addItem} />
         </TableCell>
         <TableCell>
           <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.addItem} />

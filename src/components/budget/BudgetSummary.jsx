@@ -6,6 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderCell, TableRow, TableCell } f
 class BudgetSummary extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
+  currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: 'PLN' });
 
   render() {
     const { className, expenses, leftToUse } = this.props;
@@ -17,10 +18,10 @@ class BudgetSummary extends Component {
               {this.translate('budget.summary.label', 'Podsumowanie')}
             </TableHeaderCell>
             <TableHeaderCell width={4}>
-              {this.format('budget.summary.planned', 'Planowane: {value} zł', { value: expenses.planned })}
+              {this.format('budget.summary.planned', 'Planowane: {value}', { value: this.currency(expenses.planned) })}
             </TableHeaderCell>
             <TableHeaderCell width={4}>
-              {this.format('budget.summary.real', 'Rzeczywiste: {value} zł', { value: expenses.real })}
+              {this.format('budget.summary.real', 'Rzeczywiste: {value}', { value: this.currency(expenses.real) })}
             </TableHeaderCell>
           </TableRow>
         </TableHeader>
@@ -28,10 +29,10 @@ class BudgetSummary extends Component {
           <TableRow>
             <TableCell>{this.translate('budget.summary.to-use', 'Pozostało do dyspozycji')}</TableCell>
             <TableCell>
-              {this.format('budget.summary.left-planned', '{value} zł', { value: leftToUse.planned })}
+              {this.format('budget.summary.left-planned', '{value}', { value: this.currency(leftToUse.planned) })}
             </TableCell>
             <TableCell>
-              {this.format('budget.summary.left-real', '{value} zł', { value: leftToUse.real })}
+              {this.format('budget.summary.left-real', '{value}', { value: this.currency(leftToUse.real) })}
             </TableCell>
           </TableRow>
         </TableBody>

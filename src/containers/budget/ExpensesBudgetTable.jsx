@@ -20,7 +20,7 @@ class ExpensesBudgetTable extends Component {
   render() {
     const { label, categories, data, className } = this.props;
     return <BudgetTable className={className} label={label} categories={categories} data={data}
-                        onAdd={this.addCategory} />
+                        editableRealValues={false} onAdd={this.addCategory} />
   }
 }
 

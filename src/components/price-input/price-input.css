@@ -1,0 +1,9 @@
+.price-input.ui.input input {
+	text-align: right;
+}
+.price-input.ui.input.disabled {
+	opacity: 1;
+}
+.price-input.ui.input.disabled input, .price-input.ui.input.disabled div.label {
+	background: #fbfbfb;
+}
