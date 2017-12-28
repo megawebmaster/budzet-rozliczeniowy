@@ -4,6 +4,7 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   let value;
+  const baseValue = { real: 0, savingReal: false, planned: 0, savingPlanned: false };
   switch(action.type){
     case Actions.UPDATE_PLANNED:
       try {
@@ -19,8 +20,9 @@ export default (state = initialState, action) => {
             [action.payload.month]: {
               ...state[action.payload.year].income[action.payload.month],
               [action.payload.categoryId]: {
-                ...(state[action.payload.year].income[action.payload.month][action.payload.categoryId] || { real: 0, planned: 0 }),
+                ...(state[action.payload.year].income[action.payload.month][action.payload.categoryId] || { ...baseValue }),
                 planned: value,
+                savingPlanned: true,
               },
             },
           },
@@ -41,8 +43,9 @@ export default (state = initialState, action) => {
             [action.payload.month]: {
               ...state[action.payload.year].income[action.payload.month],
               [action.payload.categoryId]: {
-                ...(state[action.payload.year].income[action.payload.month][action.payload.categoryId] || { real: 0, planned: 0 }),
+                ...(state[action.payload.year].income[action.payload.month][action.payload.categoryId] || { ...baseValue }),
                 real: value,
+                savingReal: true,
               },
             },
           },

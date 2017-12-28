@@ -1,34 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as CategoriesActions from '../../stores/categories/CategoriesAction';
 import BudgetTable from '../../components/budget/BudgetTable';
-import * as BudgetActions from '../../stores/budget/BudgetAction';
+import IncomePlannedPriceInput from './IncomePlannedPriceInput';
+import IncomeRealPriceInput from './IncomeRealPriceInput';
 
 const mapStateToProps = (state) => ({
-  categories: state.categories.income,
+  categories: state.categories.income || [],
+  // TODO: Change data fetching into summary values passing
   data: (state.budget[state.location.payload.year] || { income: {} }).income[state.location.payload.month] || {},
-  year: state.location.payload.year,
-  month: state.location.payload.month,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   addCategory: (name) => dispatch(CategoriesActions.addIncomeCategory(name)),
-  updatePlanned: (year, month, categoryId, value) => dispatch(BudgetActions.updatePlanned(year, month, categoryId, value)),
-  updateReal: (year, month, categoryId, value) => dispatch(BudgetActions.updateReal(year, month, categoryId, value)),
 });
 
-// TODO: Move it to functional style
-class IncomeBudgetTable extends Component {
-  render() {
-    const { label, categories, data, className, year, month, addCategory, updatePlanned, updateReal } = this.props;
-
-    return <BudgetTable className={className} label={label} categories={categories} data={data}
-                        editableRealValues={true} onAdd={addCategory} onUpdatePlanned={updatePlanned.bind(null, year, month)}
-                        onUpdateReal={updateReal.bind(null, year, month)} />
-  }
-}
+const IncomeBudgetTable = ({ label, categories, data, className, addCategory }) => (
+  <BudgetTable className={className} label={label} categories={categories} data={data} editableRealValues={true}
+               onAdd={addCategory} PlannedInput={IncomePlannedPriceInput} RealInput={IncomeRealPriceInput} />
+);
 
 IncomeBudgetTable.propTypes = {
   label: PropTypes.string.isRequired,

@@ -1,31 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as CategoriesActions from '../../stores/categories/CategoriesAction';
 import BudgetTable from '../../components/budget/BudgetTable';
+import ExpensePlannedPriceInput from './ExpensePlannedPriceInput';
+import ExpenseRealPriceInput from './ExpenseRealPriceInput';
 
 const mapStateToProps = (state, ownProps) => ({
-  categories: (state.categories.expenses.find((category) => category.id === ownProps.categoryId) || {}).children,
+  categories: (state.categories.expenses.find((category) => category.id === ownProps.categoryId) || { children: [] }).children,
+  // TODO: Change data fetching into summary values passing
   data: (state.budget[state.location.payload.year] || { expenses: {} }).expenses[state.location.payload.month] || {},
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   addSubcategory: (name) => dispatch(CategoriesActions.addExpensesSubcategory(ownProps.categoryId, name)),
-  updatePlanned: (categoryId, value) => { console.log('update for planned', categoryId, value); },
-  updateReal: (categoryId, value) => { console.log('update for real', categoryId, value); },
 });
 
-// TODO: Move it to functional style
-class ExpensesBudgetTable extends Component {
-  render() {
-    const { label, categories, data, className, addSubcategory, updatePlanned, updateReal } = this.props;
-
-    return <BudgetTable className={className} label={label} categories={categories} data={data}
-                        editableRealValues={false} onAdd={addSubcategory} onUpdatePlanned={updatePlanned}
-                        onUpdateReal={updateReal} />
-  }
-}
+const ExpensesBudgetTable = ({ label, categories, data, className, addSubcategory }) => (
+  <BudgetTable className={className} label={label} categories={categories} data={data} editableRealValues={false}
+               onAdd={addSubcategory} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput} />
+);
 
 ExpensesBudgetTable.propTypes = {
   className: PropTypes.string,

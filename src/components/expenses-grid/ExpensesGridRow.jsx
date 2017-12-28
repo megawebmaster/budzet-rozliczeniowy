@@ -53,7 +53,7 @@ class ExpensesGridRow extends Component {
     const { categories, row: { saving } } = this.props;
     const { category, price, day, description } = this.state;
 
-    // TODO: Add proper validations: price as double, day as available day
+    // TODO: Add proper validations: day as available day
     return (
       <TableRow className="expenses-row">
         <TableCell>

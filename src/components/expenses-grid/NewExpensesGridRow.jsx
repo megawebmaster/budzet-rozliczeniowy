@@ -9,7 +9,7 @@ import './expenses-grid-row.css';
 class NewExpensesGridRow extends Component {
   newRowState = {
     category: '',
-    price: null,
+    price: '',
     day: '',
     description: '',
   };

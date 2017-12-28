@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Table, TableBody, TableHeader, TableFooter, TableHeaderCell, TableRow, TableCell } from 'semantic-ui-react';
 
-import PriceInput from '../price-input/PriceInput';
 import AddCategoryButton from './AddCategoryButton';
 
 class BudgetTable extends Component {
@@ -12,8 +11,9 @@ class BudgetTable extends Component {
   currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: 'PLN' });
 
   render() {
-    const { label, categories, data, editableRealValues, className, onAdd, onUpdatePlanned, onUpdateReal } = this.props;
+    const { label, categories, data, editableRealValues, className, onAdd, PlannedInput, RealInput } = this.props;
     const categoryIds = categories.map(category => category.id.toString());
+    // TODO: Extract into data source!
     const { planned, real } = Object.keys(data).reduce((result, categoryId) => {
       if (categoryIds.indexOf(categoryId) > -1) {
         result.planned += data[categoryId].planned;
@@ -40,21 +40,17 @@ class BudgetTable extends Component {
           </TableRow>
         </TableHeader>
         <TableBody>
-          { categories.map(category => {
-            const values = data[category.id] || { planned: 0, real: 0 };
-            return (
+          { categories.map(category => (
               <TableRow key={`budget-row-${category.id}`}>
                 <TableCell>{category.name}</TableCell>
                 <TableCell>
-                  <PriceInput value={values.planned} onChange={(value) => onUpdatePlanned(category.id, value)} />
+                  <PlannedInput category={category} />
                 </TableCell>
                 <TableCell>
-                  <PriceInput value={values.real} disabled={!editableRealValues}
-                              onChange={(value) => onUpdateReal(category.id, value)} />
+                  <RealInput category={category} disabled={!editableRealValues} />
                 </TableCell>
               </TableRow>
-            );
-          })}
+          ))}
         </TableBody>
         <TableFooter>
           <TableRow>
@@ -75,9 +71,9 @@ BudgetTable.propTypes = {
   data: PropTypes.object.isRequired,
   editableRealValues: PropTypes.bool.isRequired,
   onAdd: PropTypes.func.isRequired,
-  onUpdatePlanned: PropTypes.func.isRequired,
-  onUpdateReal: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
+  PlannedInput: PropTypes.func.isRequired,
+  RealInput: PropTypes.func.isRequired,
 };
 
 export default injectIntl(BudgetTable);
