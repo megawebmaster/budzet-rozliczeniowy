@@ -3,11 +3,54 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import isNumber from 'lodash/isNumber';
 import isNaN from 'lodash/isNaN';
+import { Parser } from 'expr-eval';
 import { Input } from 'semantic-ui-react';
 
 import './price-input.css';
 
 class PriceInput extends Component {
+  static parser = new Parser({
+    allowMemberAccess: false,
+    operators: {
+      add: true,
+      comparison: false,
+      concatenate: false,
+      conditional: false,
+      divide: true,
+      factorial: false,
+      logical: false,
+      multiply: true,
+      power: false,
+      remainder: false,
+      subtract: true,
+      sin: false,
+      cos: false,
+      tan: false,
+      asin: false,
+      acos: false,
+      atan: false,
+      sinh: false,
+      cosh: false,
+      tanh: false,
+      asinh: false,
+      acosh: false,
+      atanh: false,
+      sqrt: false,
+      log: false,
+      ln: false,
+      lg: false,
+      log10: false,
+      abs: false,
+      ceil: false,
+      floor: false,
+      round: false,
+      trunc: false,
+      exp: false,
+      length: false,
+      in: false
+    }
+  });
+
   state = {
     isEditing: false,
     error: false,
@@ -35,7 +78,7 @@ class PriceInput extends Component {
   };
   blur = () => {
     this.setState({ isEditing: false, error: false });
-    const value = parseFloat(this.state.value.toString().replace(',', '.'));
+    const value = PriceInput.parser.parse(this.state.value.toString().replace(/,/g, '.')).evaluate();
     if (isNaN(value)) {
       this.setState({ error: true });
     } else {
