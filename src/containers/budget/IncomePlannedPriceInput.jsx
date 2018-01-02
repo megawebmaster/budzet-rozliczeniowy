@@ -19,7 +19,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, month, value) => dispatch(BudgetActions.updatePlanned(year, month, ownProps.category.id, value)),
+  onUpdate: (year, month, value) => dispatch(BudgetActions.updatePlannedIncome(year, month, ownProps.category.id, value)),
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,

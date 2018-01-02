@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import isNumber from 'lodash/isNumber';
-import isNaN from 'lodash/isNaN';
 import { Parser } from 'expr-eval';
 import { Input } from 'semantic-ui-react';
 
@@ -57,7 +56,11 @@ class PriceInput extends Component {
     value: ''
   };
 
-  currency = (value) => this.props.intl.formatNumber(value, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  currency = (value) => this.props.intl.formatNumber(value, {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 
   value = () => {
     const { isEditing, value } = this.state;
@@ -78,11 +81,19 @@ class PriceInput extends Component {
   };
   blur = () => {
     this.setState({ isEditing: false, error: false });
-    const value = PriceInput.parser.parse(this.state.value.toString().replace(/,/g, '.')).evaluate();
-    if (isNaN(value)) {
+    try {
+      const formula = this.state.value.toString().replace(/,/g, '.');
+      const value = PriceInput.parser.parse(formula).evaluate();
+      if (value !== this.props.value) {
+        this.props.onChange(value);
+      }
+    } catch(e) {
       this.setState({ error: true });
-    } else {
-      this.props.onChange(value);
+    }
+  };
+  onKeyPress = (event) => {
+    if (event.charCode === 13) {
+      this.blur();
     }
   };
 
@@ -105,7 +116,7 @@ class PriceInput extends Component {
     return <Input className="price-input" placeholder={placeholder} fluid value={this.value()} disabled={disabled}
                   label={{ basic: true, content: 'zł' }} labelPosition="right" onChange={this.updateValue}
                   onFocus={this.focus} onBlur={this.blur} ref={(element) => this.input = element} loading={isSaving}
-                  iconPosition="left" error={error} />;
+                  iconPosition="left" error={error} onKeyPress={this.onKeyPress} />;
   }
 }
 
