@@ -49,7 +49,7 @@ class NewExpensesGridRow extends Component {
   }
 
   render() {
-    const { categories } = this.props;
+    const { categories, onInputMount } = this.props;
     const { category, price, day, description } = this.state;
 
     // TODO: Add proper validations: price as double, day as available day
@@ -59,17 +59,22 @@ class NewExpensesGridRow extends Component {
         <TableCell>
           <Dropdown fluid value={category} selection search options={categories} onChange={this.updateCategory}
                     openOnFocus={false} placeholder={this.format('expenses-row.category', 'Wybierz kategorię')}
-                    searchInput={<DropdownSearchInput inputRef={(input) => this.categoryField = input} />}  />
+                    searchInput={<DropdownSearchInput inputRef={(input) => {
+                      onInputMount('category', { inputRef: input });
+                      this.categoryField = input;
+                    }} />}  />
         </TableCell>
         <TableCell>
           <PriceInput value={price} placeholder={this.format('expenses-row.price', 'Cena')} onChange={this.updatePrice}
-                      onKeyPress={this.addItem} />
+                      onKeyPress={this.addItem} onMount={onInputMount.bind(null, 'price')} />
         </TableCell>
         <TableCell>
-          <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.addItem} />
+          <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.addItem}
+                 ref={(input) => onInputMount('day', input)} />
         </TableCell>
         <TableCell>
-          <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.addItem} />
+          <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.addItem}
+                 ref={(input) => onInputMount('description', input)} />
         </TableCell>
         <TableCell textAlign="center">
           <Button color="green" icon="plus" tabIndex="-1" onClick={this.addItem} />
@@ -79,10 +84,14 @@ class NewExpensesGridRow extends Component {
   }
 }
 
+NewExpensesGridRow.defaultProps = {
+  onInputMount: (_type, _input) => {},
+};
 NewExpensesGridRow.propTypes = {
   categories: PropTypes.array.isRequired,
   month: PropTypes.number.isRequired,
   onAddItem: PropTypes.func.isRequired,
+  onInputMount: PropTypes.func,
   year: PropTypes.number.isRequired,
 };
 

@@ -7,12 +7,98 @@ import { Table, TableBody, TableHeader, TableRow, TableHeaderCell } from 'semant
 import ExpensesGridRow from '../../containers/expenses/ExpensesGridRow';
 import NewExpensesGridRow from '../../containers/expenses/NewExpensesGridRow';
 
+const NEW_ROW = 'new-expense-row';
+const ENTER = 13;
+const ARROW_UP = 38;
+const ARROW_DOWN = 40;
+// const ARROW_LEFT = 37;
+// const ARROW_RIGHT = 39;
+
 const mapStateToProps = (state) => ({
   rows: (state.expenses[state.location.payload.year] || [])[state.location.payload.month] || [],
 });
 
 class ExpensesGrid extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
+
+  state = {
+    current: {
+      index: -1,
+      type: null,
+    },
+  };
+
+  inputMount = (index, type, input) => {
+    if (input === null || input.inputRef === null) {
+      return;
+    }
+    input.inputRef.dataset.index = index;
+    input.inputRef.dataset.type = type;
+    this.inputs[type][index] = input.inputRef;
+  };
+  newInputMount = (type, input) => {
+    if (input === null || input.inputRef === null) {
+      return;
+    }
+    input.inputRef.dataset.type = type;
+    this.newInputs[type] = input.inputRef;
+  };
+  onKeyDown = (e) => {
+    if ([ENTER, ARROW_UP, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
+      if ([ENTER, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
+        this.moveFocus(1);
+      }
+      if ([ARROW_UP].indexOf(e.keyCode) !== -1) {
+        this.moveFocus(-1);
+      }
+    }
+  };
+  moveFocus = (delta) => {
+    const { current } = this.state;
+    const rows = Object.keys(this.inputs[current.type]).length;
+    let next = current.index + delta;
+
+    if (next < 0) {
+      return;
+    }
+    if (next >= rows) {
+      this.newInputs[current.type].focus();
+      this.setState({ current: { ...current, index: NEW_ROW }});
+      return;
+    }
+    if (current.index === NEW_ROW) {
+      if (delta === 1) {
+        return;
+      }
+      next = rows - 1;
+    }
+
+    this.inputs[current.type][next].focus();
+    this.setState({ current: { ...current, index: next }});
+  };
+  onFocus = (e) => {
+    const { current } = this.state;
+    const data = e.target.dataset;
+
+    if (current.index === NEW_ROW) {
+      this.setState({ current: { ...current, type: data.type }});
+      return;
+    }
+    if (data.index) {
+      const index = parseInt(data.index, 10);
+      this.setState({ current: { index, type: data.type }});
+    }
+  };
+
+  componentWillMount() {
+    this.inputs = {
+      category: {},
+      price: {},
+      day: {},
+      description: {},
+    };
+    this.newInputs = {};
+  }
 
   render() {
     const { rows } = this.props;
@@ -36,9 +122,10 @@ class ExpensesGrid extends Component {
             <TableHeaderCell width={1} />
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {rows.map(row => <ExpensesGridRow key={`expenses-row-${row.id}`} row={row} />)}
-          <NewExpensesGridRow />
+        <TableBody onKeyDown={this.onKeyDown} onFocus={this.onFocus}>
+          {rows.map((row, index) => <ExpensesGridRow key={`expenses-row-${row.id}`} row={row}
+                                                     onInputMount={this.inputMount.bind(this, index)} />)}
+          <NewExpensesGridRow onInputMount={this.newInputMount} />
         </TableBody>
       </Table>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as ExpensesActions from '../../stores/expenses/ExpensesAction';
@@ -25,11 +26,19 @@ const mapDispatchToProps = dispatch => ({
 
 class NewExpensesGridRow extends Component {
   render() {
-    const { categories, year, month, addItem } = this.props;
+    const { categories, year, month, addItem, onInputMount } = this.props;
 
-    return <Row year={year} month={month} categories={categories} onAddItem={addItem} />;
+    return <Row year={year} month={month} categories={categories} onAddItem={addItem} onInputMount={onInputMount} />;
   }
 }
+
+NewExpensesGridRow.defaultProps = {
+  onInputMount: (_type, _input) => {},
+};
+NewExpensesGridRow.propTypes = {
+  onInputMount: PropTypes.func,
+};
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewExpensesGridRow);
 

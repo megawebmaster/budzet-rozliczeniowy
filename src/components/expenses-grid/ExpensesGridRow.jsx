@@ -50,7 +50,7 @@ class ExpensesGridRow extends Component {
   }
 
   render() {
-    const { categories, row: { saving } } = this.props;
+    const { categories, row: { saving }, onInputMount } = this.props;
     const { category, price, day, description } = this.state;
 
     // TODO: Add proper validations: day as available day
@@ -59,17 +59,21 @@ class ExpensesGridRow extends Component {
         <TableCell>
           <Dropdown fluid value={category} selection search options={categories} onChange={this.updateCategory}
                     placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
-                    searchInput={<DropdownSearchInput inputRef={(input) => this.categoryField = input} />}  />
+                    searchInput={<DropdownSearchInput inputRef={(input) => onInputMount('category', { inputRef: input })} />}
+          />
         </TableCell>
         <TableCell>
           <PriceInput value={price} placeholder={this.translate('expenses-row.price', 'Cena')}
-                      onChange={this.updatePrice} onKeyPress={this.onKeyPress} />
+                      onChange={this.updatePrice} onKeyPress={this.onKeyPress}
+                      onMount={onInputMount.bind(null, 'price')} />
         </TableCell>
         <TableCell>
-          <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.onKeyPress} />
+          <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.onKeyPress}
+                 ref={(input) => onInputMount('day', input)} />
         </TableCell>
         <TableCell>
-          <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.onKeyPress} />
+          <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.onKeyPress}
+                 ref={(input) => onInputMount('description', input)} />
         </TableCell>
         <TableCell textAlign="center">
           { saving ?
@@ -81,9 +85,14 @@ class ExpensesGridRow extends Component {
   }
 }
 
+ExpensesGridRow.defaultProps = {
+  onInputMount: (_type, _input) => {},
+  onRemoveItem: (_state, _year, _month) => {},
+};
 ExpensesGridRow.propTypes = {
   categories: PropTypes.array.isRequired,
   month: PropTypes.number.isRequired,
+  onInputMount: PropTypes.func,
   onRemoveItem: PropTypes.func,
   onSaveItem: PropTypes.func.isRequired,
   row: PropTypes.object.isRequired,

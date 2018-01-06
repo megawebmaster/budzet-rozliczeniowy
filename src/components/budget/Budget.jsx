@@ -40,7 +40,6 @@ class Budget extends Component {
     input.inputRef.dataset.type = type;
     this.inputs[type][category.id] = input.inputRef;
   };
-
   onKeyDown = (e) => {
     if ([ENTER, ARROW_UP, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
       if ([ENTER, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
@@ -61,7 +60,7 @@ class Budget extends Component {
 
     this.inputs[current.type][categories[next]].focus();
     this.setState({ current: { ...current, index: next }});
-  }
+  };
   onFocus = (e) => {
     const { categories  } = this.state;
     const data = e.target.dataset;
