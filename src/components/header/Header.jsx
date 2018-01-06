@@ -1,46 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import { NavLink } from 'redux-first-router-link';
-import { Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'semantic-ui-react';
+import { Icon, Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'semantic-ui-react';
+
 import './header.css';
 
-const mapStateToProps = (state) => ({
-  year: state.location.payload.year,
-  month: state.location.payload.month,
-  page: state.location.type,
-});
-
-const mapDispatchToProps = (dispatch) => ({});
-
-const Header = ({ year, month, page }) => {
+const Header = ({ year, month, page, intl }) => {
+  const translate = (id, message) => intl.formatMessage({ id, defaultMessage: message });
+  const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);
   const payload = { year, month };
 
   return (
     <Menu tabular size="large" className="main-menu">
-      <MenuItem header>Our Company</MenuItem>
+      <MenuItem header>SimplyBudget</MenuItem>
       <MenuItem name="budget" as={NavLink} activeClassName="active" to={{ type: 'BUDGET', payload }}>
-        Budżet
+        {translate('header.menu.budget', 'Budżet')}
       </MenuItem>
       <MenuItem name="expenses" as={NavLink} activeClassName="active" to={{ type: 'EXPENSES', payload }}>
-        Rozliczenie
+        {translate('header.menu.expenses', 'Rozliczenie')}
       </MenuItem>
       <Menu.Menu position="right">
-        <Dropdown item text={`Rok: ${year.toString()}`}>
+        <Dropdown item text={format('header.year', 'Rok: {value}', {value: year.toString()})}>
           <DropdownMenu>
             <DropdownItem as={NavLink} to={{ type: page, payload: { year: 2017, month: 1 } }} text="2017" />
             <DropdownItem as={NavLink} to={{ type: page, payload: { year: 2016, month: 1 } }} text="2016" />
             <DropdownItem as={NavLink} to={{ type: page, payload: { year: 2015, month: 1 } }} text="2015" />
           </DropdownMenu>
         </Dropdown>
-        <MenuItem name="Logout" icon="power" as={NavLink} to="/" exact />
+        <MenuItem name="logout" as={NavLink} to="/" exact>
+          <Icon name="power" />
+          {translate('header.logout', 'Wyloguj się')}
+        </MenuItem>
       </Menu.Menu>
     </Menu>
   );
 };
 
 Header.propTypes = {
+  month: PropTypes.number.isRequired,
+  page: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default injectIntl(Header);

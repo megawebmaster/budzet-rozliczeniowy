@@ -2,7 +2,7 @@ import React  from 'react';
 import { connect } from 'react-redux';
 import { Grid, GridRow, GridColumn } from 'semantic-ui-react';
 
-import Header from '../../components/header/Header';
+import Header from '../../containers/Header';
 import MonthList from '../../components/MonthList';
 
 const mapStateToProps = (state) => ({
