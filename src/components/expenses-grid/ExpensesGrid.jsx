@@ -14,6 +14,7 @@ const ARROW_DOWN = 40;
 // const ARROW_LEFT = 37;
 // const ARROW_RIGHT = 39;
 
+// TODO: Add ability to sort data (based on date)
 const mapStateToProps = (state) => ({
   rows: (state.expenses[state.location.payload.year] || [])[state.location.payload.month] || [],
 });

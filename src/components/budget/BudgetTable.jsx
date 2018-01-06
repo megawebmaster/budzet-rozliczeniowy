@@ -12,20 +12,10 @@ class BudgetTable extends Component {
   currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: 'PLN' });
 
   render() {
-    const { label, categories, data, editableRealValues, className, onAdd, onInputMount, PlannedInput, RealInput } = this.props;
-    const categoryIds = categories.map(category => category.id.toString());
-    // TODO: Extract into data source!
-    const { planned, real } = Object.keys(data).reduce((result, categoryId) => {
-      if (categoryIds.indexOf(categoryId) > -1) {
-        result.planned += data[categoryId].planned;
-        result.real += data[categoryId].real;
-      }
-
-      return result;
-    }, {
-      planned: 0.0,
-      real: 0.0,
-    });
+    const {
+      label, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount, PlannedInput,
+      RealInput
+    } = this.props;
 
     return (
       <Table className={className} singleLine striped compact>
@@ -33,10 +23,10 @@ class BudgetTable extends Component {
           <TableRow>
             <TableHeaderCell width={4}>{label}</TableHeaderCell>
             <TableHeaderCell width={4}>
-              {this.format('budget.table.header-planned', 'Planowane ({value})', { value: this.currency(planned) })}
+              {this.format('budget.table.header-planned', 'Planowane ({value})', { value: this.currency(summaryPlanned) })}
             </TableHeaderCell>
             <TableHeaderCell width={4}>
-              {this.format('budget.table.header-real', 'Rzeczywiste ({value})', { value: this.currency(real) })}
+              {this.format('budget.table.header-real', 'Rzeczywiste ({value})', { value: this.currency(summaryReal) })}
             </TableHeaderCell>
           </TableRow>
         </TableHeader>
@@ -73,13 +63,14 @@ BudgetTable.defaultProps = {
 BudgetTable.propTypes = {
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
-  data: PropTypes.object.isRequired,
   editableRealValues: PropTypes.bool.isRequired,
-  onAdd: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  onInputMount: PropTypes.func,
+  summaryPlanned: PropTypes.number.isRequired,
+  summaryReal: PropTypes.number.isRequired,
   PlannedInput: PropTypes.func.isRequired,
   RealInput: PropTypes.func.isRequired,
-  onInputMount: PropTypes.func,
 };
 
 export default injectIntl(BudgetTable);

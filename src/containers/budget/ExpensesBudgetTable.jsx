@@ -7,20 +7,41 @@ import BudgetTable from '../../components/budget/BudgetTable';
 import ExpensePlannedPriceInput from './ExpensePlannedPriceInput';
 import ExpenseRealPriceInput from './ExpenseRealPriceInput';
 
-const mapStateToProps = (state, ownProps) => ({
-  categories: (state.categories.expenses.find((category) => category.id === ownProps.categoryId) || { children: [] }).children,
-  // TODO: Change data fetching into summary values passing
-  data: (state.budget[state.location.payload.year] || { expenses: {} }).expenses[state.location.payload.month] || {},
-});
+// TODO: Move data selection to reselect
+const mapStateToProps = (state, ownProps) => {
+  let categories = state.categories.expenses.find((category) => category.id === ownProps.categoryId);
+  categories = (categories || { children: [] }).children;
+  const yearlyBudget = state.budget[state.location.payload.year] || { expenses: {} };
+  const data = yearlyBudget.expenses[state.location.payload.month] || {};
+  const categoryIds = categories.map(category => category.id.toString());
+  const { planned, real } = Object.keys(data).reduce((result, categoryId) => {
+    if (categoryIds.indexOf(categoryId) > -1) {
+      result.planned += data[categoryId].planned;
+      result.real += data[categoryId].real;
+    }
+
+    return result;
+  }, {
+    planned: 0.0,
+    real: 0.0,
+  });
+
+  return {
+    categories,
+    summaryPlanned: planned,
+    summaryReal: real,
+  };
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   addSubcategory: (name) => dispatch(CategoriesActions.addExpensesSubcategory(ownProps.categoryId, name)),
 });
 
-const ExpensesBudgetTable = ({ label, categories, data, className, addSubcategory, onInputMount }) => (
-  <BudgetTable className={className} label={label} categories={categories} data={data} editableRealValues={false}
-               onAdd={addSubcategory} onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput}
-               RealInput={ExpenseRealPriceInput} />
+const ExpensesBudgetTable = ({ label, categories, summaryPlanned, summaryReal, className, addSubcategory,
+                               onInputMount }) => (
+  <BudgetTable className={className} label={label} categories={categories} editableRealValues={false}
+               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addSubcategory}
+               onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput} />
 );
 
 ExpensesBudgetTable.propTypes = {

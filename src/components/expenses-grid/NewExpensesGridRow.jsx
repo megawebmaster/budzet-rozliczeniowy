@@ -52,7 +52,7 @@ class NewExpensesGridRow extends Component {
     const { categories, onInputMount } = this.props;
     const { category, price, day, description } = this.state;
 
-    // TODO: Add proper validations: price as double, day as available day
+    // TODO: Add proper validation: day as available day
     // TODO: Move each cell to separate component - it will ease updating :)
     return (
       <TableRow className="expenses-row">

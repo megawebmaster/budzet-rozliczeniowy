@@ -7,19 +7,37 @@ import BudgetTable from '../../components/budget/BudgetTable';
 import IncomePlannedPriceInput from './IncomePlannedPriceInput';
 import IncomeRealPriceInput from './IncomeRealPriceInput';
 
-const mapStateToProps = (state) => ({
-  // TODO: Change data fetching into summary values passing
-  data: (state.budget[state.location.payload.year] || { income: {} }).income[state.location.payload.month] || {},
-});
+const mapStateToProps = (state) => {
+  const categories = state.categories.income;
+  const yearlyBudget = state.budget[state.location.payload.year] || { income: {} };
+  const data = yearlyBudget.income[state.location.payload.month] || {};
+  const categoryIds = categories.map(category => category.id.toString());
+  const { planned, real } = Object.keys(data).reduce((result, categoryId) => {
+    if (categoryIds.indexOf(categoryId) > -1) {
+      result.planned += data[categoryId].planned;
+      result.real += data[categoryId].real;
+    }
+
+    return result;
+  }, {
+    planned: 0.0,
+    real: 0.0,
+  });
+
+  return {
+    summaryPlanned: planned,
+    summaryReal: real,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
   addCategory: (name) => dispatch(CategoriesActions.addIncomeCategory(name)),
 });
 
-const IncomeBudgetTable = ({ label, categories, data, className, addCategory, onInputMount }) => (
-  <BudgetTable className={className} label={label} categories={categories} data={data} editableRealValues={true}
-               onAdd={addCategory} onInputMount={onInputMount} PlannedInput={IncomePlannedPriceInput}
-               RealInput={IncomeRealPriceInput} />
+const IncomeBudgetTable = ({ label, categories, summaryPlanned, summaryReal, className, addCategory, onInputMount }) => (
+  <BudgetTable className={className} label={label} categories={categories} editableRealValues={true}
+               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory}
+               onInputMount={onInputMount} PlannedInput={IncomePlannedPriceInput} RealInput={IncomeRealPriceInput} />
 );
 
 IncomeBudgetTable.defaultProps = {
@@ -28,7 +46,6 @@ IncomeBudgetTable.defaultProps = {
 IncomeBudgetTable.propTypes = {
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
-  data: PropTypes.object.isRequired,
   onInputMount: PropTypes.func,
   label: PropTypes.string.isRequired,
 };
