@@ -17,14 +17,16 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   addSubcategory: (name) => dispatch(CategoriesActions.addExpensesSubcategory(ownProps.categoryId, name)),
 });
 
-const ExpensesBudgetTable = ({ label, categories, data, className, addSubcategory }) => (
+const ExpensesBudgetTable = ({ label, categories, data, className, addSubcategory, onInputMount }) => (
   <BudgetTable className={className} label={label} categories={categories} data={data} editableRealValues={false}
-               onAdd={addSubcategory} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput} />
+               onAdd={addSubcategory} onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput}
+               RealInput={ExpenseRealPriceInput} />
 );
 
 ExpensesBudgetTable.propTypes = {
   className: PropTypes.string,
   categoryId: PropTypes.number.isRequired,
+  onInputMount: PropTypes.func,
   label: PropTypes.string.isRequired,
 };
 

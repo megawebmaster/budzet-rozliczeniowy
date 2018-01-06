@@ -105,6 +105,14 @@ class PriceInput extends Component {
     this.setState({ value: this.props.value });
   }
 
+  componentDidMount() {
+    const { onMount, disabled } = this.props;
+
+    if (!disabled) {
+      onMount(this.input);
+    }
+  }
+
   componentWillReceiveProps(props) {
     this.setState({ value: props.value });
   }
@@ -123,6 +131,7 @@ class PriceInput extends Component {
 PriceInput.defaultProps = {
   disabled: false,
   isSaving: false,
+  onMount: (_input) => {},
   placeholder: '',
   value: '',
 };
@@ -130,6 +139,7 @@ PriceInput.propTypes = {
   disabled: PropTypes.bool,
   isSaving: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  onMount: PropTypes.func,
   placeholder: PropTypes.string,
   value: PropTypes.any,
 };

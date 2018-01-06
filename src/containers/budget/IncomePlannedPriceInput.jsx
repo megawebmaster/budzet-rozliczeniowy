@@ -28,16 +28,19 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   onChange: (value) => dispatchProps.onUpdate(stateProps.year, stateProps.month, value),
 });
 
-const IncomePlannedPriceInput = ({ disabled, placeholder, value, isSaving, onChange }) => (
-  <Input value={value} disabled={disabled} isSaving={isSaving} placeholder={placeholder} onChange={onChange} />
+const IncomePlannedPriceInput = ({ disabled, placeholder, value, isSaving, onChange, onMount }) => (
+  <Input value={value} disabled={disabled} isSaving={isSaving} placeholder={placeholder} onChange={onChange}
+         onMount={onMount} />
 );
 IncomePlannedPriceInput.defaultProps = {
   disabled: false,
+  onMount: (_type, _category, _input) => {},
   placeholder: '',
 };
 IncomePlannedPriceInput.propTypes = {
   category: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
+  onMount: PropTypes.func,
   placeholder: PropTypes.string,
 };
 

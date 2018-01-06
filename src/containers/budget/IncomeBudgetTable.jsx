@@ -8,7 +8,6 @@ import IncomePlannedPriceInput from './IncomePlannedPriceInput';
 import IncomeRealPriceInput from './IncomeRealPriceInput';
 
 const mapStateToProps = (state) => ({
-  categories: state.categories.income || [],
   // TODO: Change data fetching into summary values passing
   data: (state.budget[state.location.payload.year] || { income: {} }).income[state.location.payload.month] || {},
 });
@@ -17,16 +16,21 @@ const mapDispatchToProps = (dispatch) => ({
   addCategory: (name) => dispatch(CategoriesActions.addIncomeCategory(name)),
 });
 
-const IncomeBudgetTable = ({ label, categories, data, className, addCategory }) => (
+const IncomeBudgetTable = ({ label, categories, data, className, addCategory, onInputMount }) => (
   <BudgetTable className={className} label={label} categories={categories} data={data} editableRealValues={true}
-               onAdd={addCategory} PlannedInput={IncomePlannedPriceInput} RealInput={IncomeRealPriceInput} />
+               onAdd={addCategory} onInputMount={onInputMount} PlannedInput={IncomePlannedPriceInput}
+               RealInput={IncomeRealPriceInput} />
 );
 
+IncomeBudgetTable.defaultProps = {
+  onInputMount: (_type, _category, _input) => {},
+};
 IncomeBudgetTable.propTypes = {
-  label: PropTypes.string.isRequired,
   categories: PropTypes.array.isRequired,
-  data: PropTypes.object.isRequired,
   className: PropTypes.string,
+  data: PropTypes.object.isRequired,
+  onInputMount: PropTypes.func,
+  label: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncomeBudgetTable);

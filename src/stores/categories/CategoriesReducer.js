@@ -1,5 +1,7 @@
 import * as Actions from './CategoriesAction';
 
+// TODO: Add activeFrom and expiredAt fields to category to show in proper months
+// TODO: Add ability to remove category
 const initialState = {
   income: [],
   expenses: [],

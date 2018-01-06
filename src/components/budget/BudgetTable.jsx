@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Table, TableBody, TableHeader, TableFooter, TableHeaderCell, TableRow, TableCell } from 'semantic-ui-react';
+import { Table, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
 
 import AddCategoryButton from './AddCategoryButton';
 
 class BudgetTable extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
+  // TODO: Extract currency settings to configuration/store so we can fetch it consistently
   currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: 'PLN' });
 
   render() {
-    const { label, categories, data, editableRealValues, className, onAdd, PlannedInput, RealInput } = this.props;
+    const { label, categories, data, editableRealValues, className, onAdd, onInputMount, PlannedInput, RealInput } = this.props;
     const categoryIds = categories.map(category => category.id.toString());
     // TODO: Extract into data source!
     const { planned, real } = Object.keys(data).reduce((result, categoryId) => {
@@ -40,16 +41,17 @@ class BudgetTable extends Component {
           </TableRow>
         </TableHeader>
         <TableBody>
-          { categories.map(category => (
-              <TableRow key={`budget-row-${category.id}`}>
-                <TableCell>{category.name}</TableCell>
-                <TableCell>
-                  <PlannedInput category={category} />
-                </TableCell>
-                <TableCell>
-                  <RealInput category={category} disabled={!editableRealValues} />
-                </TableCell>
-              </TableRow>
+          {categories.map(category => (
+            <TableRow key={`budget-row-${category.id}`}>
+              <TableCell>{category.name}</TableCell>
+              <TableCell>
+                <PlannedInput category={category} onMount={onInputMount.bind(null, 'planned', category)} />
+              </TableCell>
+              <TableCell>
+                <RealInput category={category} onMount={onInputMount.bind(null, 'real', category)}
+                           disabled={!editableRealValues} />
+              </TableCell>
+            </TableRow>
           ))}
         </TableBody>
         <TableFooter>
@@ -65,6 +67,9 @@ class BudgetTable extends Component {
   }
 }
 
+BudgetTable.defaultProps = {
+  onInputMount: (_type, _category, _input) => {},
+};
 BudgetTable.propTypes = {
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
@@ -74,6 +79,7 @@ BudgetTable.propTypes = {
   label: PropTypes.string.isRequired,
   PlannedInput: PropTypes.func.isRequired,
   RealInput: PropTypes.func.isRequired,
+  onInputMount: PropTypes.func,
 };
 
 export default injectIntl(BudgetTable);

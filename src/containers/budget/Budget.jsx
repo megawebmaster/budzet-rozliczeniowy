@@ -7,6 +7,7 @@ import BudgetView from '../../components/budget/Budget';
 
 const mapStateToProps = (state) => ({
   expensesCategories: state.categories.expenses || [],
+  incomeCategories: state.categories.income || [],
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -16,14 +17,16 @@ const mapDispatchToProps = (dispatch) => ({
 // TODO: Move it to functional style
 class Budget extends Component {
   render() {
-    const { expensesCategories } = this.props;
+    const { expensesCategories, incomeCategories } = this.props;
 
-    return <BudgetView expensesCategories={expensesCategories} onAddExpensesCategory={this.props.addCategory} />;
+    return <BudgetView expensesCategories={expensesCategories} incomeCategories={incomeCategories}
+                       onAddExpensesCategory={this.props.addCategory} />;
   }
 }
 
 Budget.propTypes = {
   expensesCategories: PropTypes.array.isRequired,
+  incomeCategories: PropTypes.array.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Budget);
