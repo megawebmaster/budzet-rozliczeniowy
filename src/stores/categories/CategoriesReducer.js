@@ -5,6 +5,7 @@ import * as Actions from './CategoriesAction';
 const initialState = {
   income: [],
   expenses: [],
+  irregular: [],
 };
 
 export default (state = initialState, action) => {
@@ -20,6 +21,8 @@ export default (state = initialState, action) => {
       expenses = state.expenses.slice();
       expenses.splice(idx, 1, { ...expenses[idx], children: [...expenses[idx].children, { id: Date.now(), name: action.payload.name }] });
       return { ...state, expenses};
+    case Actions.ADD_IRREGULAR_CATEGORY:
+      return { ...state, irregular: [...state.irregular, { id: Date.now(), name: action.payload.name }]};
     default:
       return state;
   }

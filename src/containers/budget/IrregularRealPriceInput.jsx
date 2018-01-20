@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Input from '../../components/price-input/PriceInput';
-import * as BudgetActions from '../../stores/budget/BudgetAction';
 
 const mapStateToProps = (state, ownProps) => {
   // TODO: Move fetching data into reselect!
@@ -16,14 +15,8 @@ const mapStateToProps = (state, ownProps) => {
     year: state.location.payload.year,
   };
 };
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, value) => dispatch(BudgetActions.updateRealIrregular(year, ownProps.category.id, value))
-});
-const mergeProps = (stateProps, dispatchProps, ownProps) => ({
-  ...stateProps,
-  ...dispatchProps,
-  ...ownProps,
-  onChange: (value) => dispatchProps.onUpdate(stateProps.year, value),
+const mapDispatchToProps = () => ({
+  onChange: () => {},
 });
 
 const IrregularRealPriceInput = ({ disabled, placeholder, value, isSaving, onChange, onMount }) => (
@@ -42,4 +35,4 @@ IrregularRealPriceInput.propTypes = {
   placeholder: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(IrregularRealPriceInput);
+export default connect(mapStateToProps, mapDispatchToProps)(IrregularRealPriceInput);

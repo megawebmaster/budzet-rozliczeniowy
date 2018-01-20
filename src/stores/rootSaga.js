@@ -16,5 +16,6 @@ export default function* rootSaga() {
     takeEvery(BudgetActions.SAVE_INCOME_REAL, BudgetSaga.saveRealIncome),
     takeEvery(BudgetActions.SAVE_EXPENSE_PLANNED, BudgetSaga.savePlannedExpense),
     takeEvery(BudgetActions.SAVE_EXPENSE_REAL, BudgetSaga.saveRealExpense),
+    takeEvery(BudgetActions.SAVE_IRREGULAR_PLANNED, BudgetSaga.savePlannedIrregular),
   ]);
 }

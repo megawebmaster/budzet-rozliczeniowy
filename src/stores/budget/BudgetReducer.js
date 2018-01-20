@@ -23,6 +23,23 @@ const updateValue = (type, state, action, value) => {
     },
   };
 };
+const updateIrregularValue = (type, state, action, value) => {
+  const { year, categoryId } = action.payload;
+
+  return {
+    ...state,
+    [year]: {
+      ...state[year],
+      [type]: {
+        ...state[year][type],
+        [categoryId]: {
+          ...(state[year][type][categoryId] || { ...baseValue }),
+          ...value,
+        },
+      },
+    },
+  };
+};
 
 export default (state = initialState, action) => {
   switch(action.type){
@@ -50,6 +67,12 @@ export default (state = initialState, action) => {
       return updateValue('expenses', state, action, { savingReal: false });
     case Actions.EXPENSE_REAL_SAVE_FAIL:
       return updateValue('expenses', state, action, { savingReal: false, error: action.error });
+    case Actions.UPDATE_IRREGULAR_PLANNED:
+      return updateIrregularValue('irregular', state, action, { planned: action.payload.value, savingPlanned: true});
+    case Actions.IRREGULAR_PLANNED_SAVE_SUCCESS:
+      return updateIrregularValue('irregular', state, action, { savingPlanned: false });
+    case Actions.IRREGULAR_PLANNED_SAVE_FAIL:
+      return updateIrregularValue('irregular', state, action, { savingPlanned: false, error: action.error });
     default:
       return state;
   }

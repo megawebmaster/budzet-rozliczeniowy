@@ -23,11 +23,6 @@ export const UPDATE_IRREGULAR_PLANNED = 'BudgetAction.UPDATE_IRREGULAR_PLANNED';
 export const IRREGULAR_PLANNED_SAVE_SUCCESS = 'BudgetAction.IRREGULAR_PLANNED_SAVE_SUCCESS';
 export const IRREGULAR_PLANNED_SAVE_FAIL = 'BudgetAction.IRREGULAR_PLANNED_SAVE_FAIL';
 
-export const SAVE_IRREGULAR_REAL = 'BudgetAction.SAVE_IRREGULAR_REAL';
-export const UPDATE_IRREGULAR_REAL = 'BudgetAction.UPDATE_IRREGULAR_REAL';
-export const IRREGULAR_REAL_SAVE_SUCCESS = 'BudgetAction.IRREGULAR_REAL_SAVE_SUCCESS';
-export const IRREGULAR_REAL_SAVE_FAIL = 'BudgetAction.IRREGULAR_REAL_SAVE_FAIL';
-
 export const updatePlannedIncome = (year, month, categoryId, value) => ({
   type: SAVE_INCOME_PLANNED,
   payload: { year, month, categoryId, value }
@@ -46,9 +41,5 @@ export const updateRealExpense = (year, month, categoryId, value) => ({
 });
 export const updatePlannedIrregular = (year, categoryId, value) => ({
   type: SAVE_IRREGULAR_PLANNED,
-  payload: { year, categoryId, value }
-});
-export const updateRealIrregular = (year, categoryId, value) => ({
-  type: SAVE_IRREGULAR_REAL,
   payload: { year, categoryId, value }
 });
