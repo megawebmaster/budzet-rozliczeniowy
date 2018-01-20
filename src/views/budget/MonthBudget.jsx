@@ -13,28 +13,11 @@ const mapStateToProps = (state) => ({
   month: state.location.payload.month,
 });
 
-const mapDispatchToProps = (dispatch) => ({});
-
 class MonthBudget extends Component {
-  // renderSummaryPane() {
-  //   return (
-  //     <TabPane>Tutaj będzie podsumowanie</TabPane>
-  //   );
-  // }
-  //
-  // renderBudgetPane() {
-  //   return (
-  //     <TabPane>Tutaj będzie budżet</TabPane>
-  //   );
-  // }
 
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
-    // const panes = [
-    //   { menuItem: 'Podsumowanie', render: this.renderSummaryPane },
-    //   { menuItem: 'Budżet', render: this.renderBudgetPane },
-    // ];
     const { month, year } = this.props;
 
     return (
@@ -48,7 +31,6 @@ class MonthBudget extends Component {
           </h3>
         </Segment>
         <Budget />
-        {/*<Tab panes={panes} menu={{ attached: true, tabular: true, className: 'two item' }} />*/}
       </div>
     );
   }
@@ -59,5 +41,5 @@ MonthBudget.propTypes = {
   year: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(MonthBudget));
+export default connect(mapStateToProps)(injectIntl(MonthBudget));
 

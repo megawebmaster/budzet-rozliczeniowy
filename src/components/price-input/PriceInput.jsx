@@ -7,6 +7,7 @@ import { Input } from 'semantic-ui-react';
 
 import './price-input.css';
 
+// TODO: Show data-saving errors
 class PriceInput extends Component {
   static parser = new Parser({
     allowMemberAccess: false,

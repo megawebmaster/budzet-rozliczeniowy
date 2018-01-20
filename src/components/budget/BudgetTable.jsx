@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell,
 
 import AddCategoryButton from './AddCategoryButton';
 
+// TODO: Show data-saving errors for adding subcategory
 class BudgetTable extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);

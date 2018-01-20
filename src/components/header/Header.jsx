@@ -6,10 +6,11 @@ import { Icon, Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'sema
 
 import './header.css';
 
+// TODO: Properly load available years
 const Header = ({ year, month, page, intl }) => {
   const translate = (id, message) => intl.formatMessage({ id, defaultMessage: message });
   const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);
-  const payload = { year, month };
+  const payload = { year, month: month || (new Date()).getMonth() + 1 };
 
   return (
     <Menu tabular size="large" className="main-menu">
@@ -38,7 +39,7 @@ const Header = ({ year, month, page, intl }) => {
 };
 
 Header.propTypes = {
-  month: PropTypes.number.isRequired,
+  month: PropTypes.number,
   page: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
 };

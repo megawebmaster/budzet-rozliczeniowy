@@ -54,6 +54,7 @@ class NewExpensesGridRow extends Component {
 
     // TODO: Add proper validation: day as available day
     // TODO: Move each cell to separate component - it will ease updating :)
+    // TODO: Show data-saving errors
     return (
       <TableRow className="expenses-row">
         <TableCell>

@@ -54,6 +54,7 @@ class ExpensesGridRow extends Component {
     const { category, price, day, description } = this.state;
 
     // TODO: Add proper validations: day as available day
+    // TODO: Show data-saving errors
     return (
       <TableRow className="expenses-row">
         <TableCell>

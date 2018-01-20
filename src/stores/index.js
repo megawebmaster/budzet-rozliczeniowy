@@ -44,6 +44,11 @@ const initialState = {
           {name: 'Czynsz', id: 5},
         ],
       },
+    ],
+    irregular: [
+      {name: 'Leczenie', id: 11},
+      {name: 'Samochód', id: 12},
+      {name: 'Emerytura', id: 13},
     ]
   },
   budget: {
@@ -134,6 +139,20 @@ const initialState = {
             planned: 250.00,
             real: 248.97,
           },
+        },
+      },
+      irregular: {
+        11: {
+          planned: 5000.00,
+          real: 2300.00,
+        },
+        12: {
+          planned: 7000.00,
+          real: 0.00,
+        },
+        13: {
+          planned: 40000.00,
+          real: 150.00,
         },
       },
     },

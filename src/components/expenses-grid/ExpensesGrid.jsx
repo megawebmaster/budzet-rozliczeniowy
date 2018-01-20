@@ -19,6 +19,7 @@ const mapStateToProps = (state) => ({
   rows: (state.expenses[state.location.payload.year] || [])[state.location.payload.month] || [],
 });
 
+// TODO: Move navigation to NavigableTable
 class ExpensesGrid extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
