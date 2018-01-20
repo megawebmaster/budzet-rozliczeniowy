@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Table, TableBody, TableHeader, TableHeaderCell, TableRow, TableCell } from 'semantic-ui-react';
 
+import SummaryPlannedValueLeft from '../../containers/budget/SummaryPlannedValueLeft';
+import SummaryRealValueLeft from '../../containers/budget/SummaryRealValueLeft';
+
 class BudgetSummary extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
   currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: 'PLN' });
 
   render() {
-    const { className, expenses, leftToUse } = this.props;
+    const { className, expenses } = this.props;
     return (
       <Table className={className} attached="bottom" singleLine striped compact>
         <TableHeader>
@@ -29,10 +32,10 @@ class BudgetSummary extends Component {
           <TableRow>
             <TableCell>{this.translate('budget.summary.to-use', 'Pozostało do dyspozycji')}</TableCell>
             <TableCell>
-              {this.format('budget.summary.left-planned', '{value}', { value: this.currency(leftToUse.planned) })}
+              <SummaryPlannedValueLeft />
             </TableCell>
             <TableCell>
-              {this.format('budget.summary.left-real', '{value}', { value: this.currency(leftToUse.real) })}
+              <SummaryRealValueLeft />
             </TableCell>
           </TableRow>
         </TableBody>
@@ -49,7 +52,6 @@ const expenseShape = PropTypes.shape({
 BudgetSummary.propTypes = {
   className: PropTypes.string,
   expenses: expenseShape.isRequired,
-  leftToUse: expenseShape.isRequired,
 };
 
 export default injectIntl(BudgetSummary);
