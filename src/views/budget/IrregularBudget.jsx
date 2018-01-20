@@ -5,7 +5,7 @@ import {injectIntl} from 'react-intl';
 import { Segment } from 'semantic-ui-react';
 
 import NavigableTable from '../../components/NavigableTable';
-import IrregularBudgetTable from '../../containers/budget/IrregularBudgetTable';
+import IrregularBudgetTable from '../../containers/irregular_budget/IrregularBudgetTable';
 
 const mapStateToProps = (state) => ({
   categories: state.categories.irregular,

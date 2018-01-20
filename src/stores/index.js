@@ -9,6 +9,7 @@ import routesMap from './../routes';
 import user from './user/UserReducer';
 import categories from './categories/CategoriesReducer';
 import budget from './budget/BudgetReducer';
+import irregular_budget from './irregular_budget/IrregularBudgetReducer';
 import expenses from './expenses/ExpensesReducer';
 
 const history = createHistory();
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   user,
   categories,
   budget,
+  irregular_budget,
   expenses,
 });
 
@@ -142,18 +144,64 @@ const initialState = {
         },
       },
       irregular: {
+        10: {
+          11: {
+            planned: 500.00,
+            real: 200.00,
+          },
+          12: {
+            planned: 700.00,
+            real: 600.00,
+          },
+          13: {
+            planned: 4000.00,
+            real: 4000.00,
+          },
+        },
         11: {
-          planned: 5000.00,
-          real: 2300.00,
+          11: {
+            planned: 500.00,
+            real: 400.00,
+          },
+          12: {
+            planned: 700.00,
+            real: 1200.00,
+          },
+          13: {
+            planned: 4000.00,
+            real: 1200.00,
+          },
         },
         12: {
-          planned: 7000.00,
-          real: 0.00,
+          11: {
+            planned: 500.00,
+            real: 350.00,
+          },
+          12: {
+            planned: 700.00,
+            real: 1000.00,
+          },
+          13: {
+            planned: 4000.00,
+            real: 3800.00,
+          },
         },
-        13: {
-          planned: 40000.00,
-          real: 150.00,
-        },
+      },
+    },
+  },
+  irregular_budget: {
+    2017: {
+      11: {
+        planned: 5000.00,
+        real: 2300.00,
+      },
+      12: {
+        planned: 7000.00,
+        real: 0.00,
+      },
+      13: {
+        planned: 40000.00,
+        real: 150.00,
       },
     },
   },

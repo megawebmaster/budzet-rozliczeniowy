@@ -1,10 +1,12 @@
 import { all, takeLatest, takeEvery } from 'redux-saga/effects';
 import UserSaga from './user/UserSaga';
 import ExpensesSaga from './expenses/ExpensesSaga';
+import BudgetSaga from './budget/BudgetSaga';
+import IrregularBudgetSaga from './irregular_budget/IrregularBudgetSaga';
 import * as UserAction from './user/UserAction';
 import * as ExpensesActions from './expenses/ExpensesAction';
 import * as BudgetActions from './budget/BudgetAction';
-import BudgetSaga from './budget/BudgetSaga';
+import * as IrregularBudgetActions from './irregular_budget/IrregularBudgetAction';
 
 export default function* rootSaga() {
   yield all([
@@ -16,6 +18,6 @@ export default function* rootSaga() {
     takeEvery(BudgetActions.SAVE_INCOME_REAL, BudgetSaga.saveRealIncome),
     takeEvery(BudgetActions.SAVE_EXPENSE_PLANNED, BudgetSaga.savePlannedExpense),
     takeEvery(BudgetActions.SAVE_EXPENSE_REAL, BudgetSaga.saveRealExpense),
-    takeEvery(BudgetActions.SAVE_IRREGULAR_PLANNED, BudgetSaga.savePlannedIrregular),
+    takeEvery(IrregularBudgetActions.SAVE_IRREGULAR_PLANNED, IrregularBudgetSaga.savePlannedIrregular),
   ]);
 }

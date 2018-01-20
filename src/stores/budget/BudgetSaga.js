@@ -67,22 +67,6 @@ class BudgetSaga {
     console.log('saved', action.payload);
   }
 
-  static* savePlannedIrregular(action) {
-    console.log('saving planned irregular', action.payload);
-    yield put({
-      type: Actions.UPDATE_IRREGULAR_PLANNED,
-      payload: action.payload,
-    });
-    yield call(delay, 1000); // TODO: To be removed - just a test
-
-    // const response = yield fetch('https://randomuser.me/api/?inc=picture,name,email,phone,id,dob');
-    const response = {
-      status: 200,
-    };
-    yield BudgetSaga.handleSaveResponse(Actions.IRREGULAR_PLANNED_SAVE_SUCCESS, Actions.IRREGULAR_PLANNED_SAVE_FAIL, action, response);
-    console.log('saved', action.payload);
-  }
-
   static* handleSaveResponse(successType, failureType, action, response) {
     if (response.status === 200) {
       yield put({
