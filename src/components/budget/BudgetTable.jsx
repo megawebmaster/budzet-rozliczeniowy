@@ -9,8 +9,7 @@ import AddCategoryButton from './AddCategoryButton';
 class BudgetTable extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
-  // TODO: Extract currency settings to configuration/store so we can fetch it consistently
-  currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: 'PLN' });
+  currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: this.props.currency });
 
   render() {
     const {
@@ -65,6 +64,7 @@ BudgetTable.defaultProps = {
 BudgetTable.propTypes = {
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
+  currency: PropTypes.string.isRequired,
   editableRealValues: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
   manageableCategories: PropTypes.bool,

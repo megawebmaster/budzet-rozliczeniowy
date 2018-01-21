@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Input from '../../components/price-input/PriceInput';
+import Input from '../PriceInput';
 
 const mapStateToProps = (state, ownProps) => {
   // TODO: Move fetching data into reselect!

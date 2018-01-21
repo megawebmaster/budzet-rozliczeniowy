@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
   });
 
   return {
+    currency: state.configuration.currency.type,
     summaryPlanned: planned,
     summaryReal: real,
   };
@@ -34,9 +35,10 @@ const mapDispatchToProps = (dispatch) => ({
   addCategory: (name) => dispatch(CategoriesActions.addIncomeCategory(name)),
 });
 
-const IncomeBudgetTable = ({ label, categories, summaryPlanned, summaryReal, className, addCategory, onInputMount }) => (
+const IncomeBudgetTable = ({ label, categories, currency, summaryPlanned, summaryReal, className, addCategory,
+                             onInputMount }) => (
   <BudgetTable className={className} label={label} categories={categories} editableRealValues={true}
-               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory}
+               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={IncomePlannedPriceInput} RealInput={IncomeRealPriceInput} />
 );
 

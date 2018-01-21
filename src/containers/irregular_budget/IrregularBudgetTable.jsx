@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
   });
 
   return {
+    currency: state.configuration.currency.type,
     summaryPlanned: planned,
     summaryReal: real,
   };
@@ -34,9 +35,10 @@ const mapDispatchToProps = (dispatch) => ({
   addCategory: (name) => dispatch(CategoriesActions.addIrregularCategory(name)),
 });
 
-const IrregularBudgetTable = ({ label, categories, summaryPlanned, summaryReal, className, addCategory, onInputMount }) => (
+const IrregularBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addCategory,
+                                onInputMount }) => (
   <BudgetTable className={className} label={label} categories={categories} editableRealValues={false}
-               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory}
+               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={IrregularPlannedPriceInput} RealInput={IrregularRealPriceInput} />
 );
 

@@ -7,6 +7,7 @@ import rootSaga from './rootSaga';
 import routesMap from './../routes';
 
 import user from './user/UserReducer';
+import configuration from './configuration/ConfigurationReducer';
 import categories from './categories/CategoriesReducer';
 import budget from './budget/BudgetReducer';
 import irregular_budget from './irregular_budget/IrregularBudgetReducer';
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   budget,
   irregular_budget,
   expenses,
+  configuration,
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -218,7 +220,17 @@ const initialState = {
         { id: 1, category: 5, price: 121.43, day: 7, description: 'Płatność za mieszkanie' },
       ],
     }
-  }
+  },
+  configuration: {
+    locale: 'pl',
+    currency: {
+      type: 'PLN',
+      sign: 'zł',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    },
+    years: [2017, 2018],
+  },
 };
 export default createStore(
   rootReducer,

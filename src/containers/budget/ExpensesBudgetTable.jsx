@@ -28,6 +28,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     categories,
+    currency: state.configuration.currency.type,
     summaryPlanned: planned,
     summaryReal: real,
   };
@@ -37,10 +38,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   addSubcategory: (name) => dispatch(CategoriesActions.addExpensesSubcategory(ownProps.categoryId, name)),
 });
 
-const ExpensesBudgetTable = ({ label, categories, summaryPlanned, summaryReal, className, addSubcategory,
+const ExpensesBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addSubcategory,
                                onInputMount }) => (
   <BudgetTable className={className} label={label} categories={categories} editableRealValues={false}
-               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addSubcategory}
+               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addSubcategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput} />
 );
 

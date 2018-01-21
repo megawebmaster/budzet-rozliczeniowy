@@ -6,8 +6,7 @@ import { Icon, Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'sema
 
 import './header.css';
 
-// TODO: Properly load available years
-const Header = ({ year, month, page, intl }) => {
+const Header = ({ years, year, month, page, intl }) => {
   const translate = (id, message) => intl.formatMessage({ id, defaultMessage: message });
   const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);
   const payload = { year, month: month || (new Date()).getMonth() + 1 };
@@ -24,9 +23,9 @@ const Header = ({ year, month, page, intl }) => {
       <Menu.Menu position="right">
         <Dropdown item text={format('header.year', 'Rok: {value}', {value: year.toString()})}>
           <DropdownMenu>
-            <DropdownItem as={NavLink} to={{ type: page, payload: { year: 2017, month: 1 } }} text="2017" />
-            <DropdownItem as={NavLink} to={{ type: page, payload: { year: 2016, month: 1 } }} text="2016" />
-            <DropdownItem as={NavLink} to={{ type: page, payload: { year: 2015, month: 1 } }} text="2015" />
+            {years.map(y =>
+              <DropdownItem as={NavLink} to={{ type: page, payload: { year: y, month: 1 } }} text={y} />)
+            }
           </DropdownMenu>
         </Dropdown>
         <MenuItem name="logout" as={NavLink} to="/" exact>
@@ -42,6 +41,7 @@ Header.propTypes = {
   month: PropTypes.number,
   page: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
+  years: PropTypes.array.isRequired,
 };
 
 export default injectIntl(Header);

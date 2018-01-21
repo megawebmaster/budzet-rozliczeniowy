@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Input from '../../components/price-input/PriceInput';
+import Input from '../PriceInput';
 
 const mapStateToProps = (state) => {
-  const budget = state.budget[state.location.payload.year] || { income: {}, expenses: {} };
+  const budget = state.budget[state.location.payload.year] || { income: {}, expenses: {}, irregular: {} };
   const income = (budget.income[state.location.payload.month] || {});
   const expenses = (budget.expenses[state.location.payload.month] || {});
   const irregular = (budget.irregular[state.location.payload.month] || {});

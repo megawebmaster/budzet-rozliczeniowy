@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Input from '../../components/price-input/PriceInput';
+import Input from '../PriceInput';
 import * as IrregularBudgetActions from '../../stores/irregular_budget/IrregularBudgetAction';
 
 const mapStateToProps = (state, ownProps) => {

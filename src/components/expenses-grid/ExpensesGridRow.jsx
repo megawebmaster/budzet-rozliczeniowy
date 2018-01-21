@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Input, TableRow, TableCell, Dropdown, DropdownSearchInput, Button, Loader } from 'semantic-ui-react';
 
-import PriceInput from '../price-input/PriceInput';
+import PriceInput from '../../containers/PriceInput';
 import './expenses-grid-row.css';
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Input from '../../components/price-input/PriceInput';
+import Input from '../PriceInput';
 
 const mapStateToProps = (state) => {
   const budget = state.budget[state.location.payload.year] || { income: {}, expenses: {}, irregular: {} };

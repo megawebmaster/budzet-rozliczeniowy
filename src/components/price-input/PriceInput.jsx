@@ -59,8 +59,8 @@ class PriceInput extends Component {
 
   currency = (value) => this.props.intl.formatNumber(value, {
     style: 'decimal',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    minimumFractionDigits: this.props.minimumFractionDigits,
+    maximumFractionDigits: this.props.maximumFractionDigits,
   });
 
   value = () => {
@@ -119,11 +119,11 @@ class PriceInput extends Component {
   }
 
   render() {
-    const { disabled, isSaving, placeholder } = this.props;
+    const { currencyLabel, disabled, isSaving, placeholder } = this.props;
     const { error } = this.state;
 
     return <Input className="price-input" placeholder={placeholder} fluid value={this.value()} disabled={disabled}
-                  label={{ basic: true, content: 'zł' }} labelPosition="right" onChange={this.updateValue}
+                  label={{ basic: true, content: currencyLabel }} labelPosition="right" onChange={this.updateValue}
                   onFocus={this.focus} onBlur={this.blur} ref={(element) => this.input = element} loading={isSaving}
                   iconPosition="left" error={error} onKeyPress={this.onKeyPress} />;
   }
@@ -137,8 +137,11 @@ PriceInput.defaultProps = {
   value: '',
 };
 PriceInput.propTypes = {
+  currencyLabel: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   isSaving: PropTypes.bool,
+  maximumFractionDigits: PropTypes.number.isRequired,
+  minimumFractionDigits: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   onMount: PropTypes.func,
   placeholder: PropTypes.string,
