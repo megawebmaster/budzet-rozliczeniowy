@@ -10,13 +10,13 @@ import AddCategoryButton from './AddCategoryButton';
 import NavigableTable from './../NavigableTable';
 
 import './budget.css';
+import IrregularBudgetTable from '../../containers/budget/IrregularBudgetTable';
 
 class Budget extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
     const { expensesCategories, incomeCategories, onAddExpensesCategory, onKeyDown, onFocus, onInputMount } = this.props;
-    // TODO: Add irregular summary
     // TODO: Show data-saving errors for adding category
 
     return (
@@ -33,7 +33,7 @@ class Budget extends Component {
           <AddCategoryButton label={this.translate('budget.table.add-category', 'Dodaj kategorię')} size="large"
                              onAdd={onAddExpensesCategory}/>
         </Segment>
-        {/*<IrregularBudgetTable className="segment blue" />*/}
+        <IrregularBudgetTable className="segment blue attached" label="Nieregularne wydatki" />
         <BudgetSummary className="segment yellow" />
       </div>
     );

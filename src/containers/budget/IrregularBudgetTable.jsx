@@ -11,12 +11,11 @@ const mapStateToProps = (state) => {
   const categories = state.categories.irregular;
   const categoryIds = categories.map(category => category.id.toString());
   const yearlyBudget = state.budget[state.location.payload.year] || { irregular: {} };
-  const irregularBudget = yearlyBudget.irregular;
-
-  const { planned, real } = Object.keys(irregularBudget).reduce((result, categoryId) => {
+  const data = yearlyBudget.irregular[state.location.payload.month] || {};
+  const { planned, real } = Object.keys(data).reduce((result, categoryId) => {
     if (categoryIds.indexOf(categoryId) > -1) {
-      result.planned += irregularBudget[categoryId].planned;
-      result.real += irregularBudget[categoryId].real;
+      result.planned += data[categoryId].planned;
+      result.real += data[categoryId].real;
     }
 
     return result;
@@ -26,6 +25,7 @@ const mapStateToProps = (state) => {
   });
 
   return {
+    categories,
     summaryPlanned: planned,
     summaryReal: real,
   };
@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const IrregularBudgetTable = ({ label, categories, summaryPlanned, summaryReal, className, addCategory, onInputMount }) => (
   <BudgetTable className={className} label={label} categories={categories} editableRealValues={false}
-               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory}
+               summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory} manageableCategories={false}
                onInputMount={onInputMount} PlannedInput={IrregularPlannedPriceInput} RealInput={IrregularRealPriceInput} />
 );
 

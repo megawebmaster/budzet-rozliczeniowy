@@ -7,10 +7,11 @@ import Input from '../../components/price-input/PriceInput';
 const mapStateToProps = (state, ownProps) => {
   // TODO: Move fetching data into reselect!
   const yearBudget = state.budget[state.location.payload.year] || { irregular: {} };
-  const categoryIncome = yearBudget.irregular[ownProps.category.id] || { real: 0 };
+  const monthIncome = yearBudget.irregular[state.location.payload.month] || {};
+  const categoryPlan = monthIncome[ownProps.category.id] || { real: 0 };
 
   return {
-    value: categoryIncome.real,
+    value: categoryPlan.real,
     isSaving: false,
     year: state.location.payload.year,
   };
@@ -19,8 +20,8 @@ const mapDispatchToProps = () => ({
   onChange: () => {},
 });
 
-const IrregularRealPriceInput = ({ disabled, placeholder, value, isSaving, onChange, onMount }) => (
-  <Input value={value} disabled={disabled} isSaving={isSaving} placeholder={placeholder} onChange={onChange}
+const IrregularRealPriceInput = ({ placeholder, value, isSaving, onChange, onMount }) => (
+  <Input value={value} disabled={true} isSaving={isSaving} placeholder={placeholder} onChange={onChange}
          onMount={onMount} />
 );
 IrregularRealPriceInput.defaultProps = {

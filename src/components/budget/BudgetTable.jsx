@@ -14,8 +14,8 @@ class BudgetTable extends Component {
 
   render() {
     const {
-      label, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount, PlannedInput,
-      RealInput
+      label, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount,
+      manageableCategories, PlannedInput, RealInput
     } = this.props;
 
     return (
@@ -45,14 +45,14 @@ class BudgetTable extends Component {
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
+        {manageableCategories && <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>
               <AddCategoryButton label={this.translate('budget.table.add-subcategory', 'Dodaj podkategorię')}
                                  size="tiny" onAdd={onAdd} />
             </TableCell>
           </TableRow>
-        </TableFooter>
+        </TableFooter>}
       </Table>
     );
   }
@@ -60,12 +60,14 @@ class BudgetTable extends Component {
 
 BudgetTable.defaultProps = {
   onInputMount: (_type, _category, _input) => {},
+  manageableCategories: true,
 };
 BudgetTable.propTypes = {
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
   editableRealValues: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
+  manageableCategories: PropTypes.bool,
   onAdd: PropTypes.func.isRequired,
   onInputMount: PropTypes.func,
   summaryPlanned: PropTypes.number.isRequired,
