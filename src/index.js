@@ -50,6 +50,8 @@ const messages = {
   'budget.summary.left-real': '{value}',
   'add-category-button.save': 'Dodaj',
   'add-category-button.cancel': 'Anuluj',
+  'validation.day': 'Nieprawidłowy dzień: {value}',
+  'validation.price.invalid': 'Nieprawidłowa wartość lub formuła',
 };
 
 const composeApp = (AppComponent, store, messages) => (

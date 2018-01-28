@@ -42,6 +42,7 @@ class ExpensesGrid extends Component {
     if (input === null || input.inputRef === null) {
       return;
     }
+    input.inputRef.dataset.index = NEW_ROW;
     input.inputRef.dataset.type = type;
     this.newInputs[type] = input.inputRef;
   };
@@ -82,14 +83,13 @@ class ExpensesGrid extends Component {
     const { current } = this.state;
     const data = e.target.dataset;
 
-    if (current.index === NEW_ROW) {
-      this.setState({ current: { ...current, type: data.type }});
+    if (current.index === NEW_ROW || data.index === NEW_ROW) {
+      this.setState({ current: { index: NEW_ROW, type: data.type }});
       return;
     }
-    if (data.index) {
-      const index = parseInt(data.index, 10);
-      this.setState({ current: { index, type: data.type }});
-    }
+
+    const index = parseInt(data.index, 10);
+    this.setState({ current: { index, type: data.type }});
   };
 
   componentWillMount() {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import isNumber from 'lodash/isNumber';
 import { Parser } from 'expr-eval';
-import { Input } from 'semantic-ui-react';
+import { Input, Label } from 'semantic-ui-react';
 
 import './price-input.css';
 
@@ -53,10 +53,12 @@ class PriceInput extends Component {
 
   state = {
     isEditing: false,
-    error: false,
+    error: undefined,
+    focused: false,
     value: ''
   };
 
+  translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   currency = (value) => this.props.intl.formatNumber(value, {
     style: 'decimal',
     minimumFractionDigits: this.props.minimumFractionDigits,
@@ -81,7 +83,7 @@ class PriceInput extends Component {
     });
   };
   blur = () => {
-    this.setState({ isEditing: false, error: false });
+    this.setState({ isEditing: false, error: undefined });
     try {
       const formula = this.state.value.toString().replace(/,/g, '.');
       const value = PriceInput.parser.parse(formula).evaluate();
@@ -89,11 +91,13 @@ class PriceInput extends Component {
         this.props.onChange(value);
       }
     } catch(e) {
-      this.setState({ error: true });
+      if (this.state.value.length > 0) {
+        this.setState({ error: this.translate('validation.price.invalid', 'Nieprawidłowa wartość lub formuła') });
+      }
     }
   };
-  onKeyPress = (event) => {
-    if (event.charCode === 13) {
+  onKeyDown = (event) => {
+    if (event.keyCode === 13) {
       this.blur();
     }
   };
@@ -120,12 +124,17 @@ class PriceInput extends Component {
 
   render() {
     const { currencyLabel, disabled, isSaving, placeholder } = this.props;
-    const { error } = this.state;
+    const { error, isEditing } = this.state;
 
-    return <Input className="price-input" placeholder={placeholder} fluid value={this.value()} disabled={disabled}
-                  label={{ basic: true, content: currencyLabel }} labelPosition="right" onChange={this.updateValue}
-                  onFocus={this.focus} onBlur={this.blur} ref={(element) => this.input = element} loading={isSaving}
-                  iconPosition="left" error={error} onKeyPress={this.onKeyPress} />;
+    return (
+      <div className="input-price">
+        <Input placeholder={placeholder} fluid value={this.value()} disabled={disabled} error={!!error}
+               loading={isSaving} label={{ basic: true, content: currencyLabel }} labelPosition="right"
+               iconPosition="left" onChange={this.updateValue} onFocus={this.focus} onBlur={this.blur}
+               onKeyDown={this.onKeyDown} ref={(element) => this.input = element} />
+        {isEditing && error && <Label pointing="left" color="red">{error}</Label>}
+      </div>
+    );
   }
 }
 

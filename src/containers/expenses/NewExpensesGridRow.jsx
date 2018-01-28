@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -24,13 +24,9 @@ const mapDispatchToProps = dispatch => ({
   addItem: (row, year, month) => dispatch(ExpensesActions.addItem(row, year, month)),
 });
 
-class NewExpensesGridRow extends Component {
-  render() {
-    const { categories, year, month, addItem, onInputMount } = this.props;
-
-    return <Row year={year} month={month} categories={categories} onAddItem={addItem} onInputMount={onInputMount} />;
-  }
-}
+const NewExpensesGridRow = ({ categories, year, month, addItem, onInputMount }) => (
+  <Row year={year} month={month} categories={categories} onAddItem={addItem} onInputMount={onInputMount} />
+);
 
 NewExpensesGridRow.defaultProps = {
   onInputMount: (_type, _input) => {},

@@ -24,7 +24,7 @@ const Header = ({ years, year, month, page, intl }) => {
         <Dropdown item text={format('header.year', 'Rok: {value}', {value: year.toString()})}>
           <DropdownMenu>
             {years.map(y =>
-              <DropdownItem as={NavLink} to={{ type: page, payload: { year: y, month: 1 } }} text={y} />)
+              <DropdownItem key={`year-${y}`} as={NavLink} to={{ type: page, payload: { year: y, month: 1 } }} text={y} />)
             }
           </DropdownMenu>
         </Dropdown>

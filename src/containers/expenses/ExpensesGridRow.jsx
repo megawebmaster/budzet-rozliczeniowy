@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -25,14 +25,10 @@ const mapDispatchToProps = dispatch => ({
   removeItem: (row, year, month) => dispatch(ExpensesActions.removeItem(row, year, month)),
 });
 
-class ExpensesGridRow extends Component {
-  render() {
-    const { categories, month, year, row, saveItem, removeItem, onInputMount } = this.props;
-
-    return <Row categories={categories} row={row} month={month} year={year} onSaveItem={saveItem}
-                onRemoveItem={removeItem} onInputMount={onInputMount} />;
-  }
-}
+const ExpensesGridRow = ({ categories, month, year, row, saveItem, removeItem, onInputMount }) => (
+    <Row categories={categories} row={row} month={month} year={year} onSaveItem={saveItem} onRemoveItem={removeItem}
+         onInputMount={onInputMount} />
+);
 
 ExpensesGridRow.defaultProps = {
   onInputMount: (_type, _input) => {},

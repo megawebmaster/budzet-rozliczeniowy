@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { TableRow, TableCell, Input, Dropdown, DropdownSearchInput, Button } from 'semantic-ui-react';
+import { TableRow, TableCell, Input, Button } from 'semantic-ui-react';
 
 import PriceInput from '../../containers/PriceInput';
-import './expenses-grid-row.css';
+import DayField from './../../containers/expenses/DayField';
+import CategoryField from './fields/CategoryField';
 
 class NewExpensesGridRow extends Component {
   newRowState = {
@@ -17,8 +18,7 @@ class NewExpensesGridRow extends Component {
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   addItem = (event) => {
-    if (event.charCode === 13) {
-      event.preventDefault();
+    if (event.keyCode === 13) {
       event.stopPropagation();
       const { onAddItem, month, year } = this.props;
       onAddItem(this.state, year, month);
@@ -30,11 +30,11 @@ class NewExpensesGridRow extends Component {
   updateCategory = (_event, data) => {
     this.setState({ category: data.value });
   };
-  updatePrice = (value) => {
-    this.setState({ price: value });
+  updatePrice = (price) => {
+    this.setState({ price });
   };
-  updateDay = (_event, data) => {
-    this.setState({ day: data.value });
+  updateDay = (day) => {
+    this.setState({ day });
   };
   updateDescription = (_event, data) => {
     this.setState({ description: data.value });
@@ -52,29 +52,27 @@ class NewExpensesGridRow extends Component {
     const { categories, onInputMount } = this.props;
     const { category, price, day, description } = this.state;
 
-    // TODO: Add proper validation: day as available day
     // TODO: Move each cell to separate component - it will ease updating :)
     // TODO: Show data-saving errors
     return (
       <TableRow className="expenses-row">
         <TableCell>
-          <Dropdown fluid value={category} selection search options={categories} onChange={this.updateCategory}
-                    openOnFocus={false} placeholder={this.format('expenses-row.category', 'Wybierz kategorię')}
-                    searchInput={<DropdownSearchInput inputRef={(input) => {
-                      onInputMount('category', { inputRef: input });
-                      this.categoryField = input;
-                    }} />}  />
+          <CategoryField categories={categories} value={category} onUpdate={this.updateCategory}
+                         onInputMount={(input) => {
+                           onInputMount('category', input);
+                           this.categoryField = input.inputRef;
+                         }} />
         </TableCell>
         <TableCell>
           <PriceInput value={price} placeholder={this.format('expenses-row.price', 'Cena')} onChange={this.updatePrice}
-                      onKeyPress={this.addItem} onMount={onInputMount.bind(null, 'price')} />
+                      onKeyDown={this.addItem} onMount={onInputMount.bind(null, 'price')} />
         </TableCell>
         <TableCell>
-          <Input className="input-day" fluid value={day} onChange={this.updateDay} onKeyPress={this.addItem}
-                 ref={(input) => onInputMount('day', input)} />
+          <DayField value={day} onInputMount={(input) => onInputMount('day', input)} onUpdate={this.updateDay}
+                    onKeyDown={this.addItem} />
         </TableCell>
         <TableCell>
-          <Input fluid value={description} onChange={this.updateDescription} onKeyPress={this.addItem}
+          <Input fluid value={description} onChange={this.updateDescription} onKeyDown={this.addItem}
                  ref={(input) => onInputMount('description', input)} />
         </TableCell>
         <TableCell textAlign="center">

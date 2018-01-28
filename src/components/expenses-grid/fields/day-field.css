@@ -1,0 +1,12 @@
+.input-day {
+	position: relative;
+}
+.input-day .ui.pointing.label {
+	position: absolute;
+	left: 100%;
+	top: 5px;
+	z-index: 100;
+}
+.input-day .ui.input input {
+	text-align: right;
+}
