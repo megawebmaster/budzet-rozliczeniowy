@@ -1,7 +1,8 @@
 import Accounts from './Accounts';
 import IrregularBudget from './IrregularBudget';
-import MonthBudget from './MonthBudget';
 import YearBudget from './YearBudget';
+
+export { Accounts, IrregularBudget, YearBudget };
 
 // import React from 'react';
 // import { asyncComponent } from 'react-async-component';
@@ -17,15 +18,10 @@ import YearBudget from './YearBudget';
 //   resolve: () => import('./IrregularBudget'),
 //   LoadingComponent: () => <Segment loading />,
 // });
-// const MonthBudget = asyncComponent({
-//   name: 'MonthBudgetAsync',
-//   resolve: () => import('./MonthBudget'),
-//   LoadingComponent: () => <Segment loading />,
-// });
 // const YearBudget = asyncComponent({
 //   name: 'YearBudgetAsync',
 //   resolve: () => import('./YearBudget'),
 //   LoadingComponent: () => <Segment loading />,
 // });
-
-export { Accounts, IrregularBudget, MonthBudget, YearBudget };
+//
+// export { Accounts, IrregularBudget, YearBudget };

@@ -48,10 +48,14 @@ const messages = {
   'budget.summary.to-use': 'Pozostało do dyspozycji',
   'budget.summary.left-planned': '{value}',
   'budget.summary.left-real': '{value}',
-  'add-category-button.save': 'Dodaj',
-  'add-category-button.cancel': 'Anuluj',
+  'add-button.save': 'Dodaj',
+  'add-button.cancel': 'Anuluj',
   'validation.day': 'Nieprawidłowy dzień: {value}',
   'validation.price.invalid': 'Nieprawidłowa wartość lub formuła',
+  'views.expenses.title': 'Rozliczenie - {month} {year}',
+  'views.expenses.header': 'Rozliczenie: {month} {year}',
+  'views.month-budget.title': 'Budżet - {month} {year}',
+  'views.month-budget.header': 'Miesiąc budżetowy: {month} {year}',
 };
 
 const composeApp = (AppComponent, store, messages) => (

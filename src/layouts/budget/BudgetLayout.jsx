@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { NavLink } from 'redux-first-router-link';
 import { Grid, GridRow, GridColumn, Menu, MenuItem } from 'semantic-ui-react';
 
-import Header from '../../containers/Header';
-import MonthList from '../../components/MonthList';
+import { Header } from '../../components/header';
+import { MonthList } from '../../components/month-list';
 import './budget-layout.css';
 
 const mapStateToProps = (state) => ({

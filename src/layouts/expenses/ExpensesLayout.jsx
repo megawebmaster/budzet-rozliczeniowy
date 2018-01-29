@@ -2,8 +2,8 @@ import React  from 'react';
 import { connect } from 'react-redux';
 import { Grid, GridRow, GridColumn } from 'semantic-ui-react';
 
-import Header from '../../containers/Header';
-import MonthList from '../../components/MonthList';
+import { Header } from '../../components/header';
+import { MonthList } from '../../components/month-list';
 
 const mapStateToProps = (state) => ({
   year: state.location.payload.year,

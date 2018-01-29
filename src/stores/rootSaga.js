@@ -1,16 +1,13 @@
 import { all, takeLatest, takeEvery } from 'redux-saga/effects';
-import UserSaga from './user/UserSaga';
-import ExpensesSaga from './expenses/ExpensesSaga';
-import BudgetSaga from './budget/BudgetSaga';
-import IrregularBudgetSaga from './irregular_budget/IrregularBudgetSaga';
-import * as UserAction from './user/UserAction';
-import * as ExpensesActions from './expenses/ExpensesAction';
-import * as BudgetActions from './budget/BudgetAction';
-import * as IrregularBudgetActions from './irregular_budget/IrregularBudgetAction';
+import { BudgetSaga } from '../components/budget';
+import { ExpensesSaga } from '../components/expenses';
+import { IrregularBudgetSaga } from '../components/irregular-budget';
+import * as BudgetActions from '../components/budget';
+import * as ExpensesActions from '../components/expenses';
+import * as IrregularBudgetActions from '../components/irregular-budget';
 
 export default function* rootSaga() {
   yield all([
-    takeLatest(UserAction.LOAD_USER, UserSaga.loadUser),
     takeLatest(ExpensesActions.ADD_ITEM, ExpensesSaga.addItem),
     takeLatest(ExpensesActions.SAVE_ITEM, ExpensesSaga.saveItem),
     takeLatest(ExpensesActions.REMOVE_ITEM, ExpensesSaga.removeItem),

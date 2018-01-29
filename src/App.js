@@ -10,7 +10,8 @@ import ExpensesLayout from './layouts/expenses/ExpensesLayout';
 import Landing from './views/landing/Landing';
 import { Login } from './views/login';
 import { NotFound } from './views/errors';
-import { Accounts, IrregularBudget, MonthBudget, YearBudget } from './views/budget';
+import { Accounts, IrregularBudget, YearBudget } from './views/budget';
+import { MonthBudget } from './views/month-budget';
 import { Expenses } from './views/expenses';
 
 const mapStateToProps = (state) => ({

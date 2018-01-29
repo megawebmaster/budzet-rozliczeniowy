@@ -7,11 +7,11 @@ import rootSaga from './rootSaga';
 import routesMap from './../routes';
 
 import user from './user/UserReducer';
-import configuration from './configuration/ConfigurationReducer';
-import categories from './categories/CategoriesReducer';
-import budget from './budget/BudgetReducer';
-import irregular_budget from './irregular_budget/IrregularBudgetReducer';
-import expenses from './expenses/ExpensesReducer';
+import { ConfigurationReducer } from '../components/configuration';
+import { CategoriesReducer } from '../components/categories';
+import { BudgetReducer } from '../components/budget';
+import { IrregularBudgetReducer } from '../components/irregular-budget';
+import { ExpensesReducer } from '../components/expenses';
 
 const history = createHistory();
 const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = connectRoutes(history, routesMap);
@@ -19,11 +19,11 @@ const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = c
 const rootReducer = combineReducers({
   location: locationReducer,
   user,
-  categories,
-  budget,
-  irregular_budget,
-  expenses,
-  configuration,
+  categories: CategoriesReducer,
+  budget: BudgetReducer,
+  irregular_budget: IrregularBudgetReducer,
+  expenses: ExpensesReducer,
+  configuration: ConfigurationReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
