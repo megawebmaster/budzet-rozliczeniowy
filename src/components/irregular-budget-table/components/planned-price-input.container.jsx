@@ -3,44 +3,27 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { PriceInput as Input } from '../../price-input';
-import { monthIrregularBudget } from '../irregular-budget-table.selectors';
+import { categoryIrregular } from '../irregular-budget-table.selectors';
 import { year } from '../../location';
-import { updatePlannedIrregular } from '../../irregular-budget';
 
-const mapStateToProps = (state, ownProps) => {
-  const monthExpense = monthIrregularBudget(state);
-  const categoryPlan = monthExpense[ownProps.category.id] || { planned: 0, savingPlanned: false };
-
-  return {
-    value: categoryPlan.planned,
-    isSaving: categoryPlan.savingPlanned,
-    year: year(state),
-  };
-};
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, value) => dispatch(updatePlannedIrregular(year, ownProps.category.id, value)),
+const mapStateToProps = (state, ownProps) => ({
+  value: categoryIrregular(state, ownProps).planned,
+  year: year(state),
 });
-const mergeProps = (stateProps, dispatchProps, ownProps) => ({
-  ...stateProps,
-  ...dispatchProps,
-  ...ownProps,
-  onChange: (value) => dispatchProps.onUpdate(stateProps.year, value),
-});
+const emptyFunc = () => {};
 
-const IrregularPlannedPriceInput = ({ placeholder, value, isSaving, onChange, onMount }) => (
-  <Input value={value} disabled={true} isSaving={isSaving} placeholder={placeholder} onChange={onChange}
+const IrregularPlannedPriceInput = ({ placeholder, value, onMount }) => (
+  <Input value={value} disabled={true} isSaving={false} placeholder={placeholder} onChange={emptyFunc}
          onMount={onMount} />
 );
 IrregularPlannedPriceInput.defaultProps = {
-  disabled: false,
   onMount: (_type, _category, _input) => {},
   placeholder: '',
 };
 IrregularPlannedPriceInput.propTypes = {
-  category: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
+  categoryId: PropTypes.any.isRequired,
   onMount: PropTypes.func,
   placeholder: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(IrregularPlannedPriceInput);
+export default connect(mapStateToProps)(IrregularPlannedPriceInput);

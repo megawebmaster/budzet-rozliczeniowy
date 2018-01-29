@@ -35,10 +35,10 @@ class BudgetTable extends Component {
             <TableRow key={`budget-row-${category.id}`}>
               <TableCell>{category.name}</TableCell>
               <TableCell>
-                <PlannedInput category={category} onMount={onInputMount.bind(null, 'planned', category)} />
+                <PlannedInput categoryId={category.id} onMount={onInputMount.bind(null, 'planned', category)} />
               </TableCell>
               <TableCell>
-                <RealInput category={category} onMount={onInputMount.bind(null, 'real', category)}
+                <RealInput categoryId={category.id} onMount={onInputMount.bind(null, 'real', category)}
                            disabled={!editableRealValues} />
               </TableCell>
             </TableRow>

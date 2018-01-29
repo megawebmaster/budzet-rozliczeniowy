@@ -3,25 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { BudgetTable } from '../../budget-table';
-import { addExpensesSubcategory, expensesCategories } from '../../categories';
+import { addExpensesSubcategory } from '../../categories';
 import { currencyType } from '../../configuration';
 
-import { expensesPlannedSummaries, expensesRealSummaries } from '../expenses-budget-table.selectors';
+import {
+  expensesTableCategories,
+  expensesTablePlannedSummary,
+  expensesTableRealSummary
+} from '../expenses-budget-table.selectors';
 import ExpensePlannedPriceInput from './planned-price-input.container';
 import ExpenseRealPriceInput from './real-price-input.container';
 
-const mapStateToProps = (state, ownProps) => {
-  const category = expensesCategories(state).find((c) => c.id === ownProps.categoryId) || { children: [] };
-  const plannedSummaries = expensesPlannedSummaries(state);
-  const realSummaries = expensesRealSummaries(state);
-
-  return {
-    categories: category.children,
-    currency: currencyType(state),
-    summaryPlanned: plannedSummaries[ownProps.categoryId] || 0.0,
-    summaryReal: realSummaries[ownProps.categoryId] || 0.0,
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  categories: expensesTableCategories(state, ownProps),
+  currency: currencyType(state),
+  summaryPlanned: expensesTablePlannedSummary(state, ownProps),
+  summaryReal: expensesTableRealSummary(state, ownProps),
+});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   addSubcategory: (name) => dispatch(addExpensesSubcategory(ownProps.categoryId, name)),

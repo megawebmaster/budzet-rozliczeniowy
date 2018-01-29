@@ -4,21 +4,16 @@ import { connect } from 'react-redux';
 
 import { PriceInput as Input } from '../../price-input';
 import { year } from '../../location';
-import { irregularYearBudget } from '../irregular-budget.selectors';
+import { categoryIrregularBudget } from '../irregular-budget.selectors';
 import { updatePlannedIrregular } from '../irregular-budget.actions';
 
-const mapStateToProps = (state, ownProps) => {
-  const irregularBudget = irregularYearBudget(state);
-  const categoryPlan = irregularBudget[ownProps.category.id] || { planned: 0, savingPlanned: false };
-
-  return {
-    value: categoryPlan.planned,
-    isSaving: categoryPlan.savingPlanned,
-    year: year(state),
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  value: categoryIrregularBudget(state, ownProps).planned,
+  isSaving: categoryIrregularBudget(state, ownProps).savingPlanned,
+  year: year(state),
+});
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, value) => dispatch(updatePlannedIrregular(year, ownProps.category.id, value)),
+  onUpdate: (year, value) => dispatch(updatePlannedIrregular(year, ownProps.categoryId, value)),
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,
@@ -37,7 +32,7 @@ IrregularPlannedPriceInput.defaultProps = {
   placeholder: '',
 };
 IrregularPlannedPriceInput.propTypes = {
-  category: PropTypes.object.isRequired,
+  categoryId: PropTypes.any.isRequired,
   disabled: PropTypes.bool,
   onMount: PropTypes.func,
   placeholder: PropTypes.string,

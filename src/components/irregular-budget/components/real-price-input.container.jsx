@@ -3,23 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { PriceInput as Input } from '../../price-input';
-import { irregularYearBudget } from '../irregular-budget.selectors';
 import { year } from '../../location';
+import { categoryIrregularBudget } from '../irregular-budget.selectors';
 
-const mapStateToProps = (state, ownProps) => {
-  const irregularBudget = irregularYearBudget(state);
-  const categoryPlan = irregularBudget[ownProps.category.id] || { real: 0 };
-
-  return {
-    value: categoryPlan.real,
-    isSaving: false,
-    year: year(state),
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  value: categoryIrregularBudget(state, ownProps).real,
+  year: year(state),
+});
 const emptyFunc = () => {};
 
-const IrregularRealPriceInput = ({ disabled, placeholder, value, isSaving, onChange, onMount }) => (
-  <Input value={value} disabled={disabled} isSaving={isSaving} placeholder={placeholder} onChange={emptyFunc}
+const IrregularRealPriceInput = ({ disabled, placeholder, value, onChange, onMount }) => (
+  <Input value={value} disabled={disabled} isSaving={false} placeholder={placeholder} onChange={emptyFunc}
          onMount={onMount} />
 );
 IrregularRealPriceInput.defaultProps = {
@@ -28,7 +22,7 @@ IrregularRealPriceInput.defaultProps = {
   placeholder: '',
 };
 IrregularRealPriceInput.propTypes = {
-  category: PropTypes.object.isRequired,
+  categoryId: PropTypes.any.isRequired,
   disabled: PropTypes.bool,
   onMount: PropTypes.func,
   placeholder: PropTypes.string,

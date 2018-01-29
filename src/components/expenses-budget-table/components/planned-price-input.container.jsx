@@ -5,21 +5,16 @@ import { connect } from 'react-redux';
 import { PriceInput as Input } from '../../price-input';
 import { updatePlannedExpense } from '../../budget';
 import { month, year } from '../../location';
-import { monthExpensesBudget } from '../expenses-budget-table.selectors';
+import { categoryExpenses } from '../expenses-budget-table.selectors';
 
-const mapStateToProps = (state, ownProps) => {
-  const monthExpenses = monthExpensesBudget(state);
-  const categoryExpenses = monthExpenses[ownProps.category.id] || { planned: 0, savingPlanned: false };
-
-  return {
-    value: categoryExpenses.planned,
-    isSaving: categoryExpenses.savingPlanned,
-    year: year(state),
-    month: month(state),
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  value: categoryExpenses(state, ownProps).planned,
+  isSaving: categoryExpenses(state, ownProps).savingPlanned,
+  year: year(state),
+  month: month(state),
+});
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, month, value) => dispatch(updatePlannedExpense(year, month, ownProps.category.id, value)),
+  onUpdate: (year, month, value) => dispatch(updatePlannedExpense(year, month, ownProps.categoryId, value)),
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,
@@ -38,7 +33,7 @@ ExpensePlannedPriceInput.defaultProps = {
   placeholder: '',
 };
 ExpensePlannedPriceInput.propTypes = {
-  category: PropTypes.object.isRequired,
+  categoryId: PropTypes.any.isRequired,
   disabled: PropTypes.bool,
   onMount: PropTypes.func,
   placeholder: PropTypes.string,

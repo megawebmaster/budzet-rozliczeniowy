@@ -5,21 +5,16 @@ import { connect } from 'react-redux';
 import { PriceInput as Input } from '../../price-input';
 import { updateRealIncome } from '../../budget';
 import { month, year } from '../../location';
-import { monthIncomeBudget } from '../income-budget-table.selectors';
+import { categoryIncome } from '../income-budget-table.selectors';
 
-const mapStateToProps = (state, ownProps) => {
-  const monthIncome = monthIncomeBudget(state);
-  const categoryIncome = monthIncome[ownProps.category.id] || { real: 0, savingReal: false };
-
-  return {
-    value: categoryIncome.real,
-    isSaving: categoryIncome.savingReal,
-    year: year(state),
-    month: month(state),
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  value: categoryIncome(state, ownProps).real,
+  isSaving: categoryIncome(state, ownProps).savingReal,
+  year: year(state),
+  month: month(state),
+});
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, month, value) => dispatch(updateRealIncome(year, month, ownProps.category.id, value))
+  onUpdate: (year, month, value) => dispatch(updateRealIncome(year, month, ownProps.categoryId, value))
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,
@@ -38,7 +33,7 @@ IncomeRealPriceInput.defaultProps = {
   placeholder: '',
 };
 IncomeRealPriceInput.propTypes = {
-  category: PropTypes.object.isRequired,
+  categoryId: PropTypes.any.isRequired,
   disabled: PropTypes.bool,
   onMount: PropTypes.func,
   placeholder: PropTypes.string,
