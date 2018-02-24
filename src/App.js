@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { NOT_FOUND } from 'redux-first-router';
 import { connect } from 'react-redux';
@@ -14,35 +14,45 @@ import { Accounts, IrregularBudget, YearBudget } from './views/budget';
 import { MonthBudget } from './views/month-budget';
 import { Expenses } from './views/expenses';
 
+import {
+  ROUTE_BUDGET_ACCOUNTS,
+  ROUTE_BUDGET_IRREGULAR,
+  ROUTE_BUDGET_MONTH,
+  ROUTE_BUDGET_SUMMARY,
+  ROUTE_EXPENSES_MONTH,
+  ROUTE_HOME,
+  ROUTE_LOGIN
+} from './routes';
+
 const mapStateToProps = (state) => ({
   page: state.location.type,
 });
 
 const pages = {
-  HOME: () => <Landing />,
+  [ROUTE_HOME]: () => <Landing />,
   [NOT_FOUND]: () => <NotFound />,
-  LOGIN: () => <Login />,
-  BUDGET: () => (
+  [ROUTE_LOGIN]: () => <Login />,
+  [ROUTE_BUDGET_MONTH]: () => (
     <BudgetLayout>
       <MonthBudget />
     </BudgetLayout>
   ),
-  BUDGET_SUMMARY: () => (
+  [ROUTE_BUDGET_SUMMARY]: () => (
     <BudgetLayout>
       <YearBudget />
     </BudgetLayout>
   ),
-  BUDGET_IRREGULAR: () => (
+  [ROUTE_BUDGET_IRREGULAR]: () => (
     <BudgetLayout>
       <IrregularBudget />
     </BudgetLayout>
   ),
-  BUDGET_ACCOUNTS: () => (
+  [ROUTE_BUDGET_ACCOUNTS]: () => (
     <BudgetLayout>
       <Accounts />
     </BudgetLayout>
   ),
-  EXPENSES: () => (
+  [ROUTE_EXPENSES_MONTH]: () => (
     <ExpensesLayout>
       <Expenses />
     </ExpensesLayout>

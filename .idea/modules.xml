@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../budzet-rozliczeniowy-api/.idea/budzet-rozliczeniowy-api.iml" filepath="$PROJECT_DIR$/../budzet-rozliczeniowy-api/.idea/budzet-rozliczeniowy-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/budzet_rozliczeniowy.iml" filepath="$PROJECT_DIR$/.idea/budzet_rozliczeniowy.iml" />
     </modules>
   </component>

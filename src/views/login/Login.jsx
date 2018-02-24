@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'redux-first-router-link';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 
+import { ROUTE_BUDGET_MONTH } from '../../routes';
 import './login.css';
-
 
 class LoginForm extends React.Component {
   render() {
@@ -19,7 +19,7 @@ class LoginForm extends React.Component {
                 <Form.Input fluid icon="user" iconPosition="left" placeholder="E-mail address" />
                 <Form.Input fluid icon="lock" iconPosition="left" placeholder="Password" type="password" />
                 <Button color="teal" fluid size="large" as={Link}
-                        to={{ type: 'BUDGET', payload: {month: (new Date().getMonth() + 1)}}}>Login</Button>
+                        to={{ type: ROUTE_BUDGET_MONTH, payload: {month: (new Date().getMonth() + 1)}}}>Login</Button>
               </Segment>
             </Form>
             <Message>

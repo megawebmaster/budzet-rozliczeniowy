@@ -5,13 +5,14 @@ const initialState = {};
 const baseValue = { real: 0, savingReal: false, planned: 0, savingPlanned: false };
 const updateValue = (state, action, value) => {
   const { year, categoryId } = action.payload;
+  const selectedYear = state[year] || {};
 
   return {
     ...state,
     [year]: {
-      ...state[year],
+      ...selectedYear,
       [categoryId]: {
-        ...(state[year][categoryId] || { ...baseValue }),
+        ...(selectedYear[categoryId] || { ...baseValue }),
         ...value,
       },
     },

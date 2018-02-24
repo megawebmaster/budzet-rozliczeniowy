@@ -2,4 +2,4 @@ export { default as IrregularBudgetTable } from './components/irregular-budget-t
 export * from './irregular-budget.actions';
 export * from './irregular-budget.reducer';
 export * from './irregular-budget.selectors';
-export * from './irregular-budget.saga';
+export * from './irregular-budget.epic';

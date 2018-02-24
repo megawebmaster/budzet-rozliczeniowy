@@ -51,7 +51,6 @@ class NewExpensesRow extends Component {
     const { categories, onInputMount } = this.props;
     const { category, price, day, description } = this.state;
 
-    // TODO: Move each cell to separate component - it will ease updating :)
     // TODO: Show data-saving errors
     return (
       <TableRow className="expenses-row">

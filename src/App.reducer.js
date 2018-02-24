@@ -1,0 +1,26 @@
+import { combineReducers } from 'redux';
+import { connectRoutes } from 'redux-first-router';
+import createHistory from 'history/createBrowserHistory';
+
+import { routesMap } from './routes';
+
+import user from './stores/user/UserReducer';
+import { ConfigurationReducer } from './components/configuration';
+import { CategoriesReducer } from './components/categories';
+import { BudgetReducer } from './components/budget';
+import { IrregularBudgetReducer } from './components/irregular-budget';
+import { ExpensesReducer } from './components/expenses';
+
+const history = createHistory();
+const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = connectRoutes(history, routesMap);
+
+export { locationMiddleware, enhancer };
+export const appReducer = combineReducers({
+  location: locationReducer,
+  user,
+  categories: CategoriesReducer,
+  budget: BudgetReducer,
+  irregular_budget: IrregularBudgetReducer,
+  expenses: ExpensesReducer,
+  configuration: ConfigurationReducer,
+});

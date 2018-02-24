@@ -11,7 +11,7 @@ const ENTER = 13;
 const ARROW_UP = 38;
 const ARROW_DOWN = 40;
 
-// TODO: Move navigation to NavigableTable
+// TODO: Move navigation to NavigableTable - maybe special case footer would work?
 class Expenses extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 

@@ -1,10 +1,19 @@
 import { redirect } from 'redux-first-router';
-
+import {
+  ROUTE_BUDGET_ACCOUNTS,
+  ROUTE_BUDGET_IRREGULAR,
+  ROUTE_BUDGET_MONTH,
+  ROUTE_BUDGET_SUMMARY,
+  ROUTE_EXPENSES_MONTH,
+  ROUTE_HOME,
+  ROUTE_LOGIN
+} from './routes.actions';
 
 const loginUnauthenticated = (dispatch, getState) => {
   const { user: { isLoggedIn } } = getState();
 
   if (!isLoggedIn) {
+    // TODO: Restore when authentication is in place
     // dispatch(redirect({ type: 'LOGIN' }));
   }
 };
@@ -16,36 +25,36 @@ const redirectAuthenticated = (dispatch, getState) => {
     const today = new Date();
     const month = today.getMonth() + 1;
     const year = today.getFullYear();
-    dispatch(redirect({ type: 'BUDGET', params: { year, month } }));
+    dispatch(redirect({ type: ROUTE_BUDGET_MONTH, params: { year, month } }));
   }
 };
 
 export default {
-  HOME: {
+  [ROUTE_HOME]: {
     path: '/',
     thunk: redirectAuthenticated
   },
-  LOGIN: {
+  [ROUTE_LOGIN]: {
     path: '/login',
     thunk: redirectAuthenticated
   },
-  BUDGET_SUMMARY: {
+  [ROUTE_BUDGET_SUMMARY]: {
     path: '/:year/budget/summary',
     thunk: loginUnauthenticated
   },
-  BUDGET_IRREGULAR: {
+  [ROUTE_BUDGET_IRREGULAR]: {
     path: '/:year/budget/irregular',
     thunk: loginUnauthenticated
   },
-  BUDGET_ACCOUNTS: {
+  [ROUTE_BUDGET_ACCOUNTS]: {
     path: '/:year/budget/accounts',
     thunk: loginUnauthenticated
   },
-  BUDGET: {
+  [ROUTE_BUDGET_MONTH]: {
     path: '/:year/budget/:month',
     thunk: loginUnauthenticated
   },
-  EXPENSES: {
+  [ROUTE_EXPENSES_MONTH]: {
     path: '/:year/expenses/:month',
     thunk: loginUnauthenticated
   },

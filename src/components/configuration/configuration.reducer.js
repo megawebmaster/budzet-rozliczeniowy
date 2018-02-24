@@ -1,3 +1,5 @@
+import * as Actions from './configuration.actions';
+
 const initialState = {
   locale: 'pl',
   currency: {
@@ -6,11 +8,19 @@ const initialState = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   },
-  years: [(new Date()).getFullYear()],
+  years: {
+    loading: true,
+    data: []
+  },
 };
 
 export const ConfigurationReducer = (state = initialState, action) => {
   switch(action.type){
+    case Actions.YEARS_UPDATED:
+      return {
+        ...state,
+        years: { loading: false, data: action.payload.years },
+      };
     default:
       return state;
   }
