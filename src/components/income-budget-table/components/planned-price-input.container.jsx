@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { PriceInput as Input } from '../../price-input';
-import { updatePlannedIncome } from '../../budget';
+import { update } from '../../budget';
 import { year, month } from '../../location';
 import { categoryIncome } from '../income-budget-table.selectors';
 
@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
   month: month(state),
 });
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, month, value) => dispatch(updatePlannedIncome(year, month, ownProps.categoryId, value)),
+  onUpdate: (year, month, value) => dispatch(update('income', 'planned', year, month, ownProps.categoryId, value)),
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,

@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const IrregularBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addCategory,
                                 onInputMount }) => (
-  <BudgetTable className={className} label={label} categories={categories} editableRealValues={false}
+  <BudgetTable type="irregular" className={className} label={label} categories={categories} editableRealValues={false}
                summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={IrregularPlannedPriceInput} RealInput={IrregularRealPriceInput} />
 );

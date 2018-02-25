@@ -21,50 +21,17 @@ const saveChanges = (data, loaderType, successType, errorType) => {
   // errorType
 };
 
-const plannedIncomeEpic = (action$) =>
+const saveBudgetEpic = (action$) =>
   action$
-    .ofType(Actions.SAVE_INCOME_PLANNED)
+    .ofType(Actions.SAVE_BUDGET)
     .concatMap((action) => saveChanges(
       action.payload,
-      Actions.UPDATE_INCOME_PLANNED,
-      Actions.INCOME_PLANNED_SAVE_SUCCESS,
-      Actions.INCOME_PLANNED_SAVE_FAIL,
-    ))
-;
-const realIncomeEpic = (action$) =>
-  action$
-    .ofType(Actions.SAVE_INCOME_REAL)
-    .concatMap((action) => saveChanges(
-      action.payload,
-      Actions.UPDATE_INCOME_REAL,
-      Actions.INCOME_REAL_SAVE_SUCCESS,
-      Actions.INCOME_REAL_SAVE_FAIL,
-    ))
-;
-const plannedExpenseEpic = (action$) =>
-  action$
-    .ofType(Actions.SAVE_EXPENSE_PLANNED)
-    .concatMap((action) => saveChanges(
-      action.payload,
-      Actions.UPDATE_EXPENSE_PLANNED,
-      Actions.EXPENSE_PLANNED_SAVE_SUCCESS,
-      Actions.EXPENSE_PLANNED_SAVE_FAIL,
-    ))
-;
-const realExpenseEpic = (action$) =>
-  action$
-    .ofType(Actions.SAVE_EXPENSE_REAL)
-    .concatMap((action) => saveChanges(
-      action.payload,
-      Actions.UPDATE_EXPENSE_REAL,
-      Actions.EXPENSE_REAL_SAVE_SUCCESS,
-      Actions.EXPENSE_REAL_SAVE_FAIL,
+      Actions.SAVING_BUDGET,
+      Actions.SAVE_SUCCESS,
+      Actions.SAVE_FAIL,
     ))
 ;
 
 export const budgetEpic = combineEpics(
-  plannedIncomeEpic,
-  realIncomeEpic,
-  plannedExpenseEpic,
-  realExpenseEpic
+  saveBudgetEpic
 );

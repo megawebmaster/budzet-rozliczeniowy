@@ -12,7 +12,7 @@ const reduceCategoryBudgetType = (type, budget, categoryIds) => (
 );
 
 export const monthExpensesBudget = createSelector(
-  [yearBudget, month], (yearlyBudget, month) => yearlyBudget.expenses[month] || {}
+  [yearBudget, month], (yearlyBudget, month) => yearlyBudget.expense[month] || {}
 );
 
 export const plannedExpenses = createSelector(
