@@ -52,8 +52,43 @@ const addValueError = (state, categoryType, valueType, data, error) => {
   return setValue(state, categoryType, month, year, categoryId, valueObject);
 };
 
+// TODO: Get rid of type in hash - move it elsewhere
+const loadMonth = (state, year, month, values) => {
+  const selectedYear = state[year] || { income: {}, expense: {}, irregular: {} };
+
+  const monthValues = { income: {}, expense: {}, irregular: {} };
+  values.forEach(entry => {
+    monthValues[entry.category.type][entry.category.id] = {
+      ...baseValue,
+      planned: entry.plan,
+      real: entry.real,
+    }
+  });
+
+  return {
+    ...state,
+    [year]: {
+      ...selectedYear,
+      income: {
+        ...selectedYear.income,
+        [month]: monthValues.income
+      },
+      expense: {
+        ...selectedYear.expense,
+        [month]: monthValues.expense
+      },
+      irregular: {
+        ...selectedYear.irregular,
+        [month]: monthValues.irregular
+      },
+    }
+  };
+};
+
 export const BudgetReducer = (state = initialState, action) => {
   switch(action.type){
+    case Actions.LOAD_BUDGET:
+      return loadMonth(state, action.payload.year, action.payload.month, action.payload.values);
     case Actions.SAVING_BUDGET:
       return updateValue(state, action.payload.categoryType, action.payload.valueType, action.payload, true);
     case Actions.SAVE_SUCCESS:

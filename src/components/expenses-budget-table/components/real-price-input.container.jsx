@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { PriceInput as Input } from '../../price-input';
 import { month, year } from '../../location';
-import { update } from '../../budget';
+import { saveValue } from '../../budget';
 import { categoryExpenses } from '../expenses-budget-table.selectors';
 
 const mapStateToProps = (state, ownProps) => ({
@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
   month: month(state),
 });
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, month, value) => dispatch(update('expense', 'real', year, month, ownProps.categoryId, value)),
+  onUpdate: (year, month, value) => dispatch(saveValue('expense', 'real', year, month, ownProps.categoryId, value)),
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,

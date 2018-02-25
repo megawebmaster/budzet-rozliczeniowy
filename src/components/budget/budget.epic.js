@@ -5,15 +5,39 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
 import * as Actions from './budget.actions';
+import { ROUTE_BUDGET_MONTH } from '../../routes';
+import { month, year } from '../location';
+import { loadBudget } from './budget.actions';
+
+const saveValueAction = (year, month, categoryId, valueType, value) => (
+  fetch(`http://localhost:8080/budgets/${year}/entries/${month}/${categoryId}`, {
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: 'same-origin', // include, *omit
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      [valueType]: value,
+    }),
+    method: 'PUT',
+    // mode: 'cors', // no-cors, *same-origin
+  }).then(response => response.json())
+);
+
+const fetchBudget = (year, month) => (
+  fetch(`http://localhost:8080/budgets/${year}/entries/${month}`).then(response => response.json())
+);
 
 const saveChanges = (data, loaderType, successType, errorType) => {
-  // TODO: Replace this with proper request handling
+  const { year, month, categoryId, valueType, value } = data;
+  // TODO: Add support for handling errors
   return Observable
-    .of({
+    .from(saveValueAction(year, month, categoryId, valueType, value))
+    .map(() => ({
       type: successType,
       payload: data
-    })
-    .delay(1000)
+    }))
     .startWith({
       type: loaderType,
       payload: data,
@@ -32,6 +56,21 @@ const saveBudgetEpic = (action$) =>
     ))
 ;
 
+const loadBudgetEpic = (action$, store) =>
+  action$
+    .ofType(ROUTE_BUDGET_MONTH)
+    .mergeMap(() => {
+      const state = store.getState();
+      const currentYear = year(state);
+      const currentMonth = month(state);
+
+      return Observable
+        .from(fetchBudget(currentYear, currentMonth))
+        .map(values => loadBudget(currentYear, currentMonth, values));
+    })
+;
+
 export const budgetEpic = combineEpics(
-  saveBudgetEpic
+  saveBudgetEpic,
+  loadBudgetEpic
 );

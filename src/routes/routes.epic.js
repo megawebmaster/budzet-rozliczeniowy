@@ -4,6 +4,7 @@ import 'rxjs/add/operator/mergeMap';
 import { updateYears } from '../components/configuration';
 import { loadCategories } from '../components/categories';
 
+// TODO: It's not worth reloading on every location change
 const fetchAvailableYears = () => (
   fetch('http://localhost:8080/budgets').then(response => response.json())
 );
