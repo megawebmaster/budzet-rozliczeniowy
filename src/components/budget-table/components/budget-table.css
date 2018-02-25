@@ -1,0 +1,15 @@
+.budget-table.ui.table thead tr th {
+	padding-top: .6em;
+	padding-bottom: .5em;
+}
+.budget-table thead tr th span {
+	display: inline-block;
+	height: 1.9em;
+	padding: .25em;
+}
+.budget-table thead tr th .ui.button {
+	display: none;
+}
+.budget-table thead tr:hover th .ui.button {
+	display: block;
+}

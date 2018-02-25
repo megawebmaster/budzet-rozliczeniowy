@@ -9,8 +9,9 @@ import {
   REMOVE_CATEGORY,
   updateCategory,
 } from './categories.actions';
+import { month, year } from '../location';
 
-const saveCategoryAction = (type, name, parent = null) => (
+const saveCategoryAction = (type, name, year, month, parent = null) => (
   fetch('http://localhost:8080/categories', {
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     // credentials: 'same-origin', // include, *omit
@@ -18,31 +19,55 @@ const saveCategoryAction = (type, name, parent = null) => (
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }),
-    body: JSON.stringify({ type, name, parent_id: parent }),
+    body: JSON.stringify({
+      type, name, year, month, parent_id: parent
+    }),
     method: 'POST',
     // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
 
-const deleteCategoryAction = (type, id) => (
+const deleteCategoryAction = (type, id, year, month) => (
   fetch(`http://localhost:8080/categories/${id}`, {
     method: 'DELETE',
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      type, year, month
+    }),
   })
 );
 
-const addCategoryEpic = (action$) =>
+const addCategoryEpic = (action$, store) =>
   action$
     .ofType(ADD_CATEGORY)
-    .mergeMap((action) => (
-      Observable.from(saveCategoryAction(action.payload.type, action.payload.name, action.payload.parentId))
-        .map(category => updateCategory(action.payload.type, action.payload, category))
-    ))
+    .mergeMap((action) => {
+      const state = store.getState();
+      const promise = saveCategoryAction(
+        action.payload.type,
+        action.payload.name,
+        year(state),
+        month(state),
+        action.payload.parentId
+      );
+      return Observable.from(promise).map(category => updateCategory(action.payload.type, action.payload, category));
+    })
 ;
 
-const removeCategoryEpic = (action$) =>
+const removeCategoryEpic = (action$, store) =>
   action$
     .ofType(REMOVE_CATEGORY)
-    .do((action) => deleteCategoryAction(action.payload.type, action.payload.id))
+    .do((action) => {
+      const state = store.getState();
+      deleteCategoryAction(
+        action.payload.type,
+        action.payload.id,
+        year(state),
+        month(state)
+      );
+    })
     .filter(() => false)
 ;
 

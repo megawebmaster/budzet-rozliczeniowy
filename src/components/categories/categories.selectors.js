@@ -1,4 +1,5 @@
-// import createSelector from 'reselect';
+import { createSelector } from 'reselect';
+import { month, year } from '../location';
 
 const parseChildrenCategories = (categories) => {
   const mainCategories = categories.filter(category => category.parent === null);
@@ -8,14 +9,40 @@ const parseChildrenCategories = (categories) => {
   return mainCategories;
 };
 
-// TODO: Add support for year and month!
-export const incomeCategories = (state) => (
-  parseChildrenCategories(state.categories.filter(category => category.type === 'income'))
-);
-export const expensesCategories = (state) => (
-  parseChildrenCategories(state.categories.filter(category => category.type === 'expense'))
-);
-export const irregularCategories = (state) => (
-  parseChildrenCategories(state.categories.filter(category => category.type === 'irregular'))
+const categories = (state) => state.categories;
+
+const accessibleCategories = createSelector(
+  [year, month, categories],
+  (year, month, categories) => categories.filter(category => {
+    const started = new Date(category.startedAt);
+    const startMatched = started.getFullYear() <= year && started.getMonth() +1 <= month;
+    const deleted = new Date(category.deletedAt);
+    const deletionMatched = category.deletedAt === null || (
+      deleted.getFullYear() >= year && deleted.getMonth() + 1 > month
+    );
+
+    return startMatched && deletionMatched;
+  })
 );
 
+const yearCategories = createSelector(
+  [year, categories],
+  (year, categories) => categories.filter(category => {
+    const started = new Date(category.startedAt);
+
+    return started.getFullYear() === year && category.deletedAt === null;
+  })
+);
+
+export const incomeCategories = createSelector(
+  [accessibleCategories],
+  (categories) => parseChildrenCategories(categories.filter(category => category.type === 'income'))
+);
+export const expensesCategories = createSelector(
+  [accessibleCategories],
+  (categories) => parseChildrenCategories(categories.filter(category => category.type === 'expense'))
+);
+export const irregularCategories = createSelector(
+  [yearCategories],
+  (categories) => parseChildrenCategories(categories.filter(category => category.type === 'irregular'))
+);
