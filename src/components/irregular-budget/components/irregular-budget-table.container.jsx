@@ -7,7 +7,7 @@ import IrregularPlannedPriceInput from './planned-price-input.container';
 import IrregularRealPriceInput from './real-price-input.container';
 import { currencyType } from '../../configuration';
 import { plannedIrregularExpenses, realIrregularExpenses } from '../irregular-budget.selectors';
-import { addIrregularCategory } from '../../categories';
+import { addCategory } from '../../categories';
 
 const mapStateToProps = (state) => ({
   currency: currencyType(state),
@@ -16,7 +16,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addCategory: (name) => dispatch(addIrregularCategory(name)),
+  addCategory: (name) => dispatch(addCategory('irregular', name)),
 });
 
 const IrregularBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addCategory,

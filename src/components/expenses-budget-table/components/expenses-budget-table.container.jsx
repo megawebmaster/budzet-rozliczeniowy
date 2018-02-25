@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { BudgetTable } from '../../budget-table';
-import { addExpensesSubcategory } from '../../categories';
+import { addCategory } from '../../categories';
 import { currencyType } from '../../configuration';
 
 import {
@@ -22,12 +22,12 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  addSubcategory: (name) => dispatch(addExpensesSubcategory(ownProps.categoryId, name)),
+  addSubcategory: (name) => dispatch(addCategory('expense', name, ownProps.categoryId)),
 });
 
 const ExpensesBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addSubcategory,
                                onInputMount }) => (
-  <BudgetTable className={className} label={label} categories={categories} editableRealValues={false}
+  <BudgetTable type="expenses" className={className} label={label} categories={categories} editableRealValues={false}
                summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addSubcategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput} />
 );

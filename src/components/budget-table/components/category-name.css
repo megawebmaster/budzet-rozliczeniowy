@@ -1,0 +1,10 @@
+.category-name span {
+	margin: 5px 0;
+	display: inline-block;
+}
+.category-name button.ui.button {
+  display: none;
+}
+.category-name:hover button.ui.button {
+  display: block;
+}

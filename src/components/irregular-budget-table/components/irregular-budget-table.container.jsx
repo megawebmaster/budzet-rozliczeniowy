@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { BudgetTable } from '../../budget-table';
-import { addIrregularCategory, irregularCategories } from '../../categories';
+import { addCategory, irregularCategories } from '../../categories';
 import { plannedIrregular, realIrregular } from '../irregular-budget-table.selectors';
 import { currencyType } from '../../configuration';
 
@@ -18,12 +18,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addCategory: (name) => dispatch(addIrregularCategory(name)),
+  addCategory: (name) => dispatch(addCategory('irregular', name)),
 });
 
 const IrregularBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addCategory,
                                 onInputMount }) => (
-  <BudgetTable className={className} label={label} categories={categories} currency={currency}
+  <BudgetTable type="irregular" className={className} label={label} categories={categories} currency={currency}
                summaryPlanned={summaryPlanned} summaryReal={summaryReal} editableRealValues={false}
                manageableCategories={false} onAdd={addCategory} onInputMount={onInputMount}
                PlannedInput={IrregularPlannedPriceInput} RealInput={IrregularRealPriceInput} />

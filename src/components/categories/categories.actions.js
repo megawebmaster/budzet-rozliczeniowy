@@ -1,21 +1,21 @@
-export const ADD_INCOME_CATEGORY = 'CategoriesAction.ADD_INCOME_CATEGORY';
-export const ADD_EXPENSES_CATEGORY = 'CategoriesAction.ADD_EXPENSES_CATEGORY';
-export const ADD_EXPENSES_SUBCATEGORY = 'CategoriesAction.ADD_EXPENSES_SUBCATEGORY';
-export const ADD_IRREGULAR_CATEGORY = 'CategoriesAction.ADD_IRREGULAR_CATEGORY';
+export const LOAD_CATEGORIES = 'CategoriesAction.LOAD_CATEGORIES';
+export const ADD_CATEGORY = 'CategoriesAction.ADD_CATEGORY';
+export const UPDATE_CATEGORY = 'CategoriesAction.UPDATE_CATEGORY';
+export const REMOVE_CATEGORY = 'CategoriesAction.REMOVE_CATEGORY';
 
-export const addIncomeCategory = (name) => ({
-  type: ADD_INCOME_CATEGORY,
-  payload: { name }
+export const loadCategories = (categories) => ({
+  type: LOAD_CATEGORIES,
+  payload: { categories }
 });
-export const addExpensesCategory = (name) => ({
-  type: ADD_EXPENSES_CATEGORY,
-  payload: { name }
+export const updateCategory = (type, original, saved) => ({
+  type: UPDATE_CATEGORY,
+  payload: { type, original, saved }
 });
-export const addExpensesSubcategory = (categoryId, name) => ({
-  type: ADD_EXPENSES_SUBCATEGORY,
-  payload: { categoryId, name }
+export const removeCategory = (type, id) => ({
+  type: REMOVE_CATEGORY,
+  payload: { type, id }
 });
-export const addIrregularCategory = (name) => ({
-  type: ADD_IRREGULAR_CATEGORY,
-  payload: { name }
+export const addCategory = (type, name, parentId = null) => ({
+  type: ADD_CATEGORY,
+  payload: { type, name, parentId }
 });

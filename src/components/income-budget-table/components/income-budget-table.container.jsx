@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { currencyType } from '../../configuration';
 import { plannedIncome, realIncome } from '../income-budget-table.selectors';
 
-import { addIncomeCategory } from '../../categories';
+import { addCategory } from '../../categories';
 import { BudgetTable } from '../../budget-table';
 import IncomePlannedPriceInput from './planned-price-input.container';
 import IncomeRealPriceInput from './real-price-input.container';
@@ -17,12 +17,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addCategory: (name) => dispatch(addIncomeCategory(name)),
+  addCategory: (name) => dispatch(addCategory('income', name)),
 });
 
 const IncomeBudgetTable = ({ label, categories, currency, summaryPlanned, summaryReal, className, addCategory,
                              onInputMount }) => (
-  <BudgetTable className={className} label={label} categories={categories} summaryPlanned={summaryPlanned}
+  <BudgetTable type="income" className={className} label={label} categories={categories} summaryPlanned={summaryPlanned}
                summaryReal={summaryReal} currency={currency} onAdd={addCategory} onInputMount={onInputMount}
                editableRealValues={true} PlannedInput={IncomePlannedPriceInput} RealInput={IncomeRealPriceInput} />
 );

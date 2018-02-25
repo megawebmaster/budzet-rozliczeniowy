@@ -6,10 +6,12 @@ import { Segment } from 'semantic-ui-react';
 
 import NavigableTable from '../../components/NavigableTable';
 import { IrregularBudgetTable } from '../../components/irregular-budget';
+import { irregularCategories } from '../../components/categories';
+import { year } from '../../components/location';
 
 const mapStateToProps = (state) => ({
-  categories: state.categories.irregular,
-  year: state.location.payload.year,
+  categories: irregularCategories(state),
+  year: year(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({});

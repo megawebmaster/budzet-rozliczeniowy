@@ -1,13 +1,21 @@
 // import createSelector from 'reselect';
 
-export const incomeCategories = (state) => state.categories.income || [];
-export const expensesCategories = (state) => state.categories.expenses || [];
-export const irregularCategories = (state) => state.categories.irregular || [];
+const parseChildrenCategories = (categories) => {
+  const mainCategories = categories.filter(category => category.parent === null);
+  mainCategories.forEach(category => {
+    category.children = categories.filter(c => c.parent && c.parent.id === category.id);
+  });
+  return mainCategories;
+};
 
-// export const incomeCategoriesIds = createSelector(
-//   incomeCategories, (categories) => categories.map((category) => category.id.toString())
-// );
-// export const expensesCategoriesIds = createSelector(
-//   expensesCategories, (categories) => categories.map((category) => category.id.toString())
-// );
+// TODO: Add support for year and month!
+export const incomeCategories = (state) => (
+  parseChildrenCategories(state.categories.filter(category => category.type === 'income'))
+);
+export const expensesCategories = (state) => (
+  parseChildrenCategories(state.categories.filter(category => category.type === 'expense'))
+);
+export const irregularCategories = (state) => (
+  parseChildrenCategories(state.categories.filter(category => category.type === 'irregular'))
+);
 

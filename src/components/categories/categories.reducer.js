@@ -1,28 +1,50 @@
 import * as Actions from './categories.actions';
 
-// TODO: Add activeFrom and expiredAt fields to category to show in proper months
-// TODO: Add ability to remove category
-const initialState = {
-  income: [],
-  expenses: [],
-  irregular: [],
+const initialState = [];
+
+const add = (state, type, name, parent) => {
+  return [
+    ...state,
+    { id: Date.now(), type, name, parent }
+  ];
+};
+
+const update = (state, type, original, category) => {
+  const idx = state.findIndex(c => c.type === type && c.name === original.name);
+
+  if (idx === -1) {
+    throw new Error(`Invalid category: ${original.name}!`);
+  }
+
+  const result = state.slice();
+  result.splice(idx, 1, category);
+
+  return result;
+};
+
+const remove = (state, type, id) => {
+  const idx = state.findIndex(c => c.id === id);
+
+  if (idx === -1) {
+    throw new Error(`Invalid category ID: ${id}!`);
+  }
+
+  const result = state.slice();
+  result.splice(idx, 1);
+
+  return result;
 };
 
 export const CategoriesReducer = (state = initialState, action) => {
-  let idx, expenses;
-
   switch(action.type){
-    case Actions.ADD_INCOME_CATEGORY:
-      return { ...state, income: [...state.income, { id: Date.now(), name: action.payload.name }]};
-    case Actions.ADD_EXPENSES_CATEGORY:
-      return { ...state, expenses: [...state.expenses, { id: Date.now(), name: action.payload.name, children: [] }]};
-    case Actions.ADD_EXPENSES_SUBCATEGORY:
-      idx = state.expenses.findIndex(item => item.id === action.payload.categoryId);
-      expenses = state.expenses.slice();
-      expenses.splice(idx, 1, { ...expenses[idx], children: [...expenses[idx].children, { id: Date.now(), name: action.payload.name }] });
-      return { ...state, expenses};
-    case Actions.ADD_IRREGULAR_CATEGORY:
-      return { ...state, irregular: [...state.irregular, { id: Date.now(), name: action.payload.name }]};
+    case Actions.LOAD_CATEGORIES:
+      return action.payload.categories;
+    case Actions.UPDATE_CATEGORY:
+      return update(state, action.payload.type, action.payload.original, action.payload.saved);
+    case Actions.REMOVE_CATEGORY:
+      return remove(state, action.payload.type, action.payload.id);
+    case Actions.ADD_CATEGORY:
+      return add(state, action.payload.type, action.payload.name);
     default:
       return state;
   }
