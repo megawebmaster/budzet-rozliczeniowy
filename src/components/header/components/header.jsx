@@ -7,6 +7,7 @@ import { Icon, Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'sema
 import './header.css';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../../routes';
 
+// TODO: Do something with Budget matching for irregular, yearly and accounts
 const Header = ({ years, year, month, page, intl }) => {
   const translate = (id, message) => intl.formatMessage({ id, defaultMessage: message });
   const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);

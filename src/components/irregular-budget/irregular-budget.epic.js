@@ -2,29 +2,72 @@ import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
+import { year } from '../location';
+import { loadIrregularBudget } from './irregular-budget.actions';
+import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import * as Actions from './irregular-budget.actions';
 
-const updatePlannedValue = (data) => {
-  // TODO: Replace this with proper request handling
+const saveIrregularValueAction = (year, categoryId, valueType, value) => (
+  fetch(`http://localhost:8080/budgets/${year}/irregular/${categoryId}`, {
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: 'same-origin', // include, *omit
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      [valueType]: value,
+    }),
+    method: 'PUT',
+    // mode: 'cors', // no-cors, *same-origin
+  }).then(response => response.json())
+);
+
+const fetchIrregularBudget = (year) => (
+  fetch(`http://localhost:8080/budgets/${year}/irregular`).then(response => response.json())
+);
+
+const saveIrregularChanges = (data, loaderType, successType, errorType) => {
+  const { year, categoryId, value } = data;
+  // TODO: Add support for handling errors
   return Observable
-    .of({
-      type: Actions.IRREGULAR_PLANNED_SAVE_SUCCESS,
+    .from(saveIrregularValueAction(year, categoryId, 'planned', value))
+    .map(() => ({
+      type: successType,
       payload: data
-    })
-    .delay(1000)
+    }))
     .startWith({
-      type: Actions.UPDATE_IRREGULAR_PLANNED,
+      type: loaderType,
       payload: data,
     });
-  // Actions.IRREGULAR_PLANNED_SAVE_FAIL
+  // errorType
 };
 
-const plannedEpic = (action$) =>
+const saveIrregularBudgetEpic = (action$) =>
   action$
-    .ofType(Actions.SAVE_IRREGULAR_PLANNED)
-    .concatMap(action => updatePlannedValue(action.payload))
+    .ofType(Actions.SAVE_IRREGULAR_BUDGET)
+    .concatMap((action) => saveIrregularChanges(
+      action.payload,
+      Actions.SAVING_IRREGULAR_BUDGET,
+      Actions.SAVE_IRREGULAR_SUCCESS,
+      Actions.SAVE_IRREGULAR_FAIL,
+    ))
+;
+
+const loadIrregularBudgetEpic = (action$, store) =>
+  action$
+    .ofType(ROUTE_BUDGET_IRREGULAR)
+    .mergeMap(() => {
+      const state = store.getState();
+      const currentYear = year(state);
+
+      return Observable
+        .from(fetchIrregularBudget(currentYear))
+        .map(values => loadIrregularBudget(currentYear, values));
+    })
 ;
 
 export const irregularBudgetEpic = combineEpics(
-  plannedEpic
+  saveIrregularBudgetEpic,
+  loadIrregularBudgetEpic
 );

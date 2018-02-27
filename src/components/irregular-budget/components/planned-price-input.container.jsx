@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { PriceInput as Input } from '../../price-input';
 import { year } from '../../location';
 import { categoryIrregularBudget } from '../irregular-budget.selectors';
-import { updatePlannedIrregular } from '../irregular-budget.actions';
+import { saveIrregularValue } from '../irregular-budget.actions';
 
 const mapStateToProps = (state, ownProps) => ({
   value: categoryIrregularBudget(state, ownProps).planned,
@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => ({
   year: year(state),
 });
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, value) => dispatch(updatePlannedIrregular(year, ownProps.categoryId, value)),
+  onUpdate: (year, value) => dispatch(saveIrregularValue(year, ownProps.categoryId, value)),
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,

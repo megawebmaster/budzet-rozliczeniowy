@@ -10,7 +10,7 @@ import { month, year } from '../location';
 import { loadBudget } from './budget.actions';
 
 const saveValueAction = (year, month, categoryId, valueType, value) => (
-  fetch(`http://localhost:8080/budgets/${year}/entries/${month}/${categoryId}`, {
+  fetch(`http://localhost:8080/budgets/${year}/entries/${categoryId}`, {
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     // credentials: 'same-origin', // include, *omit
     headers: new Headers({
@@ -18,6 +18,7 @@ const saveValueAction = (year, month, categoryId, valueType, value) => (
       'Content-Type': 'application/json'
     }),
     body: JSON.stringify({
+      month,
       [valueType]: value,
     }),
     method: 'PUT',

@@ -18,14 +18,36 @@ const updateValue = (state, action, value) => {
     },
   };
 };
+const loadIrregularBudget = (state, year, values) => {
+  const selectedYear = state[year] || {};
+  const result = {};
+
+  values.forEach(entry => {
+    result[entry.category.id] = {
+      ...baseValue,
+      planned: entry.plan,
+      real: entry.real,
+    }
+  });
+
+  return {
+    ...state,
+    [year]: {
+      ...selectedYear,
+      ...result
+    }
+  };
+};
 
 export const IrregularBudgetReducer = (state = initialState, action) => {
   switch(action.type){
-    case Actions.UPDATE_IRREGULAR_PLANNED:
+    case Actions.LOAD_IRREGULAR_BUDGET:
+      return loadIrregularBudget(state, action.payload.year, action.payload.values);
+    case Actions.SAVING_IRREGULAR_BUDGET:
       return updateValue(state, action, { planned: action.payload.value, savingPlanned: true});
-    case Actions.IRREGULAR_PLANNED_SAVE_SUCCESS:
+    case Actions.SAVE_IRREGULAR_SUCCESS:
       return updateValue(state, action, { savingPlanned: false });
-    case Actions.IRREGULAR_PLANNED_SAVE_FAIL:
+    case Actions.SAVE_IRREGULAR_FAIL:
       return updateValue(state, action, { savingPlanned: false, error: action.error });
     default:
       return state;
