@@ -1,37 +1,105 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/throttleTime';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
 import * as Actions from './expenses.actions';
+import { month, year } from '../location';
+import { ROUTE_EXPENSES_MONTH } from '../../routes';
+import { loadExpenses } from './expenses.actions';
+
+const addValueAction = (year, month, value) => (
+  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}`, {
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: 'same-origin', // include, *omit
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      category_id: value.category,
+      value: value.price,
+      day: value.day,
+      description: value.description
+    }),
+    method: 'POST',
+    // mode: 'cors', // no-cors, *same-origin
+  }).then(response => response.json())
+);
+const saveValueAction = (year, month, value) => (
+  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}/${value.id}`, {
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: 'same-origin', // include, *omit
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      category_id: value.category,
+      value: value.price,
+      day: value.day,
+      description: value.description
+    }),
+    method: 'PUT',
+    // mode: 'cors', // no-cors, *same-origin
+  }).then(response => response.json())
+);
+const deleteValueAction = (year, month, value) => (
+  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}/${value.id}`, {
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: 'same-origin', // include, *omit
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    method: 'DELETE',
+    // mode: 'cors', // no-cors, *same-origin
+  }).then(response => response.json())
+);
+
+const fetchExpenses = (year, month) => (
+  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}`).then(response => response.json())
+);
 
 const addItem = (data) => {
-  // TODO: Replace this with proper request handling
+  // TODO: Add support for handling errors
   return Observable
-    .of({
-      type: Actions.ADD_ITEM_SUCCESS,
+    .from(addValueAction(data.year, data.month, data.row))
+    .map(result => ({
+      type: Actions.SAVE_ITEM_SUCCESS,
       payload: {
         year: data.year,
         month: data.month,
-        row: data.row,
+        row: {
+          id: result.id,
+          category: result.category.id,
+          price: result.value,
+          day: result.day,
+          description: result.description,
+        },
       }
-    });
-  // Actions.ADD_ITEM_FAIL
+    }));
+  // Actions.SAVE_ITEM_FAIL
 };
 const saveItem = (data) => {
-  // TODO: Replace this with proper request handling
+  // TODO: Add support for handling errors
   return Observable
-    .of({
-      type: Actions.ADD_ITEM_SUCCESS,
+    .from(saveValueAction(data.year, data.month, data.row))
+    .map(result => ({
+      type: Actions.SAVE_ITEM_SUCCESS,
       payload: {
         year: data.year,
         month: data.month,
-        row: data.row,
+        row: {
+          id: result.id,
+          category: result.category.id,
+          price: result.value,
+          day: result.day,
+          description: result.description,
+        },
       }
-    })
-    .delay(1000)
+    }))
     .startWith({
       type: Actions.SAVING_ROW,
       payload: data,
@@ -47,17 +115,35 @@ const addItemEpic = (action$) =>
 const saveItemEpic = (action$) =>
   action$
     .ofType(Actions.SAVE_ITEM)
-    .throttleTime(2000)
+    .debounceTime(1000)
     .concatMap((action) => saveItem(action.payload))
 ;
-const removeItemEpic = (action$) =>
+const removeItemEpic = (action$, store) =>
   action$
     .ofType(Actions.REMOVE_ITEM)
+    .do((action) => {
+      const state = store.getState();
+      deleteValueAction(year(state), month(state), action.payload.row);
+    })
     .filter(() => false)
+;
+const loadExpensesEpic = (action$, store) =>
+  action$
+    .ofType(ROUTE_EXPENSES_MONTH)
+    .mergeMap(() => {
+      const state = store.getState();
+      const currentYear = year(state);
+      const currentMonth = month(state);
+
+      return Observable
+        .from(fetchExpenses(currentYear, currentMonth))
+        .map(values => loadExpenses(currentYear, currentMonth, values));
+    })
 ;
 
 export const expensesEpic = combineEpics(
   addItemEpic,
   saveItemEpic,
-  removeItemEpic
+  removeItemEpic,
+  loadExpensesEpic
 );
