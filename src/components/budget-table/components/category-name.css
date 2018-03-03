@@ -3,8 +3,10 @@
 	display: inline-block;
 }
 .category-name button.ui.button {
-  display: none;
+  opacity: 0;
+	transition: 250ms ease;
 }
 .category-name:hover button.ui.button {
-  display: block;
+	opacity: 1;
+	transition: 250ms ease;
 }

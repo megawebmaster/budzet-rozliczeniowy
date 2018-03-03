@@ -16,14 +16,18 @@ class NewExpensesRow extends Component {
 
   format = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
-  addItem = (event) => {
+  onKeyDown = (event) => {
     if (event.keyCode === 13) {
       event.stopPropagation();
-      const { onAddItem, month, year } = this.props;
-      onAddItem(this.state, year, month);
-      this.reset();
-      this.categoryField.focus();
+      this.addItem();
     }
+  };
+
+  addItem = () => {
+    const { onAddItem, month, year } = this.props;
+    onAddItem(this.state, year, month);
+    this.reset();
+    this.categoryField.focus();
   };
 
   updateCategory = (_event, data) => {
@@ -63,14 +67,14 @@ class NewExpensesRow extends Component {
         </TableCell>
         <TableCell>
           <PriceInput value={price} placeholder={this.format('expenses-row.price', 'Cena')} onChange={this.updatePrice}
-                      onKeyDown={this.addItem} onMount={onInputMount.bind(null, 'price')} />
+                      onKeyDown={this.onKeyDown} onMount={onInputMount.bind(null, 'price')} />
         </TableCell>
         <TableCell>
           <DayField value={day} onInputMount={(input) => onInputMount('day', input)} onUpdate={this.updateDay}
-                    onKeyDown={this.addItem} />
+                    onKeyDown={this.onKeyDown} />
         </TableCell>
         <TableCell>
-          <Input fluid value={description} onChange={this.updateDescription} onKeyDown={this.addItem}
+          <Input fluid value={description} onChange={this.updateDescription} onKeyDown={this.onKeyDown}
                  ref={(input) => onInputMount('description', input)} />
         </TableCell>
         <TableCell textAlign="center">

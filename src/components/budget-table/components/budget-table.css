@@ -8,8 +8,10 @@
 	padding: .25em;
 }
 .budget-table thead tr th .ui.button {
-	display: none;
+	opacity: 0;
+	transition: 250ms ease;
 }
 .budget-table thead tr:hover th .ui.button {
-	display: block;
+	opacity: 1;
+	transition: 250ms ease;
 }

@@ -9,13 +9,17 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onRemove: () => dispatch(removeCategory(ownProps.type, ownProps.category.id)),
 });
 
-const CategoryNameContainer = ({ category, onRemove }) => (
-  <CategoryName category={category} onRemove={onRemove} />
+const CategoryNameContainer = ({ category, onRemove, deletable }) => (
+  <CategoryName category={category} onRemove={onRemove} deletable={deletable} />
 );
 
 CategoryNameContainer.propTypes = {
   category: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
+  deletable: PropTypes.bool,
+};
+CategoryNameContainer.defaultProps = {
+  deletable: false,
 };
 
 export default connect(null, mapDispatchToProps)(CategoryNameContainer);

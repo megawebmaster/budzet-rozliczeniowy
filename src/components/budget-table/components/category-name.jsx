@@ -8,14 +8,19 @@ class CategoryName extends Component {
   static propTypes = {
     category: PropTypes.object.isRequired,
     onRemove: PropTypes.func.isRequired,
+    deletable: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    deletable: false,
   };
 
   render() {
-    const { category, onRemove } = this.props;
+    const { category, deletable, onRemove } = this.props;
 
     return (
       <div className="category-name clearfix">
-        <Button icon="trash" color="red" size="mini" floated="right" onClick={onRemove} />
+        {deletable && <Button icon="trash" color="red" size="mini" floated="right" onClick={onRemove} />}
         <span>{category.name}</span>
       </div>
     );
