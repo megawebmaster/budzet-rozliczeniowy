@@ -1,6 +1,9 @@
 import * as Actions from './irregular-budget.actions';
+import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 
-const initialState = {};
+const initialState = {
+  loading: true,
+};
 
 const baseValue = { real: 0, savingReal: false, planned: 0, savingPlanned: false };
 const updateValue = (state, action, value) => {
@@ -32,6 +35,7 @@ const loadIrregularBudget = (state, year, values) => {
 
   return {
     ...state,
+    loading: false,
     [year]: {
       ...selectedYear,
       ...result
@@ -44,11 +48,13 @@ export const IrregularBudgetReducer = (state = initialState, action) => {
     case Actions.LOAD_IRREGULAR_BUDGET:
       return loadIrregularBudget(state, action.payload.year, action.payload.values);
     case Actions.SAVING_IRREGULAR_BUDGET:
-      return updateValue(state, action, { planned: action.payload.value, savingPlanned: true});
+      return updateValue(state, action, { planned: action.payload.value, savingPlanned: true });
     case Actions.SAVE_IRREGULAR_SUCCESS:
       return updateValue(state, action, { savingPlanned: false });
     case Actions.SAVE_IRREGULAR_FAIL:
       return updateValue(state, action, { savingPlanned: false, error: action.error });
+    case ROUTE_BUDGET_IRREGULAR:
+      return { ...state, loading: true };
     default:
       return state;
   }

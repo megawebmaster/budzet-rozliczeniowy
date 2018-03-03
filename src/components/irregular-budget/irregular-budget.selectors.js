@@ -5,6 +5,7 @@ import { reduceBudgetType } from '../budget/budget.helpers';
 import { categoryId } from '../budget/budget.selectors';
 
 export const irregularBudget = (state) => state.irregular_budget;
+export const isLoading = (state) => state.irregular_budget.loading;
 
 export const irregularYearBudget = createSelector(
   [irregularBudget, year], (budget, year) => budget[year] || {}

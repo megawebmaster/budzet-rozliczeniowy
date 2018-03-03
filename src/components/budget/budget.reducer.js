@@ -1,7 +1,10 @@
 import * as Actions from './budget.actions';
 import { upperFirst } from './budget.helpers';
+import { ROUTE_BUDGET_MONTH } from '../../routes';
 
-const initialState = {};
+const initialState = {
+  loading: true,
+};
 
 const baseValue = { real: 0, savingReal: false, planned: 0, savingPlanned: false };
 const getValue = (state, categoryType, month, year, categoryId) => {
@@ -67,6 +70,7 @@ const loadMonth = (state, year, month, values) => {
 
   return {
     ...state,
+    loading: false,
     [year]: {
       ...selectedYear,
       income: {
@@ -95,6 +99,8 @@ export const BudgetReducer = (state = initialState, action) => {
       return updateValue(state, action.payload.categoryType, action.payload.valueType, action.payload, false);
     case Actions.SAVE_FAIL:
       return addValueError(state, action.payload.categoryType, action.payload.valueType, action.payload, action.error);
+    case ROUTE_BUDGET_MONTH:
+      return { ...state, loading: true };
     default:
       return state;
   }

@@ -3,3 +3,6 @@
 	padding-left: 1.5em;
 	text-align: center;
 }
+.ui.segment.basic.container {
+	padding: 0 1px;
+}

@@ -1,6 +1,9 @@
 import * as Actions from './expenses.actions';
+import { ROUTE_EXPENSES_MONTH } from '../../routes';
 
-const initialState = {};
+const initialState = {
+  loading: true,
+};
 
 const loadMonth = (state, year, month, values) => {
   const selectedYear = state[year] || {};
@@ -12,7 +15,7 @@ const loadMonth = (state, year, month, values) => {
     description: expense.description
   }));
 
-  return { ...state, [year]: { ...selectedYear, [month]: result } };
+  return { ...state, loading: false, [year]: { ...selectedYear, [month]: result } };
 };
 
 const addItem = (state, year, month, value) => {
@@ -55,6 +58,8 @@ export const ExpensesReducer = (state = initialState, action) => {
       return saveItem(state, action.payload.year, action.payload.month, action.payload.row, false);
     case Actions.REMOVE_ITEM:
       return removeItem(state, action.payload.year, action.payload.month, action.payload.row);
+    case ROUTE_EXPENSES_MONTH:
+      return { ...state, loading: true };
     default:
       return state;
   }
