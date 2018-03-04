@@ -10,21 +10,19 @@ import { irregularCategories } from '../../components/categories';
 import { year } from '../../components/location';
 
 const IrregularBudget = ({ categories, loading, year, onFocus, onInputMount, onKeyDown, intl }) => {
-  const format = (id, message) => intl.formatMessage({id, defaultMessage: message});
+  const format = (id, message, params) => intl.formatMessage({id, defaultMessage: message}, params);
 
   return (
     <div onKeyDown={onKeyDown} onFocus={onFocus}>
       <Helmet>
-        <title>Budżet - wydatki nieregularne</title>
+        <title>{format('views.irregular-budget.title', 'Budżet - wydatki nieregularne {year}', {year})}</title>
       </Helmet>
       <Segment>
-        <h3>
-          Wydatki nieregularne: {year} rok
-        </h3>
+        <h3>{format('views.irregular-budget.header', 'Wydatki nieregularne {year} rok', {year})}</h3>
       </Segment>
       <Segment basic loading={loading}>
-        <IrregularBudgetTable className="segment blue" label="Roczne wydatki nieregularne" categories={categories}
-                              onInputMount={onInputMount} />
+        <IrregularBudgetTable className="segment blue" categories={categories} onInputMount={onInputMount}
+                              label={format('views.irregular-budget.table-label', 'Roczne wydatki nieregularne')} />
       </Segment>
     </div>
   );

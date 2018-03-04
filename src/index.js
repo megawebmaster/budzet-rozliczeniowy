@@ -68,6 +68,9 @@ const messages = {
   'views.expenses.header': 'Rozliczenie: {month} {year}',
   'views.month-budget.title': 'Budżet - {month} {year}',
   'views.month-budget.header': 'Miesiąc budżetowy: {month} {year}',
+  'views.irregular-budget.title': 'Budżet - wydatki nieregularne {year}',
+  'views.irregular-budget.header': 'Wydatki nieregularne: {year} rok',
+  'views.irregular-budget.table-label': 'Roczne wydatki nieregularne',
 };
 
 const composeApp = (AppComponent, store, messages) => (
