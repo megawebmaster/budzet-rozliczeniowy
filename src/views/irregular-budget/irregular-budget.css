@@ -3,9 +3,6 @@
 	padding-left: 1.5em;
 	text-align: center;
 }
-.ui.segment.basic.content-container {
+.ui.segment.basic.irregular-container {
 	padding: 0 1px;
-}
-.ui.basic.content-container.loading.segment::after {
-	top: 15%;
 }

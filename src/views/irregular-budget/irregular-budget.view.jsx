@@ -8,6 +8,7 @@ import NavigableTable from '../../components/NavigableTable';
 import { IrregularBudgetTable, isLoading } from '../../components/irregular-budget';
 import { irregularCategories } from '../../components/categories';
 import { year } from '../../components/location';
+import './irregular-budget.css';
 
 const IrregularBudget = ({ categories, loading, year, onFocus, onInputMount, onKeyDown, intl }) => {
   const format = (id, message, params) => intl.formatMessage({id, defaultMessage: message}, params);
@@ -20,7 +21,7 @@ const IrregularBudget = ({ categories, loading, year, onFocus, onInputMount, onK
       <Segment>
         <h3>{format('views.irregular-budget.header', 'Wydatki nieregularne {year} rok', {year})}</h3>
       </Segment>
-      <Segment basic loading={loading}>
+      <Segment basic loading={loading} className="irregular-container">
         <IrregularBudgetTable className="segment blue" categories={categories} onInputMount={onInputMount}
                               label={format('views.irregular-budget.table-label', 'Roczne wydatki nieregularne')} />
       </Segment>

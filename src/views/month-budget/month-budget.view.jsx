@@ -22,7 +22,7 @@ const MonthBudget = ({ month, year, loading, intl }) => {
       <Segment>
         <h3>{format('views.month-budget.header', 'Miesiąc budżetowy: {month} {year}', params)}</h3>
       </Segment>
-      <Segment basic loading={loading} className="container">
+      <Segment basic loading={loading} className="content-container">
         <Budget />
       </Segment>
     </Fragment>
