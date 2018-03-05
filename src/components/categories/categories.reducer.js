@@ -10,7 +10,7 @@ const add = (state, type, name, parent) => {
 };
 
 const update = (state, type, original, category) => {
-  const idx = state.findIndex(c => c.type === type && c.name === original.name);
+  const idx = state.findIndex(c => c.type === type && c.name === original.name && c.parent === original.parent);
 
   if (idx === -1) {
     throw new Error(`Invalid category: ${original.name}!`);

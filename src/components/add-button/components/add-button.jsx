@@ -38,7 +38,7 @@ class AddButton extends Component {
 
   saveInput = () => {
     this.props.onSave(this.state.value);
-    this.hideInput();
+    this.setState({ value: '' });
   };
 
   renderButton = () => {

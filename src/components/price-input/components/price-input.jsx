@@ -106,6 +106,17 @@ class PriceInput extends Component {
     this.setState({ value: data.value });
   };
 
+  getLoadingProps = () => {
+    if (this.props.isSaving) {
+      return {
+        loading: true,
+        iconPosition: 'left',
+      };
+    }
+
+    return {};
+  };
+
   componentWillMount() {
     this.setState({ value: this.props.value });
   }
@@ -123,15 +134,15 @@ class PriceInput extends Component {
   }
 
   render() {
-    const { currencyLabel, disabled, isSaving, placeholder } = this.props;
+    const { currencyLabel, disabled, placeholder } = this.props;
     const { error, isEditing } = this.state;
 
     return (
       <div className="input-price">
         <Input placeholder={placeholder} fluid value={this.value()} disabled={disabled} error={!!error}
-               loading={isSaving} label={{ basic: true, content: currencyLabel }} labelPosition="right"
-               onChange={this.updateValue} onFocus={this.focus} onBlur={this.blur} iconPosition={isSaving ? 'left' : ''}
-               onKeyDown={this.onKeyDown} ref={(element) => this.input = element} />
+               label={{ basic: true, content: currencyLabel }} labelPosition="right" onChange={this.updateValue}
+               onFocus={this.focus} onBlur={this.blur} onKeyDown={this.onKeyDown} {...this.getLoadingProps()}
+               ref={(element) => this.input = element} />
         {isEditing && error && <Label pointing="left" color="red">{error}</Label>}
       </div>
     );
