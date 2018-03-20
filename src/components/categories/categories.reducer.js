@@ -40,6 +40,11 @@ export const CategoriesReducer = (state = initialState, action) => {
     case Actions.LOAD_CATEGORIES:
       return action.payload.categories;
     case Actions.UPDATE_CATEGORY:
+      return update(state, action.payload.type, action.payload.category, {
+        ...action.payload.category,
+        ...action.payload.values
+      });
+    case Actions.REPLACE_CATEGORY:
       return update(state, action.payload.type, action.payload.original, action.payload.saved);
     case Actions.REMOVE_CATEGORY:
       return remove(state, action.payload.type, action.payload.id);

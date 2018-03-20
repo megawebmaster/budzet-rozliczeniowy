@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { BudgetTable } from '../../budget-table';
-import { addCategory, removeCategory } from '../../categories';
+import { addCategory, removeCategory, updateCategory } from '../../categories';
 import { currencyType } from '../../configuration';
 
 import {
@@ -21,22 +21,23 @@ const mapStateToProps = (state, ownProps) => ({
   summaryReal: expensesTableRealSummary(state, ownProps),
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  addSubcategory: (name) => dispatch(addCategory('expense', name, ownProps.categoryId)),
-  onRemove: () => dispatch(removeCategory('expense', ownProps.categoryId)),
+const mapDispatchToProps = (dispatch, { category }) => ({
+  addSubcategory: (name) => dispatch(addCategory('expense', name, category.id)),
+  onRemove: () => dispatch(removeCategory('expense', category.id)),
+  onEdit: (name) => dispatch(updateCategory('expense', category, { name })),
 });
 
 const ExpensesBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addSubcategory,
-                               onRemove, onInputMount }) => (
+                               onEdit, onRemove, onInputMount }) => (
   <BudgetTable type="expense" className={className} label={label} categories={categories} editableRealValues={false}
                summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addSubcategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput}
-               onRemove={onRemove} />
+               onRemove={onRemove} onEdit={onEdit} />
 );
 
 ExpensesBudgetTable.propTypes = {
   className: PropTypes.string,
-  categoryId: PropTypes.number.isRequired,
+  category: PropTypes.object.isRequired,
   onInputMount: PropTypes.func,
   label: PropTypes.string.isRequired,
 };

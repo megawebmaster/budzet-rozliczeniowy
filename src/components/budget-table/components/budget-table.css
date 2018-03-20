@@ -1,13 +1,16 @@
-.budget-table.ui.table thead tr th {
+.budget-table.ui.table thead th {
 	padding-top: .6em;
 	padding-bottom: .5em;
 }
-.budget-table thead tr th span {
+.budget-table thead th span {
 	display: inline-block;
-	height: 1.9em;
+	height: 2em;
 	padding: .25em;
 }
-.budget-table thead tr th .ui.button {
+.budget-table tbody td span {
+	padding: .25em 0;
+}
+.budget-table thead th .ui.button {
 	opacity: 0;
 	transition: 250ms ease;
 }

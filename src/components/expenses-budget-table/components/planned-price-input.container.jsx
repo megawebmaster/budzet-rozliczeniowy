@@ -13,8 +13,8 @@ const mapStateToProps = (state, ownProps) => ({
   year: year(state),
   month: month(state),
 });
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, month, value) => dispatch(saveValue('expense', 'planned', year, month, ownProps.categoryId, value)),
+const mapDispatchToProps = (dispatch, { categoryId }) => ({
+  onUpdate: (year, month, value) => dispatch(saveValue('expense', 'planned', year, month, categoryId, value)),
 });
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...stateProps,

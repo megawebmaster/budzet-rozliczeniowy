@@ -1,19 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHeader,
-  TableHeaderCell,
-  TableRow
-} from 'semantic-ui-react';
+import { Table, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
 
 import AddSubcategoryButton from './add-subcategory-button';
 import CategoryName from './category-name.container';
+import { EditableText } from '../../editable-text';
 import './budget-table.css';
 
 // TODO: Show data-saving errors for adding subcategory
@@ -27,6 +19,7 @@ class BudgetTable extends Component {
     label: PropTypes.string.isRequired,
     manageableCategories: PropTypes.bool,
     onAdd: PropTypes.func.isRequired,
+    onEdit: PropTypes.func,
     onRemove: PropTypes.func,
     onInputMount: PropTypes.func,
     summaryPlanned: PropTypes.number.isRequired,
@@ -36,9 +29,9 @@ class BudgetTable extends Component {
   };
 
   static defaultProps = {
-    onInputMount: (_type, _category, _input) => {
-    },
-    onRemove: null,
+    onInputMount: (_type, _category, _input) => {},
+    onEdit: () => {},
+    onRemove: () => {},
     manageableCategories: true,
   };
 
@@ -49,7 +42,7 @@ class BudgetTable extends Component {
   render() {
     const {
       label, type, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount,
-      manageableCategories, onRemove, PlannedInput, RealInput
+      manageableCategories, onEdit, onRemove, PlannedInput, RealInput
     } = this.props;
 
     return (
@@ -57,13 +50,13 @@ class BudgetTable extends Component {
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>
-              <span>{label}</span>
+              <EditableText text={label} deletable={!!onRemove} editable={!!onEdit} onDelete={onRemove}
+                            onUpdate={onEdit} />
             </TableHeaderCell>
             <TableHeaderCell width={4}>
               <span>{this.format('budget.table.header-planned', 'Planowane ({value})', { value: this.currency(summaryPlanned) })}</span>
             </TableHeaderCell>
             <TableHeaderCell width={4}>
-              {onRemove && <Button icon="trash" color="red" size="mini" floated="right" compact onClick={onRemove} />}
               <span>{this.format('budget.table.header-real', 'Rzeczywiste ({value})', { value: this.currency(summaryReal) })}</span>
             </TableHeaderCell>
           </TableRow>

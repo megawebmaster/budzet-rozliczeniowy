@@ -1,14 +1,19 @@
 export const LOAD_CATEGORIES = 'CategoriesAction.LOAD_CATEGORIES';
 export const ADD_CATEGORY = 'CategoriesAction.ADD_CATEGORY';
 export const UPDATE_CATEGORY = 'CategoriesAction.UPDATE_CATEGORY';
+export const REPLACE_CATEGORY = 'CategoriesAction.REPLACE_CATEGORY';
 export const REMOVE_CATEGORY = 'CategoriesAction.REMOVE_CATEGORY';
 
 export const loadCategories = (categories) => ({
   type: LOAD_CATEGORIES,
   payload: { categories }
 });
-export const updateCategory = (type, original, saved) => ({
+export const updateCategory = (type, category, values) => ({
   type: UPDATE_CATEGORY,
+  payload: { type, category, values }
+});
+export const replaceCategory = (type, original, saved) => ({
+  type: REPLACE_CATEGORY,
   payload: { type, original, saved }
 });
 export const removeCategory = (type, id) => ({

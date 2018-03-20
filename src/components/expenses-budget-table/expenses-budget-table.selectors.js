@@ -49,7 +49,7 @@ export const expensesTableCategories = createCachedSelector(
   expensesCategories, categoryId,
   (categories, categoryId) => (categories.find((c) => c.id === categoryId) || { children: [] }).children
 )(
-  (state, props) => `categories-${props.categoryId}`,
+  (state, props) => `categories-${props.category.id}`,
 );
 
 export const expensesTablePlannedSummary = createCachedSelector(

@@ -1,0 +1,29 @@
+.editable-text span {
+	display: inline-block;
+}
+.editable-text button.ui.button {
+  opacity: 0;
+	padding: .5em;
+	transition: 250ms ease;
+}
+.editable-text:hover button.ui.button {
+	opacity: 1;
+	transition: 250ms ease;
+}
+.editable-text .input input {
+	padding-top: .632em;
+	padding-bottom: .625em;
+}
+.editable-text .input button.ui.button {
+  opacity: 1;
+}
+.table thead th .editable-text span {
+	margin: 3px 0;
+}
+.table thead th .editable-text input {
+	padding-top: .25em;
+	padding-bottom: .25em;
+}
+.table thead th button.ui.button {
+	margin: .125em 0;
+}

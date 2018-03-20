@@ -28,7 +28,7 @@ class Budget extends Component {
         </Segment>
         <Segment attached>
           { expensesCategories.map(category =>
-            <ExpensesBudgetTable key={`category-${category.id}`} label={category.name} categoryId={category.id}
+            <ExpensesBudgetTable key={`category-${category.id}`} label={category.name} category={category}
                                  onInputMount={onInputMount} />)}
           <AddCategoryButton />
         </Segment>

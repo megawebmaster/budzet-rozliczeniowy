@@ -7,7 +7,8 @@ import 'rxjs/add/operator/map';
 import {
   ADD_CATEGORY,
   REMOVE_CATEGORY,
-  updateCategory,
+  UPDATE_CATEGORY,
+  replaceCategory,
 } from './categories.actions';
 import { month, year } from '../location';
 
@@ -23,6 +24,23 @@ const saveCategoryAction = (type, name, year, month, parent = null) => (
       type, name, year, month, parent_id: parent
     }),
     method: 'POST',
+    // mode: 'cors', // no-cors, *same-origin
+  }).then(response => response.json())
+);
+
+const updateCategoryAction = (type, id, values) => (
+  fetch(`http://localhost:8080/categories/${id}`, {
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: 'same-origin', // include, *omit
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      ...values,
+      parent_id: values.parent || null
+    }),
+    method: 'PATCH',
     // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
@@ -52,7 +70,20 @@ const addCategoryEpic = (action$, store) =>
         month(state),
         action.payload.parentId
       );
-      return Observable.from(promise).map(category => updateCategory(action.payload.type, action.payload, category));
+      return Observable.from(promise).map(category => replaceCategory(action.payload.type, action.payload, category));
+    })
+;
+
+const updateCategoryEpic = (action$) =>
+  action$
+    .ofType(UPDATE_CATEGORY)
+    .mergeMap((action) => {
+      const promise = updateCategoryAction(
+        action.payload.type,
+        action.payload.category.id,
+        action.payload.values
+      );
+      return Observable.from(promise).filter(() => false);
     })
 ;
 
@@ -73,5 +104,6 @@ const removeCategoryEpic = (action$, store) =>
 
 export const categoriesEpic = combineEpics(
   addCategoryEpic,
+  updateCategoryEpic,
   removeCategoryEpic,
 );
