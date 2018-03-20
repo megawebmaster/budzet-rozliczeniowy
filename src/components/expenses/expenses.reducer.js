@@ -1,5 +1,6 @@
 import * as Actions from './expenses.actions';
 import { ROUTE_EXPENSES_MONTH } from '../../routes';
+import { SORT_EXPENSES } from './expenses.actions';
 
 const initialState = {
   loading: true,
@@ -16,6 +17,14 @@ const loadMonth = (state, year, month, values) => {
   }));
 
   return { ...state, loading: false, [year]: { ...selectedYear, [month]: result } };
+};
+
+const sortItems = (state, year, month, field) => {
+  const selectedYear = state[year] || {};
+  const selectedMonth = selectedYear[month].slice() || [];
+  const sortedMonth = selectedMonth.sort((a, b) => a[field] < b[field] ? -1 : 1);
+
+  return { ...state, [year]: { ...selectedYear, [month]: sortedMonth } };
 };
 
 const addItem = (state, year, month, value) => {
@@ -58,6 +67,8 @@ export const ExpensesReducer = (state = initialState, action) => {
       return saveItem(state, action.payload.year, action.payload.month, action.payload.row, false);
     case Actions.REMOVE_ITEM:
       return removeItem(state, action.payload.year, action.payload.month, action.payload.row);
+    case SORT_EXPENSES:
+      return sortItems(state, action.payload.year, action.payload.month, action.payload.field);
     case ROUTE_EXPENSES_MONTH:
       return { ...state, loading: true };
     default:

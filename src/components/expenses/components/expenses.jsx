@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Table, TableBody, TableHeader, TableRow, TableHeaderCell } from 'semantic-ui-react';
+import { Button, Table, TableBody, TableHeader, TableRow, TableHeaderCell } from 'semantic-ui-react';
 
 import { ExpensesRow } from '../../expenses-row';
 import { ExpensesNewRow } from '../../expenses-new-row';
+
+import './expenses.css';
 
 const NEW_ROW = 'new-expense-row';
 const ENTER = 13;
@@ -13,6 +15,11 @@ const ARROW_DOWN = 40;
 
 // TODO: Move navigation to NavigableTable - maybe special case footer would work?
 class Expenses extends Component {
+  static propTypes = {
+    rows: PropTypes.array.isRequired,
+    sortRows: PropTypes.func.isRequired,
+  };
+
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   state = {
@@ -84,6 +91,9 @@ class Expenses extends Component {
     this.setState({ current: { index, type: data.type }});
   };
 
+  sortCategory = () => this.props.sortRows('category');
+  sortDay = () => this.props.sortRows('day');
+
   componentWillMount() {
     this.inputs = {
       category: {},
@@ -98,20 +108,24 @@ class Expenses extends Component {
     const { rows } = this.props;
 
     return (
-      <Table singleLine striped compact>
+      <Table singleLine striped compact className="expenses-table">
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>
-              {this.translate('expenses-grid.headers.category', 'Category')}
+              <Button basic fluid color="black" onClick={this.sortCategory} className="expense-header-category">
+                {this.translate('expenses-grid.headers.category', 'Kategoria')}
+              </Button>
             </TableHeaderCell>
             <TableHeaderCell width={2} textAlign="center">
-              {this.translate('expenses-grid.headers.price', 'Price')}
+              {this.translate('expenses-grid.headers.price', 'Cena')}
             </TableHeaderCell>
-            <TableHeaderCell width={1} textAlign="center">
-              {this.translate('expenses-grid.headers.day', 'Day')}
+            <TableHeaderCell width={1}>
+              <Button basic fluid color="black" onClick={this.sortDay}>
+                {this.translate('expenses-grid.headers.day', 'Dzień')}
+              </Button>
             </TableHeaderCell>
             <TableHeaderCell width={8}>
-              {this.translate('expenses-grid.headers.description', 'Description')}
+              {this.translate('expenses-grid.headers.description', 'Opis')}
             </TableHeaderCell>
             <TableHeaderCell width={1} />
           </TableRow>
@@ -125,9 +139,5 @@ class Expenses extends Component {
     );
   }
 }
-
-Expenses.propTypes = {
-  rows: PropTypes.array.isRequired,
-};
 
 export default injectIntl(Expenses);

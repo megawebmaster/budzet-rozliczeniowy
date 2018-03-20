@@ -1,0 +1,16 @@
+.expenses-table thead th button.ui.basic.button.expense-header-category {
+	text-align: left;
+}
+.expenses-table thead th button.ui.basic.button {
+  border: none;
+	box-shadow: none!important;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+}
+.expenses-table thead th button.ui.basic.button:hover, .expenses-table thead th button.ui.basic.button:focus {
+	box-shadow: none !important;
+}
+.expenses-table thead th button.ui.basic.button:hover {
+	text-decoration: underline;
+}
