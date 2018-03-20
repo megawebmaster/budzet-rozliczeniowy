@@ -1,5 +1,6 @@
 import { redirect } from 'redux-first-router';
 import {
+  ROUTE_BUDGET,
   ROUTE_BUDGET_ACCOUNTS,
   ROUTE_BUDGET_IRREGULAR,
   ROUTE_BUDGET_MONTH,
@@ -25,7 +26,7 @@ const redirectAuthenticated = (dispatch, getState) => {
     const today = new Date();
     const month = today.getMonth() + 1;
     const year = today.getFullYear();
-    dispatch(redirect({ type: ROUTE_BUDGET_MONTH, params: { year, month } }));
+    dispatch(redirect({ type: ROUTE_BUDGET_MONTH, payload: { year, month } }));
   }
 };
 
@@ -37,6 +38,10 @@ export default {
   [ROUTE_LOGIN]: {
     path: '/login',
     thunk: redirectAuthenticated
+  },
+  [ROUTE_BUDGET]: {
+    path: '/:year/budget',
+    thunk: loginUnauthenticated
   },
   [ROUTE_BUDGET_SUMMARY]: {
     path: '/:year/budget/summary',

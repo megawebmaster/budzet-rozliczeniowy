@@ -5,9 +5,8 @@ import { NavLink } from 'redux-first-router-link';
 import { Icon, Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'semantic-ui-react';
 
 import './header.css';
-import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../../routes';
+import { ROUTE_BUDGET, ROUTE_EXPENSES_MONTH } from '../../../routes';
 
-// TODO: Do something with Budget matching for irregular, yearly and accounts
 const Header = ({ years, year, month, page, intl }) => {
   const translate = (id, message) => intl.formatMessage({ id, defaultMessage: message });
   const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);
@@ -16,7 +15,7 @@ const Header = ({ years, year, month, page, intl }) => {
   return (
     <Menu tabular size="large" className="main-menu">
       <MenuItem header>SimplyBudget</MenuItem>
-      <MenuItem name="budget" as={NavLink} activeClassName="active" to={{ type: ROUTE_BUDGET_MONTH, payload }}>
+      <MenuItem name="budget" as={NavLink} activeClassName="active" to={{ type: ROUTE_BUDGET, payload }}>
         {translate('header.menu.budget', 'Budżet')}
       </MenuItem>
       <MenuItem name="expenses" as={NavLink} activeClassName="active" to={{ type: ROUTE_EXPENSES_MONTH, payload }}>
