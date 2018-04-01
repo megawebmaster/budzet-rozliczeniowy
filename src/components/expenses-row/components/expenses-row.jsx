@@ -45,22 +45,22 @@ class ExpensesGridRow extends Component {
     // TODO: Show data-saving errors
     return (
       <TableRow className="expenses-row">
-        <TableCell>
+        <TableCell width={4}>
           <CategoryField categories={categories} value={category} onUpdate={this.updateCategory}
                          onInputMount={(input) => onInputMount('category', input)} />
         </TableCell>
-        <TableCell>
+        <TableCell width={2}>
           <PriceInput value={price} placeholder={this.translate('expenses-row.price', 'Cena')}
                       onChange={this.updatePrice} onMount={onInputMount.bind(null, 'price')} />
         </TableCell>
-        <TableCell>
+        <TableCell width={1}>
           <DayField value={day} onInputMount={(input) => onInputMount('day', input)} onUpdate={this.updateDay} />
         </TableCell>
-        <TableCell>
+        <TableCell width={8}>
           <Input fluid value={description} onChange={this.updateDescription}
                  ref={onInputMount.bind(null, 'description')} />
         </TableCell>
-        <TableCell textAlign="center">
+        <TableCell width={1} textAlign="center">
           { saving ?
             <Loader active inline="centered" /> :
             <Button color="red" icon="trash" tabIndex="-1" onClick={this.removeItem} /> }

@@ -1,0 +1,8 @@
+.budget-summary {
+	margin: 0 -1px;
+	padding: 10px 0;
+	bottom: 0;
+	position: -webkit-sticky;
+	position: sticky;
+	background-color: #ffffff;
+}

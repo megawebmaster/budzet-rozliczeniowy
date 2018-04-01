@@ -19,10 +19,10 @@ const ExpensesView = ({ month, year, loading, intl }) => {
       <Helmet>
         <title>{format('views.expenses.title', 'Rozliczenie - {month} {year}', params)}</title>
       </Helmet>
-      <Segment>
+      <Segment className="content-container-title">
         <h3>{format('views.expenses.header', 'Rozliczenie: {month} {year}', params)}</h3>
       </Segment>
-      <Segment basic loading={loading}>
+      <Segment basic loading={loading} className="content-container expenses">
         <Expenses />
       </Segment>
     </div>

@@ -27,7 +27,7 @@ export const expensesPlannedSummaries = createSelector(
     const summaries = {};
     categories.forEach((category) => {
       const childrenIds = category.children.map((child) => child.id.toString());
-      summaries[category.id] =reduceCategoryBudgetType('planned', budget, childrenIds);
+      summaries[category.id] = reduceCategoryBudgetType('planned', budget, childrenIds);
     });
 
     return summaries;
@@ -38,7 +38,7 @@ export const expensesRealSummaries = createSelector(
     const summaries = {};
     categories.forEach((category) => {
       const childrenIds = category.children.map((child) => child.id.toString());
-      summaries[category.id] =reduceCategoryBudgetType('real', budget, childrenIds);
+      summaries[category.id] = reduceCategoryBudgetType('real', budget, childrenIds);
     });
 
     return summaries;

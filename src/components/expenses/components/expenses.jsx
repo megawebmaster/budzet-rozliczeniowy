@@ -1,7 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, Table, TableBody, TableHeader, TableRow, TableHeaderCell } from 'semantic-ui-react';
+import {
+  Button,
+  Table,
+  TableBody,
+  TableHeader,
+  TableRow,
+  TableHeaderCell
+} from 'semantic-ui-react';
 
 import { ExpensesRow } from '../../expenses-row';
 import { ExpensesNewRow } from '../../expenses-new-row';
@@ -108,34 +115,40 @@ class Expenses extends Component {
     const { rows } = this.props;
 
     return (
-      <Table singleLine striped compact className="expenses-table">
-        <TableHeader>
-          <TableRow>
-            <TableHeaderCell width={4}>
-              <Button basic fluid color="black" onClick={this.sortCategory} className="expense-header-category">
-                {this.translate('expenses-grid.headers.category', 'Kategoria')}
-              </Button>
-            </TableHeaderCell>
-            <TableHeaderCell width={2} textAlign="center">
-              {this.translate('expenses-grid.headers.price', 'Cena')}
-            </TableHeaderCell>
-            <TableHeaderCell width={1}>
-              <Button basic fluid color="black" onClick={this.sortDay}>
-                {this.translate('expenses-grid.headers.day', 'Dzień')}
-              </Button>
-            </TableHeaderCell>
-            <TableHeaderCell width={8}>
-              {this.translate('expenses-grid.headers.description', 'Opis')}
-            </TableHeaderCell>
-            <TableHeaderCell width={1} />
-          </TableRow>
-        </TableHeader>
-        <TableBody onKeyDown={this.onKeyDown} onFocus={this.onFocus}>
-          {rows.map((row, index) => <ExpensesRow key={`expenses-row-${row.id}`} row={row}
-                                                 onInputMount={this.inputMount.bind(this, index)} />)}
-          <ExpensesNewRow onInputMount={this.newInputMount} />
-        </TableBody>
-      </Table>
+      <Fragment>
+        <div className="expenses-table-header">
+          <Table singleLine striped compact className="expenses-table" attached="top">
+            <TableHeader>
+              <TableRow>
+                <TableHeaderCell width={4}>
+                  <Button basic fluid color="black" onClick={this.sortCategory} className="expense-header-category">
+                    {this.translate('expenses-grid.headers.category', 'Kategoria')}
+                  </Button>
+                </TableHeaderCell>
+                <TableHeaderCell width={2} textAlign="center">
+                  {this.translate('expenses-grid.headers.price', 'Cena')}
+                </TableHeaderCell>
+                <TableHeaderCell width={1}>
+                  <Button basic fluid color="black" onClick={this.sortDay}>
+                    {this.translate('expenses-grid.headers.day', 'Dzień')}
+                  </Button>
+                </TableHeaderCell>
+                <TableHeaderCell width={8}>
+                  {this.translate('expenses-grid.headers.description', 'Opis')}
+                </TableHeaderCell>
+                <TableHeaderCell width={1} />
+              </TableRow>
+            </TableHeader>
+          </Table>
+        </div>
+        <Table singleLine striped compact className="expenses-table" attached>
+          <TableBody onKeyDown={this.onKeyDown} onFocus={this.onFocus}>
+            {rows.map((row, index) => <ExpensesRow key={`expenses-row-${row.id}`} row={row}
+                                                   onInputMount={this.inputMount.bind(this, index)} />)}
+          </TableBody>
+        </Table>
+        <ExpensesNewRow onInputMount={this.newInputMount} />
+      </Fragment>
     );
   }
 }

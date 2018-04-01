@@ -1,0 +1,12 @@
+.expenses-new-row {
+	margin: 0 -1px;
+	padding: 10px 0;
+	bottom: 0;
+	position: -webkit-sticky;
+	position: sticky;
+	background-color: #ffffff;
+}
+
+.expenses-new-row .ui.dropdown > .text {
+	font-weight: normal;
+}

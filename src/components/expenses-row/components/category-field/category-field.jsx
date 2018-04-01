@@ -10,7 +10,7 @@ class CategoryField extends Component {
     const { value, categories, onInputMount, onUpdate } = this.props;
 
     return (
-      <Dropdown fluid value={value} selection search options={categories} onChange={onUpdate}
+      <Dropdown fluid value={value} selection search options={categories} onChange={onUpdate} upward
                 openOnFocus={false} placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
                 searchInput={<DropdownSearchInput inputRef={(i) => onInputMount({ inputRef: i })} />}
       />

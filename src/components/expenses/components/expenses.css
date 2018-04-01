@@ -14,3 +14,15 @@
 .expenses-table thead th button.ui.basic.button:hover {
 	text-decoration: underline;
 }
+.expenses-table-header {
+	top: 0;
+	position: -webkit-sticky;
+	position: sticky;
+	z-index: 2;
+	padding: 1em 1px 0;
+	background-color: #fff;
+	margin: 0 -1px;
+}
+.expenses-table-header .expenses-table {
+	border-bottom: 0;
+}

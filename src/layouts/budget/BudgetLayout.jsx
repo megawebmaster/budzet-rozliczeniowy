@@ -1,7 +1,7 @@
-import React  from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'redux-first-router-link';
-import { Grid, GridRow, GridColumn, Menu, MenuItem } from 'semantic-ui-react';
+import { Grid, GridColumn, Menu, MenuItem } from 'semantic-ui-react';
 
 import { Header } from '../../components/header';
 import { MonthList } from '../../components/month-list';
@@ -14,33 +14,31 @@ const mapStateToProps = (state) => ({
 });
 
 const BudgetLayout = ({ children, year }) => (
-  <div>
+  <Fragment>
     <Header year={year} />
     <Grid padded="horizontally">
-      <GridRow>
-        <GridColumn width={3}>
-          <Menu vertical fluid>
-            <MenuItem name="whole-year" as={NavLink} activeClassName="active"
-                      to={{ type: ROUTE_BUDGET_SUMMARY, payload: {year}}}>
-              Cały rok
-            </MenuItem>
-            <MenuItem name="irregular" as={NavLink} activeClassName="active"
-                      to={{ type: ROUTE_BUDGET_IRREGULAR, payload: {year}}}>
-              Nieregularne
-            </MenuItem>
-            <MenuItem name="accounts" as={NavLink} activeClassName="active"
-                      to={{ type: ROUTE_BUDGET_ACCOUNTS, payload: {year}}}>
-              Stan kont
-            </MenuItem>
-          </Menu>
-          <MonthList baseRoute={{ type: ROUTE_BUDGET_MONTH, payload: { year } }} />
-        </GridColumn>
-        <GridColumn width={13}>
-          {children}
-        </GridColumn>
-      </GridRow>
+      <GridColumn width={3} className="menu-column">
+        <Menu vertical fluid>
+          <MenuItem name="whole-year" as={NavLink} activeClassName="active"
+                    to={{ type: ROUTE_BUDGET_SUMMARY, payload: {year}}}>
+            Cały rok
+          </MenuItem>
+          <MenuItem name="irregular" as={NavLink} activeClassName="active"
+                    to={{ type: ROUTE_BUDGET_IRREGULAR, payload: {year}}}>
+            Nieregularne
+          </MenuItem>
+          <MenuItem name="accounts" as={NavLink} activeClassName="active"
+                    to={{ type: ROUTE_BUDGET_ACCOUNTS, payload: {year}}}>
+            Stan kont
+          </MenuItem>
+        </Menu>
+        <MonthList baseRoute={{ type: ROUTE_BUDGET_MONTH, payload: { year } }} />
+      </GridColumn>
+      <GridColumn width={13}>
+        {children}
+      </GridColumn>
     </Grid>
-  </div>
+  </Fragment>
 );
 
 export default connect(mapStateToProps)(BudgetLayout);
