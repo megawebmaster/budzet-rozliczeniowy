@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 
 import Summary from './budget-summary';
 import { plannedExpenses, realExpenses } from '../../expenses-budget-table';
-import { plannedIrregular, realIrregular } from '../../irregular-budget-table';
+import { plannedIrregular } from '../../irregular-budget-table';
 
 const mapStateToProps = (state) => ({
   planned: plannedExpenses(state) + plannedIrregular(state),
-  real: realExpenses(state) + realIrregular(state),
+  real: realExpenses(state) + plannedIrregular(state),
 });
 
 const BudgetSummaryContainer = ({ className, planned, real }) => (
