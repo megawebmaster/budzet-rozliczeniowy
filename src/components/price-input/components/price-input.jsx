@@ -51,6 +51,28 @@ class PriceInput extends Component {
     }
   });
 
+  static propTypes = {
+    currencyLabel: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
+    isSaving: PropTypes.bool,
+    maximumFractionDigits: PropTypes.number.isRequired,
+    minimumFractionDigits: PropTypes.number.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onMount: PropTypes.func,
+    placeholder: PropTypes.string,
+    value: PropTypes.any,
+    help: PropTypes.string,
+  };
+
+  static defaultProps = {
+    disabled: false,
+    isSaving: false,
+    onMount: (_input) => {},
+    placeholder: '',
+    value: '',
+    help: '',
+  };
+
   state = {
     isEditing: false,
     error: undefined,
@@ -134,7 +156,7 @@ class PriceInput extends Component {
   }
 
   render() {
-    const { currencyLabel, disabled, placeholder } = this.props;
+    const { currencyLabel, disabled, placeholder, help } = this.props;
     const { error, isEditing } = this.state;
 
     return (
@@ -143,30 +165,12 @@ class PriceInput extends Component {
                label={{ basic: true, content: currencyLabel }} labelPosition="right" onChange={this.updateValue}
                onFocus={this.focus} onBlur={this.blur} onKeyDown={this.onKeyDown} {...this.getLoadingProps()}
                ref={(element) => this.input = element} />
+        {isEditing && help && !error && <Label pointing="left" color="teal">{help}</Label>}
         {isEditing && error && <Label pointing="left" color="red">{error}</Label>}
       </div>
     );
   }
 }
-
-PriceInput.defaultProps = {
-  disabled: false,
-  isSaving: false,
-  onMount: (_input) => {},
-  placeholder: '',
-  value: '',
-};
-PriceInput.propTypes = {
-  currencyLabel: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
-  isSaving: PropTypes.bool,
-  maximumFractionDigits: PropTypes.number.isRequired,
-  minimumFractionDigits: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onMount: PropTypes.func,
-  placeholder: PropTypes.string,
-  value: PropTypes.any,
-};
 
 export default injectIntl(PriceInput);
 

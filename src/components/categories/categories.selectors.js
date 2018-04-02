@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 import { month, year } from '../location';
+import createCachedSelector from 're-reselect/src/index';
+import { categoryId } from '../budget/budget.selectors';
 
 const parseChildrenCategories = (categories) => {
   const mainCategories = categories.filter(category => category.parent === null);
@@ -45,4 +47,11 @@ export const expensesCategories = createSelector(
 export const irregularCategories = createSelector(
   [yearCategories],
   (categories) => parseChildrenCategories(categories.filter(category => category.type === 'irregular'))
+);
+
+export const expenseCategory = createCachedSelector(
+  accessibleCategories, categoryId,
+  (categories, categoryId) => categories.find((c) => c.id === categoryId) || {}
+)(
+  (state, props) => `expense-category-${props.categoryId}`,
 );

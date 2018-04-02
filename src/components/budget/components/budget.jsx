@@ -32,8 +32,8 @@ class Budget extends Component {
                                  onInputMount={onInputMount} />)}
           <AddCategoryButton />
         </Segment>
-        <IrregularBudgetTable className="segment blue attached" label="Nieregularne wydatki" />
-        <BudgetSummary className="segment yellow" />
+        <IrregularBudgetTable className="segment blue" label="Nieregularne wydatki" />
+        <BudgetSummary className="segment teal" />
       </div>
     );
   }

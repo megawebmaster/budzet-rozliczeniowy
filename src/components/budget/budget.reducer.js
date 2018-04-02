@@ -56,6 +56,7 @@ const addValueError = (state, categoryType, valueType, data, error) => {
 };
 
 // TODO: Get rid of type in hash - move it elsewhere
+// TODO: Improve recalculating trees - update only required branches (reselect + immutable)
 const loadMonth = (state, year, month, values) => {
   const selectedYear = state[year] || { income: {}, expense: {}, irregular: {} };
 
