@@ -44,12 +44,15 @@ Budget.propTypes = {
   incomeCategories: PropTypes.array.isRequired,
 };
 
-const NavigableBudget = NavigableTable(Budget, (props) => {
-  const incomeCategories = props.incomeCategories.map(category => category.id);
-  const expensesCategories = [].concat(...props.expensesCategories.map(category =>
-    category.children.map(subcategory => subcategory.id)
-  ));
-  return incomeCategories.concat(expensesCategories);
+const NavigableBudget = NavigableTable(Budget, {
+  categoryFetcher: (props) => {
+    const incomeCategories = props.incomeCategories.map(category => category.id);
+    const expensesCategories = [].concat(...props.expensesCategories.map(category =>
+      category.children.map(subcategory => subcategory.id)
+    ));
+    return incomeCategories.concat(expensesCategories);
+  },
+  bottomMargin: 130
 });
 export default injectIntl(NavigableBudget);
 

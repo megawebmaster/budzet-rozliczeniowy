@@ -35,9 +35,8 @@ const mapStateToProps = (state) => ({
   loading: isLoading(state),
 });
 
-const NavigableIrregularBudget = NavigableTable(
-  IrregularBudget,
-  (props) => props.categories.map(category => category.id)
-);
+const NavigableIrregularBudget = NavigableTable(IrregularBudget, {
+  categoryFetcher: (props) => props.categories.map(category => category.id)
+});
 export default connect(mapStateToProps)(injectIntl(NavigableIrregularBudget));
 

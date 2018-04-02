@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import jump from 'jump.js';
 
 const ENTER = 13;
 const ARROW_UP = 38;
@@ -6,7 +7,15 @@ const ARROW_DOWN = 40;
 // const ARROW_LEFT = 37;
 // const ARROW_RIGHT = 39;
 
-const NavigableTable = (WrappedTable, categoryFetcher) => class extends Component {
+const duration = distance => {
+  if (distance < 60) {
+    return 150;
+  }
+
+  return 250;
+};
+
+const NavigableTable = (WrappedTable, { categoryFetcher, bottomMargin = 0, topMargin = 0 }) => class extends Component {
   state = {
     categories: [],
     current: {
@@ -45,6 +54,30 @@ const NavigableTable = (WrappedTable, categoryFetcher) => class extends Componen
       return;
     }
 
+    let offsetTop = 0;
+    let elem = this.inputs[current.type][categories[next]];
+    do {
+      if (!isNaN(elem.offsetLeft)) {
+        offsetTop += elem.offsetTop;
+      }
+      elem = elem.offsetParent;
+    } while(elem);
+
+    const windowHeight = document.body.offsetHeight;
+    const scrollPosition = window.pageYOffset;
+
+    if (delta > 0) {
+      const offset = offsetTop + 40 - windowHeight - scrollPosition + bottomMargin;
+      if (offset > 0) {
+        jump(offset, { duration });
+      }
+    }
+    if (delta < 0) {
+      const offset = offsetTop - scrollPosition - 40 - topMargin;
+      if (offset < 0) {
+        jump(offset, { duration });
+      }
+    }
     this.inputs[current.type][categories[next]].focus();
     this.setState({ current: { ...current, index: next }});
   };
