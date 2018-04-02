@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { PriceInput as Input } from '../../price-input';
+import { PriceInputWithAverage as Input } from '../../price-input';
 import { saveValue } from '../../budget';
 import { month, year } from '../../location';
 import { categoryExpenses } from '../expenses-budget-table.selectors';
@@ -25,10 +25,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   onChange: (value) => dispatchProps.onUpdate(stateProps.year, stateProps.month, value),
 });
 
-// TODO: Translate "Średnio x zł"
 const ExpensePlannedPriceInput = ({ disabled, placeholder, value, average, isSaving, onChange, onMount }) => (
   <Input value={value} disabled={disabled} isSaving={isSaving} placeholder={placeholder} onChange={onChange}
-         onMount={onMount} help={`Średnio: ${average} zł`} />
+         onMount={onMount} average={average} />
 );
 ExpensePlannedPriceInput.defaultProps = {
   disabled: false,

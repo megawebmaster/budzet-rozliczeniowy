@@ -64,6 +64,7 @@ const messages = {
   'add-button.cancel': 'Anuluj',
   'validation.day': 'Nieprawidłowy dzień: {value}',
   'validation.price.invalid': 'Nieprawidłowa wartość lub formuła',
+  'price-input.average-help': 'Średnio: {value} {currency}',
   'views.expenses.title': 'Rozliczenie - {month} {year}',
   'views.expenses.header': 'Rozliczenie: {month} {year}',
   'views.month-budget.title': 'Budżet - {month} {year}',
