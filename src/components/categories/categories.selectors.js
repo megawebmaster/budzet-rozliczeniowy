@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { month, year } from '../location';
-import createCachedSelector from 're-reselect/src/index';
+import createCachedSelector from 're-reselect';
 import { categoryId } from '../budget/budget.selectors';
 
 const parseChildrenCategories = (categories) => {
