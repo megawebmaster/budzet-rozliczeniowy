@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import jump from 'jump.js';
 
+const FOOTER_ROW = 'navigable-footer-row';
 const ENTER = 13;
 const ARROW_UP = 38;
 const ARROW_DOWN = 40;
@@ -15,28 +16,41 @@ const duration = distance => {
   return 250;
 };
 
-const NavigableTable = (WrappedTable, { categoryFetcher, bottomMargin = 0, topMargin = 0 }) => class extends Component {
+const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 0 }) => class extends Component {
   state = {
-    categories: [],
+    items: [],
     current: {
       index: -1,
       type: null,
     },
+    hasFooter: false,
   };
 
-  setCategories = (props) => {
-    this.setState({ categories: categoryFetcher(props) });
+  setItems = (props) => {
+    this.setState({ items: getItems(props) });
   };
-
-  inputMount = (type, category, input) => {
-    input.inputRef.dataset.category = category.id;
+  inputMount = (type, item, input) => {
+    if (input === null || input.inputRef === null) {
+      return;
+    }
+    input.inputRef.dataset.item = item;
     input.inputRef.dataset.type = type;
     if (!this.inputs.hasOwnProperty(type)) {
       this.inputs[type] = {};
     }
-    this.inputs[type][category.id] = input.inputRef;
+    this.inputs[type][item] = input.inputRef;
+  };
+  footerMount = (type, input) => {
+    if (input === null || input.inputRef === null) {
+      return;
+    }
+    input.inputRef.dataset.item = FOOTER_ROW;
+    input.inputRef.dataset.type = type;
+    this.footer[type] = input.inputRef;
+    this.setState({ hasFooter: true });
   };
   onKeyDown = (e) => {
+    // TODO: We should add this on navigable fields only!
     if ([ENTER, ARROW_UP, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
       if ([ENTER, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
         this.moveFocus(1);
@@ -47,15 +61,34 @@ const NavigableTable = (WrappedTable, { categoryFetcher, bottomMargin = 0, topMa
     }
   };
   moveFocus = (delta) => {
-    const { current, categories } = this.state;
+    const { current, items, hasFooter } = this.state;
+    const rows = Object.keys(this.inputs[current.type]).length;
+    let elem, input;
     let next = current.index + delta;
 
-    if (next < 0 || next >= Object.keys(this.inputs[current.type]).length) {
+    if (next < 0) {
+      return;
+    }
+    if (next < rows) {
+      input = elem = this.inputs[current.type][items[next]];
+    } else if (hasFooter && next >= rows) {
+      input = elem = this.footer[current.type];
+      next = FOOTER_ROW;
+    } else if (hasFooter && current.index === FOOTER_ROW) {
+      if (delta === 1) {
+        return;
+      }
+      next = rows - 1;
+      input = elem = this.inputs[current.type][items[next]];
+    } else {
+      return;
+    }
+
+    if (!input) {
       return;
     }
 
     let offsetTop = 0;
-    let elem = this.inputs[current.type][categories[next]];
     do {
       if (!isNaN(elem.offsetLeft)) {
         offsetTop += elem.offsetTop;
@@ -78,30 +111,38 @@ const NavigableTable = (WrappedTable, { categoryFetcher, bottomMargin = 0, topMa
         jump(offset, { duration });
       }
     }
-    this.inputs[current.type][categories[next]].focus();
+    input.focus();
     this.setState({ current: { ...current, index: next }});
   };
+
   onFocus = (e) => {
-    const { categories  } = this.state;
+    const { current, items } = this.state;
     const data = e.target.dataset;
-    if (data.category) {
-      const category = parseInt(data.category, 10);
-      this.setState({ current: { index: categories.indexOf(category), type: data.type }});
+
+    if (data.item) {
+      if (current.index === FOOTER_ROW || data.item === FOOTER_ROW) {
+        this.setState({ current: { index: FOOTER_ROW, type: data.type }});
+        return;
+      }
+
+      const item = parseInt(data.item, 10);
+      this.setState({ current: { index: items.indexOf(item), type: data.type }});
     }
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setCategories(nextProps);
+    this.setItems(nextProps);
   }
 
   componentWillMount() {
     this.inputs = {};
-    this.setCategories(this.props);
+    this.footer = {};
+    this.setItems(this.props);
   }
 
   render() {
-    return <WrappedTable {...this.props} onInputMount={this.inputMount} onKeyDown={this.onKeyDown}
-                         onFocus={this.onFocus} />;
+    return <WrappedTable {...this.props} onInputMount={this.inputMount} onFooterMount={this.footerMount}
+                         onKeyDown={this.onKeyDown} onFocus={this.onFocus} />;
   }
 };
 

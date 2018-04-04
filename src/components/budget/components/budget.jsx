@@ -45,7 +45,7 @@ Budget.propTypes = {
 };
 
 const NavigableBudget = NavigableTable(Budget, {
-  categoryFetcher: (props) => {
+  getItems: (props) => {
     const incomeCategories = props.incomeCategories.map(category => category.id);
     const expensesCategories = [].concat(...props.expensesCategories.map(category =>
       category.children.map(subcategory => subcategory.id)

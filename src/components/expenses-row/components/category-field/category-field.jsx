@@ -28,5 +28,5 @@ CategoryField.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-export default injectIntl(CategoryField);
+export default  injectIntl(CategoryField);
 

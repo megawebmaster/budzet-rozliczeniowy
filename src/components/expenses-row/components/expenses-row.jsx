@@ -39,7 +39,7 @@ class ExpensesGridRow extends Component {
   }
 
   render() {
-    const { categories, row: { saving }, onInputMount } = this.props;
+    const { categories, row: { id, saving }, onInputMount } = this.props;
     const { category, day, price, description } = this.state;
 
     // TODO: Show data-saving errors
@@ -47,18 +47,18 @@ class ExpensesGridRow extends Component {
       <TableRow className="expenses-row">
         <TableCell width={4}>
           <CategoryField categories={categories} value={category} onUpdate={this.updateCategory}
-                         onInputMount={(input) => onInputMount('category', input)} />
+                         onInputMount={(input) => onInputMount('category', id, input)} />
         </TableCell>
         <TableCell width={2}>
           <PriceInput value={price} placeholder={this.translate('expenses-row.price', 'Cena')}
-                      onChange={this.updatePrice} onMount={onInputMount.bind(null, 'price')} />
+                      onChange={this.updatePrice} onMount={onInputMount.bind(null, 'price', id)} />
         </TableCell>
         <TableCell width={1}>
-          <DayField value={day} onInputMount={(input) => onInputMount('day', input)} onUpdate={this.updateDay} />
+          <DayField value={day} onInputMount={(input) => onInputMount('day', id, input)} onUpdate={this.updateDay} />
         </TableCell>
         <TableCell width={8}>
           <Input fluid value={description} onChange={this.updateDescription}
-                 ref={onInputMount.bind(null, 'description')} />
+                 ref={onInputMount.bind(null, 'description', id)} />
         </TableCell>
         <TableCell width={1} textAlign="center">
           { saving ?
