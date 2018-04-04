@@ -5,6 +5,7 @@
 	position: -webkit-sticky;
 	position: sticky;
 	background-color: #ffffff;
+	z-index: 3;
 }
 
 .expenses-new-row .ui.dropdown > .text {
