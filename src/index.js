@@ -72,6 +72,14 @@ const messages = {
   'views.irregular-budget.title': 'Budżet - wydatki nieregularne {year}',
   'views.irregular-budget.header': 'Wydatki nieregularne: {year} rok',
   'views.irregular-budget.table-label': 'Roczne wydatki nieregularne',
+  'views.login.title': 'Zaloguj się do swojego konta',
+  'views.login.form-email': 'Adres e-mail',
+  'views.login.form-button': 'Wyślij mi magiczny link',
+  'views.login.new-message': 'Nie masz jeszcze konta? Po prostu zaloguj się, a my utworzymy je dla Ciebie!',
+  'views.login.check-mailbox-title': 'Magiczny link wysłany',
+  'views.login.check-mailbox': 'Sprawdź swoją skrzynkę e-mail i kliknij na link w wiadomości od nas, żeby się zalogować',
+  'views.login.logging-in': 'Logowanie w toku…',
+  'views.landing.login': 'Zaloguj się',
 };
 
 const composeApp = (AppComponent, store, messages) => (

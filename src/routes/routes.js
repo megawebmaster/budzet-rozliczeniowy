@@ -9,20 +9,16 @@ import {
   ROUTE_HOME,
   ROUTE_LOGIN
 } from './routes.actions';
+import { Authenticator } from '../App.auth';
 
-const loginUnauthenticated = (dispatch, getState) => {
-  const { user: { isLoggedIn } } = getState();
-
-  if (!isLoggedIn) {
-    // TODO: Restore when authentication is in place
-    // dispatch(redirect({ type: 'LOGIN' }));
+const loginUnauthenticated = (dispatch) => {
+  if (!Authenticator.isLoggedIn()) {
+    dispatch(redirect({ type: ROUTE_LOGIN }));
   }
 };
 
-const redirectAuthenticated = (dispatch, getState) => {
-  const { user: { isLoggedIn } } = getState();
-
-  if (isLoggedIn) {
+const redirectAuthenticated = (dispatch) => {
+  if (Authenticator.isLoggedIn()) {
     const today = new Date();
     const month = today.getMonth() + 1;
     const year = today.getFullYear();

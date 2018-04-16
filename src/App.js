@@ -7,7 +7,7 @@ import { Container } from 'semantic-ui-react';
 import BudgetLayout from './layouts/budget/BudgetLayout';
 import ExpensesLayout from './layouts/expenses/ExpensesLayout';
 
-import Landing from './views/landing/Landing';
+import { Landing } from './views/landing';
 import { Login } from './views/login';
 import { NotFound } from './views/errors';
 import { Accounts, YearBudget } from './views/budget';

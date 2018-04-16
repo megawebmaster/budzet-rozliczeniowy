@@ -1,12 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Segment } from 'semantic-ui-react';
 
-import { Budget, isLoading } from '../../components/budget';
-import { month, year } from '../../components/location';
+import { Budget } from '../../components/budget';
 import './month-budget.css';
 
 const MonthBudget = ({ month, year, loading, intl }) => {
@@ -35,11 +33,5 @@ MonthBudget.propTypes = {
   loading: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  year: year(state),
-  month: month(state),
-  loading: isLoading(state),
-});
-
-export default connect(mapStateToProps)(injectIntl(MonthBudget));
+export default injectIntl(MonthBudget);
 

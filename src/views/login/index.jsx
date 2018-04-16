@@ -1,10 +1,8 @@
-import Login from './Login';
+export { default as Login } from './login.container';
 // import { asyncComponent } from 'react-async-component';
 //
-// const Login = asyncComponent({
+// export const Login = asyncComponent({
 //   name: 'LoginAsync',
 //   serverMode: 'resolve',
-//   resolve: () => import('./Login'),
+//   resolve: () => import('./login.container'),
 // });
-
-export {Login};

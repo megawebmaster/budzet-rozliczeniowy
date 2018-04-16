@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { NavLink } from 'redux-first-router-link';
-import { Icon, Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'semantic-ui-react';
+import { Button, Icon, Menu, MenuItem, Dropdown, DropdownMenu, DropdownItem } from 'semantic-ui-react';
 
-import './header.css';
 import { ROUTE_BUDGET, ROUTE_EXPENSES_MONTH } from '../../../routes';
+import './header.css';
 
-const Header = ({ years, year, month, page, intl }) => {
+const Header = ({ years, year, month, page, onLogout, intl }) => {
   const translate = (id, message) => intl.formatMessage({ id, defaultMessage: message });
   const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);
   const payload = { year, month: month || (new Date()).getMonth() + 1 };
@@ -29,7 +29,7 @@ const Header = ({ years, year, month, page, intl }) => {
             }
           </DropdownMenu>
         </Dropdown>
-        <MenuItem name="logout" as={NavLink} to="/" exact>
+        <MenuItem name="logout" as={Button} onClick={onLogout}>
           <Icon name="power" />
           {translate('header.logout', 'Wyloguj się')}
         </MenuItem>

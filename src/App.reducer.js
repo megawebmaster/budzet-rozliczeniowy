@@ -4,7 +4,6 @@ import createHistory from 'history/createBrowserHistory';
 
 import { routesMap } from './routes';
 
-import user from './stores/user/UserReducer';
 import { ConfigurationReducer } from './components/configuration';
 import { CategoriesReducer } from './components/categories';
 import { BudgetReducer } from './components/budget';
@@ -17,7 +16,6 @@ const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = c
 export { locationMiddleware, enhancer };
 export const appReducer = combineReducers({
   location: locationReducer,
-  user,
   categories: CategoriesReducer,
   budget: BudgetReducer,
   irregular_budget: IrregularBudgetReducer,

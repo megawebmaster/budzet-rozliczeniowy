@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Header from './header';
 import { month, pageType, year } from '../../location';
 import { availableYears } from '../../configuration';
+import { Authenticator } from '../../../App.auth';
 
 const mapStateToProps = (state) => ({
   years: availableYears(state),
@@ -11,4 +12,8 @@ const mapStateToProps = (state) => ({
   page: pageType(state),
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = () => ({
+  onLogout: () => Authenticator.logout(),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
