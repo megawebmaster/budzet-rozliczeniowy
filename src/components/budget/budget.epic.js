@@ -8,26 +8,31 @@ import * as Actions from './budget.actions';
 import { ROUTE_BUDGET_MONTH } from '../../routes';
 import { month, year } from '../location';
 import { loadBudget } from './budget.actions';
+import { Authenticator } from '../../App.auth';
 
 const saveValueAction = (year, month, categoryId, valueType, value) => (
   fetch(`http://localhost:8080/budgets/${year}/entries/${categoryId}`, {
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *omit
     headers: new Headers({
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     body: JSON.stringify({
       month,
       [valueType]: value,
     }),
     method: 'PUT',
-    // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
 
 const fetchBudget = (year, month) => (
-  fetch(`http://localhost:8080/budgets/${year}/entries/${month}`).then(response => response.json())
+  fetch(`http://localhost:8080/budgets/${year}/entries/${month}`, {
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
+    })
+  }).then(response => response.json())
 );
 
 const saveChanges = (data, loaderType, successType, errorType) => {

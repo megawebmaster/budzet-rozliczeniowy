@@ -6,13 +6,25 @@ import 'rxjs/add/operator/mergeMap';
 import { updateYears } from '../components/configuration';
 import { loadCategories } from '../components/categories';
 import { ROUTE_BUDGET, ROUTE_BUDGET_MONTH } from './routes.actions';
+import { Authenticator } from '../App.auth';
 
 // TODO: It's not worth reloading on every location change
 const fetchAvailableYears = () => (
-  fetch('http://localhost:8080/budgets').then(response => response.json())
+  fetch('http://localhost:8080/budgets', {
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
+    }),
+    method: 'GET'
+  }).then(response => response.json())
 );
 const fetchCategories = () => (
-  fetch('http://localhost:8080/categories').then(response => response.json())
+  fetch('http://localhost:8080/categories', {
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
+    })
+  }).then(response => response.json())
 );
 
 const fetchYearsEpic = (action$) =>

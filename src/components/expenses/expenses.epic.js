@@ -8,14 +8,14 @@ import * as Actions from './expenses.actions';
 import { month, year } from '../location';
 import { ROUTE_EXPENSES_MONTH } from '../../routes';
 import { loadExpenses } from './expenses.actions';
+import { Authenticator } from '../../App.auth';
 
 const addValueAction = (year, month, value) => (
   fetch(`http://localhost:8080/budgets/${year}/expenses/${month}`, {
-    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *omit
     headers: new Headers({
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     body: JSON.stringify({
       category_id: value.category,
@@ -24,16 +24,14 @@ const addValueAction = (year, month, value) => (
       description: value.description
     }),
     method: 'POST',
-    // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
 const saveValueAction = (year, month, value) => (
   fetch(`http://localhost:8080/budgets/${year}/expenses/${month}/${value.id}`, {
-    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *omit
     headers: new Headers({
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     body: JSON.stringify({
       category_id: value.category,
@@ -42,24 +40,27 @@ const saveValueAction = (year, month, value) => (
       description: value.description
     }),
     method: 'PUT',
-    // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
 const deleteValueAction = (year, month, value) => (
   fetch(`http://localhost:8080/budgets/${year}/expenses/${month}/${value.id}`, {
-    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *omit
     headers: new Headers({
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     method: 'DELETE',
-    // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
 
 const fetchExpenses = (year, month) => (
-  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}`).then(response => response.json())
+  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}`, {
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
+    }),
+  }).then(response => response.json())
 );
 
 const addItem = (data) => {

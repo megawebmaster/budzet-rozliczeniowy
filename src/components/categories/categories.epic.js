@@ -11,37 +11,34 @@ import {
   replaceCategory,
 } from './categories.actions';
 import { month, year } from '../location';
+import { Authenticator } from '../../App.auth';
 
 const saveCategoryAction = (type, name, year, month, parent = null) => (
   fetch('http://localhost:8080/categories', {
-    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *omit
     headers: new Headers({
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     body: JSON.stringify({
       type, name, year, month, parent_id: parent
     }),
     method: 'POST',
-    // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
 
 const updateCategoryAction = (type, id, values) => (
   fetch(`http://localhost:8080/categories/${id}`, {
-    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    // credentials: 'same-origin', // include, *omit
     headers: new Headers({
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     body: JSON.stringify({
       ...values,
       parent_id: values.parent || null
     }),
     method: 'PATCH',
-    // mode: 'cors', // no-cors, *same-origin
   }).then(response => response.json())
 );
 
@@ -50,7 +47,8 @@ const deleteCategoryAction = (type, id, year, month) => (
     method: 'DELETE',
     headers: new Headers({
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     body: JSON.stringify({
       type, year, month

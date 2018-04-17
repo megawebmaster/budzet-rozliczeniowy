@@ -4,7 +4,7 @@ const auth = new WebAuth({
   clientID: 'PqsSsHBLYS3MDS2FXthxnouqES3Amiu9',
   domain: 'megawebmaster.eu.auth0.com',
   redirectUri: 'http://localhost:3000/login',
-  responseType: 'token',
+  responseType: 'token id_token',
 });
 
 // TODO: Improve this class to work with promises (or maybe even Redux?)
@@ -29,6 +29,7 @@ export class Authenticator {
 
       let expiresAt = JSON.stringify((authentication.expiresIn * 1000) + new Date().getTime());
       localStorage.setItem('token', authentication.accessToken);
+      localStorage.setItem('jwt', authentication.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('expiration', authentication.expiresIn.toString());
       callback();
@@ -36,7 +37,7 @@ export class Authenticator {
   }
 
   static getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem('jwt');
   }
 
   static isLoggedIn() {
@@ -47,6 +48,7 @@ export class Authenticator {
 
   static logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('jwt');
     localStorage.removeItem('expiration');
     localStorage.removeItem('expires_at');
     auth.logout({
