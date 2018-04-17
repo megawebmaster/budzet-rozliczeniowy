@@ -15,6 +15,9 @@
 .input-price .ui.input input {
 	text-align: right;
 }
-.input-price.ui.input.disabled input, .input-price.ui.input.disabled div.label {
+.input-price .ui.input.disabled {
+	opacity: 1;
+}
+.input-price .ui.input.disabled input, .input-price .ui.input.disabled .basic.label {
 	background: #fbfbfb;
 }
