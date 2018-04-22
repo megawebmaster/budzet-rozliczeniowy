@@ -5,6 +5,7 @@ const auth = new WebAuth({
   domain: 'megawebmaster.eu.auth0.com',
   redirectUri: 'http://localhost:3000/login',
   responseType: 'token id_token',
+  scope: 'openid profile email'
 });
 
 // TODO: Improve this class to work with promises (or maybe even Redux?)
@@ -32,6 +33,7 @@ export class Authenticator {
       localStorage.setItem('jwt', authentication.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('expiration', authentication.expiresIn.toString());
+      // TODO: Add nice data from the JWT token to store so we can show user's name/nickname and avatar :)
       callback();
     });
   }
