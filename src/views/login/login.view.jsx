@@ -15,7 +15,7 @@ const STATUS_LOGGING_IN = 'logging-in';
 class LoginView extends PureComponent {
   static propTypes = {
     intl: PropTypes.any.isRequired,
-    redirectToBudget: PropTypes.func.isRequired,
+    userLoggedIn: PropTypes.func.isRequired,
   };
 
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
@@ -39,8 +39,7 @@ class LoginView extends PureComponent {
   componentDidMount() {
     Authenticator.validateLogin(() => {
       this.setState({ status: STATUS_LOGGING_IN });
-      // TODO: Load budgets and redirect to default one
-      this.props.redirectToBudget();
+      this.props.userLoggedIn();
     });
   }
 

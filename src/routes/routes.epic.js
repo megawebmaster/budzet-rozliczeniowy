@@ -11,7 +11,7 @@ import { Authenticator } from '../App.auth';
 
 const halfHour = 30*60*1000;
 
-const fetchBudgets = () => (
+export const fetchBudgets = () => (
   fetch('http://localhost:8080/budgets', {
     headers: new Headers({
       'Accept': 'application/json',
@@ -42,7 +42,7 @@ const fetchCategories = (budgetSlug) => (
 
 const fetchBudgetsEpic = (action$) =>
   action$
-    .filter(action => action.type.indexOf('Route/') === 0)
+    .filter(action => action.type.indexOf('Route/') === 0 && Authenticator.isLoggedIn())
     .throttleTime(halfHour)
     .mergeMap(() => (
       Observable.from(fetchBudgets()).map(updateBudgets)
