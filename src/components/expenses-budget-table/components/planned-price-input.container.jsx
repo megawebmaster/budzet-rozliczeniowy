@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { PriceInputWithAverage as Input } from '../../price-input';
 import { saveValue } from '../../budget';
-import { month, year } from '../../location';
 import { categoryExpenses } from '../expenses-budget-table.selectors';
 import { expenseCategory } from '../../categories';
 
@@ -12,17 +11,9 @@ const mapStateToProps = (state, ownProps) => ({
   value: categoryExpenses(state, ownProps).planned,
   isSaving: categoryExpenses(state, ownProps).savingPlanned,
   average: expenseCategory(state, ownProps).averageValue,
-  year: year(state),
-  month: month(state),
 });
 const mapDispatchToProps = (dispatch, { categoryId }) => ({
-  onUpdate: (year, month, value) => dispatch(saveValue('expense', 'planned', year, month, categoryId, value)),
-});
-const mergeProps = (stateProps, dispatchProps, ownProps) => ({
-  ...stateProps,
-  ...dispatchProps,
-  ...ownProps,
-  onChange: (value) => dispatchProps.onUpdate(stateProps.year, stateProps.month, value),
+  onChange: (value) => dispatch(saveValue('expense', 'planned', categoryId, value)),
 });
 
 const ExpensePlannedPriceInput = ({ disabled, placeholder, value, average, isSaving, onChange, onMount }) => (
@@ -41,4 +32,4 @@ ExpensePlannedPriceInput.propTypes = {
   placeholder: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ExpensePlannedPriceInput);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpensePlannedPriceInput);

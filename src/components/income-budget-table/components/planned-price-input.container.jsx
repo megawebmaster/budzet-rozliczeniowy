@@ -4,23 +4,14 @@ import { connect } from 'react-redux';
 
 import { PriceInput as Input } from '../../price-input';
 import { saveValue } from '../../budget';
-import { year, month } from '../../location';
 import { categoryIncome } from '../income-budget-table.selectors';
 
 const mapStateToProps = (state, ownProps) => ({
   value: categoryIncome(state, ownProps).planned,
   isSaving: categoryIncome(state, ownProps).savingPlanned,
-  year: year(state),
-  month: month(state),
 });
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, month, value) => dispatch(saveValue('income', 'planned', year, month, ownProps.categoryId, value)),
-});
-const mergeProps = (stateProps, dispatchProps, ownProps) => ({
-  ...stateProps,
-  ...dispatchProps,
-  ...ownProps,
-  onChange: (value) => dispatchProps.onUpdate(stateProps.year, stateProps.month, value),
+const mapDispatchToProps = (dispatch, { categoryId }) => ({
+  onChange: (value) => dispatch(saveValue('income', 'planned', categoryId, value)),
 });
 
 const IncomePlannedPriceInput = ({ disabled, placeholder, value, isSaving, onChange, onMount }) => (
@@ -39,4 +30,4 @@ IncomePlannedPriceInput.propTypes = {
   placeholder: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(IncomePlannedPriceInput);
+export default connect(mapStateToProps, mapDispatchToProps)(IncomePlannedPriceInput);

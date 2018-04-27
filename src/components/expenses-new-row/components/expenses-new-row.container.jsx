@@ -12,13 +12,17 @@ const mapStateToProps = (state) => ({
   month: month(state),
   categories: expensesCategoriesForDropdown(state),
 });
-
 const mapDispatchToProps = dispatch => ({
   addItem: (row, year, month) => dispatch(addItem(row, year, month)),
 });
+const mergeProps = (stateProps, dispatchProps, ownProps) => ({
+  ...ownProps,
+  categories: stateProps.categories,
+  addItem: (row) => dispatchProps.addItem(row, stateProps.year, stateProps.month),
+});
 
-const NewExpensesRowContainer = ({ categories, year, month, addItem, onInputMount }) => (
-  <Row year={year} month={month} categories={categories} onAddItem={addItem} onInputMount={onInputMount} />
+const NewExpensesRowContainer = ({ categories, addItem, onInputMount }) => (
+  <Row categories={categories} onAddItem={addItem} onInputMount={onInputMount} />
 );
 
 NewExpensesRowContainer.defaultProps = {
@@ -29,5 +33,5 @@ NewExpensesRowContainer.propTypes = {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewExpensesRowContainer);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(NewExpensesRowContainer);
 

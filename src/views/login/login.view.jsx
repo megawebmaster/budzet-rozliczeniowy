@@ -39,6 +39,7 @@ class LoginView extends PureComponent {
   componentDidMount() {
     Authenticator.validateLogin(() => {
       this.setState({ status: STATUS_LOGGING_IN });
+      // TODO: Load budgets and redirect to default one
       this.props.redirectToBudget();
     });
   }

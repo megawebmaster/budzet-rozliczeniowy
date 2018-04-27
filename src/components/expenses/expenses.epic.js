@@ -1,17 +1,19 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
+import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/ignoreElements';
 import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/concatMap';
-import * as Actions from './expenses.actions';
-import { month, year } from '../location';
-import { ROUTE_EXPENSES_MONTH } from '../../routes';
-import { loadExpenses } from './expenses.actions';
-import { Authenticator } from '../../App.auth';
 
-const addValueAction = (year, month, value) => (
-  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}`, {
+import { Authenticator } from '../../App.auth';
+import { budget as budgetSelector, month, year } from '../location';
+import { ROUTE_EXPENSES_MONTH } from '../../routes';
+import * as Actions from './expenses.actions';
+import { loadExpenses } from './expenses.actions';
+
+const addValueAction = (budget, year, month, value) => (
+  fetch(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -26,8 +28,8 @@ const addValueAction = (year, month, value) => (
     method: 'POST',
   }).then(response => response.json())
 );
-const saveValueAction = (year, month, value) => (
-  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}/${value.id}`, {
+const saveValueAction = (budget, year, month, value) => (
+  fetch(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}/${value.id}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -42,8 +44,8 @@ const saveValueAction = (year, month, value) => (
     method: 'PUT',
   }).then(response => response.json())
 );
-const deleteValueAction = (year, month, value) => (
-  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}/${value.id}`, {
+const deleteValueAction = (budget, year, month, value) => (
+  fetch(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}/${value.id}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -53,8 +55,8 @@ const deleteValueAction = (year, month, value) => (
   }).then(response => response.json())
 );
 
-const fetchExpenses = (year, month) => (
-  fetch(`http://localhost:8080/budgets/${year}/expenses/${month}`, {
+const fetchExpenses = (budget, year, month) => (
+  fetch(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -64,9 +66,11 @@ const fetchExpenses = (year, month) => (
 );
 
 const addItem = (data) => {
+  const { budget, year, month, row } = data;
   // TODO: Add support for handling errors
   return Observable
-    .from(addValueAction(data.year, data.month, data.row))
+    .from(addValueAction(budget, year, month, row))
+    // TODO: Add action creator for SAVE_ITEM_SUCCESS?!?!
     .map(result => ({
       type: Actions.SAVE_ITEM_SUCCESS,
       payload: {
@@ -84,9 +88,11 @@ const addItem = (data) => {
   // Actions.SAVE_ITEM_FAIL
 };
 const saveItem = (data) => {
+  const { budget, year, month, row } = data;
   // TODO: Add support for handling errors
   return Observable
-    .from(saveValueAction(data.year, data.month, data.row))
+    .from(saveValueAction(budget, year, month, row))
+    // TODO: Add action creator for SAVE_ITEM_SUCCESS?!?!
     .map(result => ({
       type: Actions.SAVE_ITEM_SUCCESS,
       payload: {
@@ -108,25 +114,37 @@ const saveItem = (data) => {
   // Actions.ADD_ITEM_FAIL
 };
 
-const addItemEpic = (action$) =>
+const addItemEpic = (action$, store) =>
   action$
     .ofType(Actions.ADD_ITEM)
-    .concatMap((action) => addItem(action.payload))
+    .concatMap((action) => {
+      const state = store.getState();
+      return addItem({
+        ...action.payload,
+        budget: budgetSelector(state),
+      });
+    })
 ;
-const saveItemEpic = (action$) =>
+const saveItemEpic = (action$, store) =>
   action$
     .ofType(Actions.SAVE_ITEM)
     .debounceTime(1000)
-    .concatMap((action) => saveItem(action.payload))
+    .concatMap((action) => {
+      const state = store.getState();
+      return saveItem({
+        ...action.payload,
+        budget: budgetSelector(state),
+      });
+    })
 ;
 const removeItemEpic = (action$, store) =>
   action$
     .ofType(Actions.REMOVE_ITEM)
     .do((action) => {
       const state = store.getState();
-      deleteValueAction(year(state), month(state), action.payload.row);
+      deleteValueAction(budgetSelector(state), action.payload.year, action.payload.month, action.payload.row);
     })
-    .filter(() => false)
+    .ignoreElements()
 ;
 const loadExpensesEpic = (action$, store) =>
   action$
@@ -135,9 +153,10 @@ const loadExpensesEpic = (action$, store) =>
       const state = store.getState();
       const currentYear = year(state);
       const currentMonth = month(state);
+      const currentBudget = budgetSelector(state);
 
       return Observable
-        .from(fetchExpenses(currentYear, currentMonth))
+        .from(fetchExpenses(currentBudget, currentYear, currentMonth))
         .map(values => loadExpenses(currentYear, currentMonth, values));
     })
 ;

@@ -17,10 +17,8 @@ const newRowState = {
 class NewExpensesRow extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
-    month: PropTypes.number.isRequired,
     onAddItem: PropTypes.func.isRequired,
     onInputMount: PropTypes.func,
-    year: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -37,8 +35,7 @@ class NewExpensesRow extends Component {
   };
 
   addItem = () => {
-    const { onAddItem, month, year } = this.props;
-    onAddItem(this.state, year, month);
+    this.props.onAddItem(this.state);
     this.reset();
     this.categoryField.focus();
     setTimeout(() => window.scrollBy({ top: document.body.offsetHeight, left: 0, behavior: 'smooth' }));
@@ -50,9 +47,7 @@ class NewExpensesRow extends Component {
   updateDescription = (_event, data) => this.setState({ description: data.value });
   reset = () => this.setState({ ...newRowState, id: `new_${Date.now()}` });
 
-  componentWillMount() {
-    this.reset();
-  }
+  state = { ...newRowState };
 
   render() {
     const { categories, onInputMount } = this.props;

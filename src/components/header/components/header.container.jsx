@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
 import Header from './header';
-import { month, pageType, year } from '../../location';
-import { availableYears } from '../../configuration';
+import { budget, month, pageType, year } from '../../location';
+import { availableBudgets, availableYears, currentBudget } from '../../configuration';
 import { Authenticator } from '../../../App.auth';
 
 const mapStateToProps = (state) => ({
@@ -10,6 +10,9 @@ const mapStateToProps = (state) => ({
   year: year(state),
   month: month(state),
   page: pageType(state),
+  budgets: availableBudgets(state),
+  budget: currentBudget(state),
+  budgetSlug: budget(state),
 });
 
 const mapDispatchToProps = () => ({

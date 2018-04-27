@@ -3,23 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { PriceInput as Input } from '../../price-input';
-import { year } from '../../location';
 import { categoryIrregularBudget } from '../irregular-budget.selectors';
 import { saveIrregularValue } from '../irregular-budget.actions';
 
 const mapStateToProps = (state, ownProps) => ({
   value: categoryIrregularBudget(state, ownProps).planned,
   isSaving: categoryIrregularBudget(state, ownProps).savingPlanned,
-  year: year(state),
 });
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onUpdate: (year, value) => dispatch(saveIrregularValue(year, ownProps.categoryId, value)),
-});
-const mergeProps = (stateProps, dispatchProps, ownProps) => ({
-  ...stateProps,
-  ...dispatchProps,
-  ...ownProps,
-  onChange: (value) => dispatchProps.onUpdate(stateProps.year, value),
+const mapDispatchToProps = (dispatch, { categoryId }) => ({
+  onChange: (value) => dispatch(saveIrregularValue(categoryId, value)),
 });
 
 const IrregularPlannedPriceInput = ({ disabled, placeholder, value, isSaving, onChange, onMount }) => (
@@ -38,4 +30,4 @@ IrregularPlannedPriceInput.propTypes = {
   placeholder: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(IrregularPlannedPriceInput);
+export default connect(mapStateToProps, mapDispatchToProps)(IrregularPlannedPriceInput);

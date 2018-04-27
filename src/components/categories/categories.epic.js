@@ -10,11 +10,11 @@ import {
   UPDATE_CATEGORY,
   replaceCategory,
 } from './categories.actions';
-import { month, year } from '../location';
+import { budget, month, year } from '../location';
 import { Authenticator } from '../../App.auth';
 
-const saveCategoryAction = (type, name, year, month, parent = null) => (
-  fetch('http://localhost:8080/categories', {
+const saveCategoryAction = (type, name, budget, year, month, parent = null) => (
+  fetch(`http://localhost:8080/budgets/${budget}/categories`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -27,8 +27,8 @@ const saveCategoryAction = (type, name, year, month, parent = null) => (
   }).then(response => response.json())
 );
 
-const updateCategoryAction = (type, id, values) => (
-  fetch(`http://localhost:8080/categories/${id}`, {
+const updateCategoryAction = (type, budget, id, values) => (
+  fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -42,8 +42,8 @@ const updateCategoryAction = (type, id, values) => (
   }).then(response => response.json())
 );
 
-const deleteCategoryAction = (type, id, year, month) => (
-  fetch(`http://localhost:8080/categories/${id}`, {
+const deleteCategoryAction = (type, budget, id, year, month) => (
+  fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
     method: 'DELETE',
     headers: new Headers({
       'Accept': 'application/json',
@@ -64,6 +64,7 @@ const addCategoryEpic = (action$, store) =>
       const promise = saveCategoryAction(
         action.payload.type,
         action.payload.name,
+        budget(state),
         year(state),
         month(state),
         action.payload.parentId
@@ -72,12 +73,14 @@ const addCategoryEpic = (action$, store) =>
     })
 ;
 
-const updateCategoryEpic = (action$) =>
+const updateCategoryEpic = (action$, store) =>
   action$
     .ofType(UPDATE_CATEGORY)
     .mergeMap((action) => {
+      const state = store.getState();
       const promise = updateCategoryAction(
         action.payload.type,
+        budget(state),
         action.payload.category.id,
         action.payload.values
       );
@@ -92,6 +95,7 @@ const removeCategoryEpic = (action$, store) =>
       const state = store.getState();
       deleteCategoryAction(
         action.payload.type,
+        budget(state),
         action.payload.id,
         year(state),
         month(state)

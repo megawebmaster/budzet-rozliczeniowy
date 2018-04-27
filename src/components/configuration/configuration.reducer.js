@@ -8,19 +8,16 @@ const initialState = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   },
-  years: {
-    loading: true,
-    data: []
-  },
+  years: [],
+  budgets: [],
 };
 
 export const ConfigurationReducer = (state = initialState, action) => {
   switch(action.type){
     case Actions.YEARS_UPDATED:
-      return {
-        ...state,
-        years: { loading: false, data: action.payload.years },
-      };
+      return { ...state, years: action.payload.years };
+    case Actions.BUDGETS_UPDATED:
+      return { ...state, budgets: action.payload.budgets };
     default:
       return state;
   }

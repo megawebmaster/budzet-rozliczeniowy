@@ -4,9 +4,9 @@ export const SAVING_BUDGET = 'BudgetAction.UPDATE_BUDGET';
 export const SAVE_SUCCESS = 'BudgetAction.SAVE_SUCCESS';
 export const SAVE_FAIL = 'BudgetAction.SAVE_FAIL';
 
-export const saveValue = (categoryType, valueType, year, month, categoryId, value) => ({
+export const saveValue = (categoryType, valueType, categoryId, value) => ({
   type: SAVE_BUDGET,
-  payload: { year, month, categoryId, categoryType, valueType, value }
+  payload: { categoryId, categoryType, valueType, value }
 });
 
 export const loadBudget = (year, month, values) => ({

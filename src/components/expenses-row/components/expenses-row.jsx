@@ -8,33 +8,40 @@ import { CategoryField } from './category-field';
 import { DayField } from './day-field';
 
 class ExpensesGridRow extends Component {
+  static propTypes = {
+    categories: PropTypes.array.isRequired,
+    row: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      saving: PropTypes.bool,
+    }).isRequired,
+    onInputMount: PropTypes.func,
+    onRemoveItem: PropTypes.func,
+    onSaveItem: PropTypes.func.isRequired,
+  };
+  static defaultProps = {
+    onInputMount: (_type, _input) => {},
+    onRemoveItem: (_state) => {},
+  };
+
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
 
-  saveItem = () => {
-    const { year, month } = this.props;
-    this.props.onSaveItem(this.state, year, month);
+  saveItem = () => this.props.onSaveItem(this.state);
+  removeItem = () => this.props.onRemoveItem(this.state);
+
+  updateCategory = (_event, data) => this.setState({ category: data.value }, this.saveItem);
+  updatePrice = (price) => this.setState({ price }, this.saveItem);
+  updateDay = (day) => this.setState({ day }, this.saveItem);
+  updateDescription = (_event, data) => this.setState({ description: data.value }, this.saveItem);
+
+  state = {
+    category: '',
+    day: '',
+    price: '',
+    description: '',
   };
 
-  removeItem = () => {
-    const { year, month } = this.props;
-    this.props.onRemoveItem(this.state, year, month);
-  };
-
-  updateCategory = (_event, data) => {
-    this.setState({ category: data.value }, this.saveItem);
-  };
-  updatePrice = (price) => {
-    this.setState({ price }, this.saveItem);
-  };
-  updateDay = (day) => {
-    this.setState({ day }, this.saveItem);
-  };
-  updateDescription = (_event, data) => {
-    this.setState({ description: data.value }, this.saveItem);
-  };
-
-  componentWillMount() {
+  componentDidMount() {
     this.setState(this.props.row);
   }
 
@@ -69,20 +76,6 @@ class ExpensesGridRow extends Component {
     );
   }
 }
-
-ExpensesGridRow.defaultProps = {
-  onInputMount: (_type, _input) => {},
-  onRemoveItem: (_state, _year, _month) => {},
-};
-ExpensesGridRow.propTypes = {
-  categories: PropTypes.array.isRequired,
-  month: PropTypes.number.isRequired,
-  onInputMount: PropTypes.func,
-  onRemoveItem: PropTypes.func,
-  onSaveItem: PropTypes.func.isRequired,
-  row: PropTypes.object.isRequired,
-  year: PropTypes.number.isRequired,
-};
 
 export default injectIntl(ExpensesGridRow);
 

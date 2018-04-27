@@ -8,7 +8,7 @@ export const loadIrregularBudget = (year, values) => ({
   type: LOAD_IRREGULAR_BUDGET,
   payload: { year, values }
 });
-export const saveIrregularValue = (year, categoryId, value) => ({
+export const saveIrregularValue = (categoryId, value) => ({
   type: SAVE_IRREGULAR_BUDGET,
-  payload: { year, categoryId, value }
+  payload: { categoryId, value }
 });

@@ -36,27 +36,27 @@ export default {
     thunk: redirectAuthenticated
   },
   [ROUTE_BUDGET]: {
-    path: '/:year/budget',
+    path: '/:budget/:year/budget',
     thunk: loginUnauthenticated
   },
   [ROUTE_BUDGET_SUMMARY]: {
-    path: '/:year/budget/summary',
+    path: '/:budget/:year/budget/summary',
     thunk: loginUnauthenticated
   },
   [ROUTE_BUDGET_IRREGULAR]: {
-    path: '/:year/budget/irregular',
+    path: '/:budget/:year/budget/irregular',
     thunk: loginUnauthenticated
   },
   [ROUTE_BUDGET_ACCOUNTS]: {
-    path: '/:year/budget/accounts',
+    path: '/:budget/:year/budget/accounts',
     thunk: loginUnauthenticated
   },
   [ROUTE_BUDGET_MONTH]: {
-    path: '/:year/budget/:month',
+    path: '/:budget/:year/budget/:month',
     thunk: loginUnauthenticated
   },
   [ROUTE_EXPENSES_MONTH]: {
-    path: '/:year/expenses/:month',
+    path: '/:budget/:year/expenses/:month',
     thunk: loginUnauthenticated
   },
 };

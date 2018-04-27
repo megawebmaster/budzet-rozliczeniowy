@@ -4,14 +4,15 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
-import * as Actions from './budget.actions';
-import { ROUTE_BUDGET_MONTH } from '../../routes';
-import { month, year } from '../location';
-import { loadBudget } from './budget.actions';
-import { Authenticator } from '../../App.auth';
 
-const saveValueAction = (year, month, categoryId, valueType, value) => (
-  fetch(`http://localhost:8080/budgets/${year}/entries/${categoryId}`, {
+import { Authenticator } from '../../App.auth';
+import * as Actions from './budget.actions';
+import { loadBudget } from './budget.actions';
+import { ROUTE_BUDGET_MONTH } from '../../routes';
+import { budget as budgetSelector, month, year } from '../location';
+
+const saveValueAction = (budget, year, month, categoryId, valueType, value) => (
+  fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${categoryId}`, {
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: new Headers({
       'Accept': 'application/json',
@@ -26,8 +27,8 @@ const saveValueAction = (year, month, categoryId, valueType, value) => (
   }).then(response => response.json())
 );
 
-const fetchBudget = (year, month) => (
-  fetch(`http://localhost:8080/budgets/${year}/entries/${month}`, {
+const fetchBudget = (budget, year, month) => (
+  fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${month}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,
@@ -36,10 +37,10 @@ const fetchBudget = (year, month) => (
 );
 
 const saveChanges = (data, loaderType, successType, errorType) => {
-  const { year, month, categoryId, valueType, value } = data;
+  const { budget, year, month, categoryId, valueType, value } = data;
   // TODO: Add support for handling errors
   return Observable
-    .from(saveValueAction(year, month, categoryId, valueType, value))
+    .from(saveValueAction(budget, year, month, categoryId, valueType, value))
     .map(() => ({
       type: successType,
       payload: data
@@ -51,15 +52,24 @@ const saveChanges = (data, loaderType, successType, errorType) => {
   // errorType
 };
 
-const saveBudgetEpic = (action$) =>
+const saveBudgetEpic = (action$, store) =>
   action$
     .ofType(Actions.SAVE_BUDGET)
-    .concatMap((action) => saveChanges(
-      action.payload,
-      Actions.SAVING_BUDGET,
-      Actions.SAVE_SUCCESS,
-      Actions.SAVE_FAIL,
-    ))
+    .concatMap((action) => {
+      const state = store.getState();
+
+      return saveChanges(
+        {
+          ...action.payload,
+          budget: budgetSelector(state),
+          year: year(state),
+          month: month(state),
+        },
+        Actions.SAVING_BUDGET,
+        Actions.SAVE_SUCCESS,
+        Actions.SAVE_FAIL,
+      )
+    })
 ;
 
 const loadBudgetEpic = (action$, store) =>
@@ -69,9 +79,10 @@ const loadBudgetEpic = (action$, store) =>
       const state = store.getState();
       const currentYear = year(state);
       const currentMonth = month(state);
+      const budget = budgetSelector(state);
 
       return Observable
-        .from(fetchBudget(currentYear, currentMonth))
+        .from(fetchBudget(budget, currentYear, currentMonth))
         .map(values => loadBudget(currentYear, currentMonth, values));
     })
 ;
