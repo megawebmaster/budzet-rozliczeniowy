@@ -8,6 +8,7 @@
     "history": "^4.7.2",
     "jump.js": "^1.0.2",
     "lodash": "^4.17.4",
+    "openpgp": "^3.0.8",
     "prop-types": "^15.6.0",
     "re-reselect": "^1.0.1",
     "react": "^16.2.0",
