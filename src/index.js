@@ -80,6 +80,8 @@ const messages = {
   'views.login.check-mailbox-title': 'Magiczny link wysłany',
   'views.login.check-mailbox': 'Sprawdź swoją skrzynkę e-mail i kliknij na link w wiadomości od nas, żeby się zalogować',
   'views.login.logging-in': 'Logowanie w toku…',
+  'views.login.encryption-password': 'Podaj hasło szyfrujące',
+  'views.login.encryption-button': 'Odszyfruj dane',
   'views.landing.login': 'Zaloguj się',
 };
 
