@@ -7,36 +7,54 @@ import { loadIrregularBudget } from './irregular-budget.actions';
 import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import * as Actions from './irregular-budget.actions';
 import { Authenticator } from '../../App.auth';
+import { Encryptor } from '../../App.encryption';
 
-const saveIrregularValueAction = (budget, year, categoryId, valueType, value) => (
-  fetch(`http://localhost:8080/budgets/${budget}/${year}/irregular/${categoryId}`, {
+const saveIrregularValueAction = async (budget, year, categoryId, value) => {
+  const encryptedValue = await Encryptor.encrypt(value.toString());
+  const encryptedMonthlyValue = await Encryptor.encrypt((value / 10.0).toString());
+  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/irregular/${categoryId}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
     body: JSON.stringify({
-      [valueType]: value,
+      planned: encryptedValue,
+      planned_monthly: encryptedMonthlyValue,
     }),
     method: 'PUT',
-  }).then(response => response.json())
-);
+  });
+  const entry = await response.json();
 
-const fetchIrregularBudget = (budget, year) => (
-  fetch(`http://localhost:8080/budgets/${budget}/${year}/irregular`, {
+  return await {
+    ...entry,
+    plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
+    real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
+  };
+};
+
+const fetchIrregularBudget = async (budget, year) => {
+  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/irregular`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,
     })
-  }).then(response => response.json())
-);
+  });
+  const entries = await response.json();
+
+  return Promise.all(entries.map(async entry => ({
+    ...entry,
+    plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
+    real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
+  })));
+};
 
 const saveIrregularChanges = (data, loaderType, successType, errorType) => {
   const { budget, year, categoryId, value } = data;
   // TODO: Add support for handling errors
   return Observable
-    .from(saveIrregularValueAction(budget, year, categoryId, 'planned', value))
+    .from(saveIrregularValueAction(budget, year, categoryId, value))
     .map(() => ({
       type: successType,
       payload: data

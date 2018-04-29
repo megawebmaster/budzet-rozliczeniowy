@@ -13,7 +13,7 @@ const parseChildrenCategories = (categories) => {
 
 const categories = (state) => state.categories;
 
-const accessibleCategories = createSelector(
+export const accessibleCategories = createSelector(
   [year, month, categories],
   (year, month, categories) => categories.filter(category => {
     const started = new Date(category.startedAt);

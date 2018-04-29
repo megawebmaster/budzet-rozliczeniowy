@@ -6,13 +6,24 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
 
 import { Authenticator } from '../../App.auth';
+import { Encryptor } from '../../App.encryption';
 import * as Actions from './budget.actions';
 import { loadBudget } from './budget.actions';
-import { ROUTE_BUDGET_MONTH } from '../../routes';
+import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes';
 import { budget as budgetSelector, month, year } from '../location';
 
-const saveValueAction = (budget, year, month, categoryId, valueType, value) => (
-  fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${categoryId}`, {
+/**
+ * @param budget string
+ * @param year string
+ * @param month string
+ * @param categoryId string
+ * @param valueType string
+ * @param value number
+ * @returns {Promise<{plan: number, real: number}>}
+ */
+const saveValueAction = async (budget, year, month, categoryId, valueType, value) => {
+  const encryptedValue = await Encryptor.encrypt(value.toString());
+  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${categoryId}`, {
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: new Headers({
       'Accept': 'application/json',
@@ -21,20 +32,40 @@ const saveValueAction = (budget, year, month, categoryId, valueType, value) => (
     }),
     body: JSON.stringify({
       month,
-      [valueType]: value,
+      [valueType]: encryptedValue,
     }),
     method: 'PUT',
-  }).then(response => response.json())
-);
+  });
+  const entry = await response.json();
 
-const fetchBudget = (budget, year, month) => (
-  fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${month}`, {
+  return await {
+    ...entry,
+    plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
+    real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
+  };
+};
+
+/**
+ * @param budget string
+ * @param year string
+ * @param month string
+ * @returns {Promise<[any]>}
+ */
+const fetchBudget = async (budget, year, month) => {
+  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${month}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,
     })
-  }).then(response => response.json())
-);
+  });
+  const entries = await response.json();
+
+  return await Promise.all(entries.map(async entry => ({
+    ...entry,
+    plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
+    real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
+  })));
+};
 
 const saveChanges = (data, loaderType, successType, errorType) => {
   const { budget, year, month, categoryId, valueType, value } = data;
@@ -55,7 +86,7 @@ const saveChanges = (data, loaderType, successType, errorType) => {
 const saveBudgetEpic = (action$, store) =>
   action$
     .ofType(Actions.SAVE_BUDGET)
-    .concatMap((action) => {
+    .concatMap(action => {
       const state = store.getState();
 
       return saveChanges(
@@ -74,7 +105,7 @@ const saveBudgetEpic = (action$, store) =>
 
 const loadBudgetEpic = (action$, store) =>
   action$
-    .ofType(ROUTE_BUDGET_MONTH)
+    .filter(action => [ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH].indexOf(action.type) !== -1)
     .mergeMap(() => {
       const state = store.getState();
       const currentYear = year(state);
@@ -83,7 +114,7 @@ const loadBudgetEpic = (action$, store) =>
 
       return Observable
         .from(fetchBudget(budget, currentYear, currentMonth))
-        .map(values => loadBudget(currentYear, currentMonth, values));
+        .map(entries => loadBudget(currentYear, currentMonth, entries));
     })
 ;
 

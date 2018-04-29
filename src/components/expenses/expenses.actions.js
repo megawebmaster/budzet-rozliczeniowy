@@ -27,3 +27,21 @@ export const sortExpenses = (year, month, field) => ({
   type: SORT_EXPENSES,
   payload: { year, month, field }
 });
+export const savingItem = (year, month, row) => ({
+  type: SAVING_ROW,
+  payload: { year, month, row }
+});
+export const saveItemSuccess = (year, month, response) => ({
+  type: SAVE_ITEM_SUCCESS,
+  payload: {
+    year,
+    month,
+    row: {
+      id: response.id,
+      category: response.category.id,
+      price: response.value,
+      day: response.day,
+      description: response.description,
+    },
+  }
+});

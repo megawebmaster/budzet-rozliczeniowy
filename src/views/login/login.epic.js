@@ -16,7 +16,7 @@ const redirectToDefaultBudgetEpic = (action$) =>
       const today = new Date();
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
-      const budget = action.payload.budgets.filter(b => b.isDefault)[0];
+      const budget = action.payload.budgets.find(b => b.isDefault);
 
       return Observable.of([
         action,

@@ -5,7 +5,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/throttleTime';
 import { updateBudgets, updateYears } from '../components/configuration';
-import { loadCategories } from '../components/categories';
 import { ROUTE_BUDGET, ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from './routes.actions';
 import { Authenticator } from '../App.auth';
 
@@ -31,15 +30,6 @@ const fetchAvailableYears = (budgetSlug) => (
   }).then(response => response.json())
 );
 
-const fetchCategories = (budgetSlug) => (
-  fetch(`http://localhost:8080/budgets/${budgetSlug}/categories`, {
-    headers: new Headers({
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${Authenticator.getToken()}`,
-    })
-  }).then(response => response.json())
-);
-
 const fetchBudgetsEpic = (action$) =>
   action$
     .filter(action => action.type.indexOf('Route/') === 0 && Authenticator.isLoggedIn())
@@ -59,15 +49,6 @@ const fetchYearsEpic = (action$) =>
     ))
 ;
 
-const fetchCategoriesEpic = (action$) =>
-  action$
-    .filter(action => [ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH].indexOf(action.type) !== -1)
-    // .throttleTime(halfHour)
-    .mergeMap(action => (
-      Observable.from(fetchCategories(action.payload.budget)).map(loadCategories)
-    ))
-;
-
 const redirectToMonthlyBudgetEpic = (action$) =>
   action$
     .ofType(ROUTE_BUDGET)
@@ -83,6 +64,5 @@ const redirectToMonthlyBudgetEpic = (action$) =>
 export const routesEpic = combineEpics(
   fetchBudgetsEpic,
   fetchYearsEpic,
-  fetchCategoriesEpic,
   redirectToMonthlyBudgetEpic,
 );
