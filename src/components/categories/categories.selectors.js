@@ -13,11 +13,13 @@ const parseChildrenCategories = (categories) => {
 
 const categories = (state) => state.categories;
 
-export const accessibleCategories = createSelector(
+const accessibleCategories = createSelector(
   [year, month, categories],
   (year, month, categories) => categories.filter(category => {
     const started = new Date(category.startedAt);
-    const startMatched = started.getFullYear() <= year && started.getMonth() +1 <= month;
+    const startMatched = category.startedAt === null || (
+      started.getFullYear() <= year && started.getMonth() + 1 <= month
+    );
     const deleted = new Date(category.deletedAt);
     const deletionMatched = category.deletedAt === null || (
       deleted.getFullYear() >= year && deleted.getMonth() + 1 > month

@@ -24,17 +24,9 @@ class AddButton extends Component {
     }
   };
 
-  updateValue = (_event, data) => {
-    this.setState({ value: data.value });
-  };
-
-  showInput = () => {
-    this.setState({ adding: true });
-  };
-
-  hideInput = () => {
-    this.setState({ value: '', adding: false });
-  };
+  updateValue = (_event, data) => this.setState({ value: data.value });
+  showInput = () => this.setState({ adding: true });
+  hideInput = () => this.setState({ value: '', adding: false });
 
   saveInput = () => {
     this.props.onSave(this.state.value);

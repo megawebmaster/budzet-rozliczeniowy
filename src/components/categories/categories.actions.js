@@ -22,5 +22,5 @@ export const removeCategory = (type, id) => ({
 });
 export const addCategory = (type, name, parentId = null) => ({
   type: ADD_CATEGORY,
-  payload: { type, name, parentId }
+  payload: { id: Date.now(), type, name, parentId }
 });

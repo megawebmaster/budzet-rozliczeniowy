@@ -27,12 +27,12 @@ const mapDispatchToProps = (dispatch, { category }) => ({
   onEdit: (name) => dispatch(updateCategory('expense', category, { name })),
 });
 
-const ExpensesBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addSubcategory,
-                               onEdit, onRemove, onInputMount }) => (
+const ExpensesBudgetTable = ({ category, label, currency, categories, summaryPlanned, summaryReal, className,
+                               addSubcategory, onEdit, onRemove, onInputMount }) => (
   <BudgetTable type="expense" className={className} label={label} categories={categories} editableRealValues={false}
                summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addSubcategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput}
-               onRemove={onRemove} onEdit={onEdit} />
+               onRemove={onRemove} onEdit={onEdit} saving={category.saving} />
 );
 
 ExpensesBudgetTable.propTypes = {

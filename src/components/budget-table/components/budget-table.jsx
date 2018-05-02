@@ -11,6 +11,7 @@ import './budget-table.css';
 // TODO: Show data-saving errors for adding subcategory
 class BudgetTable extends Component {
   static propTypes = {
+    saving: PropTypes.bool,
     type: PropTypes.string.isRequired,
     categories: PropTypes.array.isRequired,
     className: PropTypes.string,
@@ -33,6 +34,7 @@ class BudgetTable extends Component {
     onEdit: () => {},
     onRemove: () => {},
     manageableCategories: true,
+    saving: false,
   };
 
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
@@ -41,7 +43,7 @@ class BudgetTable extends Component {
 
   render() {
     const {
-      label, type, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount,
+      label, saving, type, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount,
       manageableCategories, onEdit, onRemove, PlannedInput, RealInput
     } = this.props;
 
@@ -51,7 +53,7 @@ class BudgetTable extends Component {
           <TableRow>
             <TableHeaderCell width={4}>
               <EditableText text={label} deletable={!!onRemove} editable={!!onEdit} onDelete={onRemove}
-                            onUpdate={onEdit} />
+                            onUpdate={onEdit} saving={saving} />
             </TableHeaderCell>
             <TableHeaderCell width={4}>
               <span>{this.format('budget.table.header-planned', 'Planowane ({value})', { value: this.currency(summaryPlanned) })}</span>
