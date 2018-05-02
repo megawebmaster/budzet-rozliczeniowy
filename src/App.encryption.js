@@ -1,6 +1,15 @@
 import openpgp, { message, util } from 'openpgp';
 
-openpgp.config = {aead_protect: true};
+export const initEncryption = () => {
+  openpgp.initWorker({
+    workers: [
+      new Worker('/encryptionWorker.js'),
+    ],
+    n: 1,
+    path: '/encryptionWorker.js'
+  });
+  openpgp.config = { aead_protect: true };
+};
 
 export class Encryptor {
   static setPassword(password) {

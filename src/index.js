@@ -13,6 +13,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import 'semantic-ui-css/semantic.min.css';
+import { initEncryption } from './App.encryption';
 
 const epicMiddleware = createEpicMiddleware(appEpic);
 const initialState = {};
@@ -94,6 +95,7 @@ const composeApp = (AppComponent, store, messages) => (
 );
 
 ReactDOM.render(composeApp(App, store, messages), root);
+initEncryption();
 
 if (module.hot) {
   module.hot.accept('./App', () => {
