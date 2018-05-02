@@ -1,7 +1,7 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, ButtonGroup, Input } from 'semantic-ui-react';
+import { Button, ButtonGroup, Input, Loader } from 'semantic-ui-react';
 
 import './editable-text.css';
 
@@ -11,6 +11,7 @@ class EditableText extends PureComponent {
   static propTypes = {
     deletable: PropTypes.bool,
     editable: PropTypes.bool,
+    saving: PropTypes.bool,
     size: PropTypes.string,
     text: PropTypes.string.isRequired,
     onUpdate: PropTypes.func.isRequired,
@@ -20,6 +21,7 @@ class EditableText extends PureComponent {
   static defaultProps = {
     deletable: false,
     editable: false,
+    saving: false,
     size: 'mini',
   };
 
@@ -41,17 +43,9 @@ class EditableText extends PureComponent {
     }
   };
 
-  updateValue = (_event, data) => {
-    this.setState({ value: data.value });
-  };
-
-  showInput = () => {
-    this.setState({ editing: true });
-  };
-
-  hideInput = () => {
-    this.setState({ value: this.props.text, editing: false });
-  };
+  updateValue = (_event, data) => this.setState({ value: data.value });
+  showInput = () => this.setState({ editing: true });
+  hideInput = () => this.setState({ value: this.props.text, editing: false });
 
   saveInput = () => {
     this.props.onUpdate(this.state.value);
@@ -59,14 +53,15 @@ class EditableText extends PureComponent {
   };
 
   renderText = () => {
-    const { text, deletable, editable, onDelete } = this.props;
+    const { text, deletable, editable, saving, onDelete } = this.props;
 
     return (
       <Fragment>
-        <ButtonGroup floated="right">
+        {!saving && <ButtonGroup floated="right">
           {editable && <Button icon="pencil" color="teal" size="mini" onClick={this.showInput} />}
           {deletable && <Button icon="trash" color="red" size="mini" onClick={onDelete} />}
-        </ButtonGroup>
+        </ButtonGroup>}
+        <Loader active={saving} inline />
         <span>{text}</span>
       </Fragment>
     );

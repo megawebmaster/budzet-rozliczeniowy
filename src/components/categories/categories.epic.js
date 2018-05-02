@@ -20,6 +20,10 @@ import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 
 // const halfHour = 30*60*1000;
 
+/**
+ * @param budgetSlug string
+ * @returns {Promise<[any]>}
+ */
 const fetchCategories = async (budgetSlug) => {
   const response = await fetch(`http://localhost:8080/budgets/${budgetSlug}/categories`, {
     headers: new Headers({
@@ -35,6 +39,15 @@ const fetchCategories = async (budgetSlug) => {
   })));
 };
 
+/**
+ * @param type string
+ * @param name string
+ * @param budget string
+ * @param year string
+ * @param month string
+ * @param parent string|null
+ * @returns {Promise<{name: *}>}
+ */
 const saveCategoryAction = async (type, name, budget, year, month, parent = null) => {
   const encryptedName = await Encryptor.encrypt(name);
   const response = await fetch(`http://localhost:8080/budgets/${budget}/categories`, {
@@ -57,6 +70,13 @@ const saveCategoryAction = async (type, name, budget, year, month, parent = null
   return { ...category, name };
 };
 
+/**
+ * @param type string
+ * @param budget sting
+ * @param id string
+ * @param values object
+ * @returns {Promise<{name: *}>}
+ */
 const updateCategoryAction = async (type, budget, id, values) => {
   const encryptedName = await Encryptor.encrypt(values.name);
   const response = await fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
@@ -77,6 +97,14 @@ const updateCategoryAction = async (type, budget, id, values) => {
   return { ...category, name: values.name };
 };
 
+/**
+ * @param type string
+ * @param budget string
+ * @param id number
+ * @param year string
+ * @param month string
+ * @returns {Promise<Response>}
+ */
 const deleteCategoryAction = (type, budget, id, year, month) => (
   fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
     method: 'DELETE',
@@ -129,9 +157,9 @@ const updateCategoryEpic = (action$, store) =>
         action.payload.category.id,
         action.payload.values
       );
-      return Observable.from(promise);
+
+      return Observable.from(promise).map(category => replaceCategory(action.payload.type, action.payload.category, category));
     })
-    .ignoreElements()
 ;
 
 const removeCategoryEpic = (action$, store) =>

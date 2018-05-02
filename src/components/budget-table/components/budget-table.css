@@ -10,6 +10,9 @@
 .budget-table tbody td span {
 	padding: .25em 0;
 }
+.budget-table tbody td {
+	position: relative;
+}
 .budget-table thead th .ui.button {
 	opacity: 0;
 	transition: 250ms ease;

@@ -125,7 +125,6 @@ const fetchExpenses = async (budget, year, month) => {
 
 const addItem = (data) => {
   const { budget, year, month, row, budgetValue } = data;
-  console.log('adding new item', data);
   // TODO: Add support for handling errors
   return Observable
     .from(addValueAction(budget, year, month, row, budgetValue))

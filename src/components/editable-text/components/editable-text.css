@@ -1,6 +1,9 @@
 .editable-text span {
 	display: inline-block;
 }
+.editable-text .ui.loader {
+	float: right;
+}
 .editable-text button.ui.button {
   opacity: 0;
 	padding: .5em;

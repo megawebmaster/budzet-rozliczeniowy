@@ -20,8 +20,8 @@ class CategoryName extends Component {
     const { category, deletable, editable, onRemove, onEdit } = this.props;
 
     return (
-      <EditableText text={category.name} deletable={deletable} onDelete={onRemove} editable={editable}
-                    onUpdate={onEdit} />
+      <EditableText text={category.name} deletable={deletable} onDelete={onRemove} saving={category.saving}
+                    editable={editable} onUpdate={onEdit} />
     );
   }
 }

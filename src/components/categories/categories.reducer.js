@@ -5,12 +5,12 @@ const initialState = [];
 const add = (state, type, name, parent) => {
   return [
     ...state,
-    { id: Date.now(), type, name, parent }
+    { id: Date.now(), saving: true, type, name, parent }
   ];
 };
 
 const update = (state, type, original, category) => {
-  const idx = state.findIndex(c => c.type === type && c.name === original.name && c.parent === original.parent);
+  const idx = state.findIndex(c => c.id === original.id || (c.type === type && c.name === original.name && c.parent === original.parent));
 
   if (idx === -1) {
     throw new Error(`Invalid category: ${original.name}!`);
@@ -42,10 +42,11 @@ export const CategoriesReducer = (state = initialState, action) => {
     case Actions.UPDATE_CATEGORY:
       return update(state, action.payload.type, action.payload.category, {
         ...action.payload.category,
-        ...action.payload.values
+        ...action.payload.values,
+        saving: true,
       });
     case Actions.REPLACE_CATEGORY:
-      return update(state, action.payload.type, action.payload.original, action.payload.saved);
+      return update(state, action.payload.type, action.payload.original, { ...action.payload.saved, saving: false });
     case Actions.REMOVE_CATEGORY:
       return remove(state, action.payload.type, action.payload.id);
     case Actions.ADD_CATEGORY:
