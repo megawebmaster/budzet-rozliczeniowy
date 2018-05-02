@@ -50,7 +50,6 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
     this.setState({ hasFooter: true });
   };
   onKeyDown = (e) => {
-    // TODO: We should add this on navigable fields only!
     if ([ENTER, ARROW_UP, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
       if ([ENTER, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
         this.moveFocus(1);

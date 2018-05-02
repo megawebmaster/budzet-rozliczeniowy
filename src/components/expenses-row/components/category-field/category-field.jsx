@@ -7,7 +7,8 @@ class CategoryField extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   state = {
-    upward: false
+    upward: false,
+    open: false,
   };
 
   onOpen = () => {
@@ -17,9 +18,12 @@ class CategoryField extends Component {
       top += element.offsetTop;
       element = element.offsetParent;
     }
-    this.setState({ upward: top > document.body.clientHeight - 260});
+    this.setState({ upward: top > document.body.clientHeight - 260, open: true });
     this.dropdown.focus();
   };
+
+  onClose = () => this.setState({ open: false });
+  hideOnKeyDown = (event) => this.state.open && event.stopPropagation();
 
   mountDropdown = (ref) => {
     this.dropdown = ref;
@@ -32,9 +36,9 @@ class CategoryField extends Component {
 
     return (
       <Dropdown fluid value={value} selection search options={categories} onChange={onUpdate} upward={upward}
-                onOpen={this.onOpen} openOnFocus={false} className="category-field"
+                onOpen={this.onOpen} onClose={this.onClose} openOnFocus={false} className="category-field"
                 placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
-                searchInput={<DropdownSearchInput inputRef={this.mountDropdown} />}
+                searchInput={<DropdownSearchInput inputRef={this.mountDropdown} onKeyDown={this.hideOnKeyDown} />}
       />
     );
   }
