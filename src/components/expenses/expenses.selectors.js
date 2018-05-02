@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { month, year } from '../location';
 
 export const expenses = (state) => state.expenses;
-export const isLoading = (state) => state.expenses.loading;
+export const isLoading = (state) => state.expenses.loading || state.categories.loading;
 
 export const yearExpenses = createSelector(
   [expenses, year],

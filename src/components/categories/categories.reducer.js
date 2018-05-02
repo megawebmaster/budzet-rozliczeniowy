@@ -1,18 +1,24 @@
 import * as Actions from './categories.actions';
 
-const initialState = [];
+const initialState = {
+  loading: true,
+  data: []
+};
 
 const add = (state, id, type, name, parentId) => {
   const parent = parentId ? {id: parentId} : null;
 
-  return [
+  return {
     ...state,
-    { id, startedAt: null, deletedAt: null, averageValues: [], children: [], saving: true, type, name, parent }
-  ];
+    data: [
+      ...state.data,
+      { id, startedAt: null, deletedAt: null, averageValues: [], children: [], saving: true, type, name, parent }
+    ]
+  };
 };
 
 const update = (state, type, original, category) => {
-  const idx = state.findIndex(c => c.id === original.id);
+  const idx = state.data.findIndex(c => c.id === original.id);
 
   if (idx === -1) {
     throw new Error(`Invalid category: ${original.name}!`);
@@ -21,11 +27,11 @@ const update = (state, type, original, category) => {
   const result = state.slice();
   result.splice(idx, 1, category);
 
-  return result;
+  return { ...state, data: result };
 };
 
 const remove = (state, type, id) => {
-  const idx = state.findIndex(c => c.id === id);
+  const idx = state.data.findIndex(c => c.id === id);
 
   if (idx === -1) {
     throw new Error(`Invalid category ID: ${id}!`);
@@ -34,13 +40,13 @@ const remove = (state, type, id) => {
   const result = state.slice();
   result.splice(idx, 1);
 
-  return result;
+  return { ...state, data: result };
 };
 
 export const CategoriesReducer = (state = initialState, action) => {
   switch(action.type){
     case Actions.LOAD_CATEGORIES:
-      return action.payload.categories;
+      return { loading: false, data: action.payload.categories };
     case Actions.UPDATE_CATEGORY:
       return update(state, action.payload.type, action.payload.category, {
         ...action.payload.category,

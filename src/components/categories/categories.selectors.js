@@ -11,7 +11,7 @@ const parseChildrenCategories = (categories) => {
   return mainCategories;
 };
 
-const categories = (state) => state.categories;
+const categories = (state) => state.categories.data;
 
 const accessibleCategories = createSelector(
   [year, month, categories],
