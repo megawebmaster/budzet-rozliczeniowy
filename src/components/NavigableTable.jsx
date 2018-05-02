@@ -98,17 +98,19 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
     const windowHeight = document.body.offsetHeight;
     const scrollPosition = window.pageYOffset;
 
-    // TODO: We need to hack into jump.js to let us cancel animation loop because other is new and just taking place
+    if (this.scroll) {
+      this.scroll.cancel();
+    }
     if (delta > 0) {
       const offset = offsetTop + 40 - windowHeight - scrollPosition + bottomMargin;
       if (offset > 0) {
-        jump(offset, { duration });
+        this.scroll = jump(offset, { duration });
       }
     }
     if (delta < 0) {
       const offset = offsetTop - scrollPosition - 40 - topMargin;
       if (offset < 0) {
-        jump(offset, { duration });
+        this.scroll = jump(offset, { duration });
       }
     }
     input.focus();
