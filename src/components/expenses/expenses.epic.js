@@ -142,8 +142,8 @@ const saveItem = (data) => {
 };
 const calculateBudgetValue = (state, { row }) => (
   monthExpenses(state)
-    .filter(expense => expense.category === row.category)
-    .reduce((result, expense) => result + expense.price, 0.0)
+    .filter(expense => expense.category === row.category && expense.id !== row.id)
+    .reduce((result, expense) => result + expense.price, row.price)
 );
 
 const addItemEpic = (action$, store) =>

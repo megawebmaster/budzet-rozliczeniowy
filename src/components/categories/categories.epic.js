@@ -20,6 +20,17 @@ import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 
 // const halfHour = 30*60*1000;
 
+const calculateAverageValue = async (averageValues) => {
+  if (averageValues.length === 0) {
+    return 0.0;
+  }
+
+  /** @var array */
+  const decryptedValues = await Promise.all(averageValues.map(async value => await Encryptor.decrypt(value)));
+
+  return decryptedValues.reduce((result, value) => result + parseFloat(value), 0.0) / averageValues.length;
+};
+
 /**
  * @param budgetSlug string
  * @returns {Promise<[any]>}
@@ -35,7 +46,8 @@ const fetchCategories = async (budgetSlug) => {
 
   return await Promise.all(categories.map(async category => ({
     ...category,
-    name: await Encryptor.decrypt(category.name)
+    name: await Encryptor.decrypt(category.name),
+    averageValue: await calculateAverageValue(category.averageValues),
   })));
 };
 

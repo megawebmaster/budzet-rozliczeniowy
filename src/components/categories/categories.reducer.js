@@ -24,7 +24,7 @@ const update = (state, type, original, category) => {
     throw new Error(`Invalid category: ${original.name}!`);
   }
 
-  const result = state.slice();
+  const result = state.data.slice();
   result.splice(idx, 1, category);
 
   return { ...state, data: result };
@@ -37,7 +37,7 @@ const remove = (state, type, id) => {
     throw new Error(`Invalid category ID: ${id}!`);
   }
 
-  const result = state.slice();
+  const result = state.data.slice();
   result.splice(idx, 1);
 
   return { ...state, data: result };
