@@ -6,7 +6,7 @@ const initialState = {
   loading: true,
 };
 
-const baseValue = { real: 0, savingReal: false, planned: 0, savingPlanned: false };
+const baseValue = { real: 0, savingReal: false, errorReal: '', planned: 0, savingPlanned: false, errorPlanned: '' };
 const getValue = (state, categoryType, month, year, categoryId) => {
   const selectedYear = state[year] || { income: {}, expense: {}, irregular: {} };
   const selectedYearType = selectedYear[categoryType] || {};

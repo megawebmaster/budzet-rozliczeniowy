@@ -6,6 +6,7 @@ import { categoryIncome } from '../income-budget-table.selectors';
 
 const mapStateToProps = (state, ownProps) => ({
   value: categoryIncome(state, ownProps).planned,
+  error: categoryIncome(state, ownProps).errorPlanned,
   isSaving: categoryIncome(state, ownProps).savingPlanned,
 });
 const mapDispatchToProps = (dispatch, { categoryId }) => ({

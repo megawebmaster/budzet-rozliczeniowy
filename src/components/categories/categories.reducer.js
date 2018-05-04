@@ -12,7 +12,18 @@ const add = (state, id, type, name, parentId) => {
     ...state,
     data: [
       ...state.data,
-      { id, startedAt: null, deletedAt: null, averageValues: [], children: [], saving: true, type, name, parent }
+      {
+        id,
+        type,
+        name,
+        parent,
+        startedAt: null,
+        deletedAt: null,
+        averageValues: [],
+        children: [],
+        saving: true,
+        error: '',
+      }
     ]
   };
 };

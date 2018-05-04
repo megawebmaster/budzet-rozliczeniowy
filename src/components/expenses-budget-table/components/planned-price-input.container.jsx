@@ -7,6 +7,7 @@ import { expenseCategory } from '../../categories';
 
 const mapStateToProps = (state, ownProps) => ({
   value: categoryExpenses(state, ownProps).planned,
+  error: categoryExpenses(state, ownProps).errorPlanned,
   isSaving: categoryExpenses(state, ownProps).savingPlanned,
   average: expenseCategory(state, ownProps).averageValue,
 });

@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 import { Button, ButtonGroup, Input, Loader } from 'semantic-ui-react';
 
 import './editable-text.css';
+import { EditField } from './edit-field';
 
 class EditableText extends PureComponent {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
@@ -11,6 +12,8 @@ class EditableText extends PureComponent {
   static propTypes = {
     deletable: PropTypes.bool,
     editable: PropTypes.bool,
+    error: PropTypes.string,
+    intl: PropTypes.object.isRequired,
     saving: PropTypes.bool,
     size: PropTypes.string,
     text: PropTypes.string.isRequired,
@@ -21,6 +24,7 @@ class EditableText extends PureComponent {
   static defaultProps = {
     deletable: false,
     editable: false,
+    error: '',
     saving: false,
     size: 'mini',
   };
@@ -43,12 +47,15 @@ class EditableText extends PureComponent {
     }
   };
 
-  updateValue = (_event, data) => this.setState({ value: data.value });
+  updateValue = (value) => this.setState({ value });
   showInput = () => this.setState({ editing: true });
-  hideInput = () => this.setState({ value: this.props.text, editing: false });
+  // TODO: Check if this works as expected
+  hideInput = () => this.setState({ value: this.props.text, editing: false }, this.saveInput);
 
   saveInput = () => {
-    this.props.onUpdate(this.state.value);
+    if (this.state.value !== this.props.text) {
+      this.props.onUpdate(this.state.value);
+    }
     this.setState({ editing: false });
   };
 
@@ -68,32 +75,25 @@ class EditableText extends PureComponent {
   };
 
   renderInput = () => {
-    const { label, size } = this.props;
+    const { error, label, size } = this.props;
     const { value } = this.state;
 
-    return (
-      <Fragment>
-        <Input fluid action size={size} placeholder={label} value={value} onChange={this.updateValue}
-               onKeyDown={this.onKeyDown} ref={(input) => this.field = input}>
-          <input />
-          <Button color="teal" icon="save" onClick={this.saveInput} />
-          <Button color="red" icon="close" onClick={this.hideInput} />
-        </Input>
-      </Fragment>
-    );
+    return <EditField placeholder={label} size={size} value={value} error={error} onChange={this.updateValue}
+                      onSave={this.saveInput} onCancel={this.hideInput} />;
   };
 
-  componentWillMount() {
-    this.setState({ value: this.props.text });
+  componentDidMount() {
+    this.setState({ value: this.props.text, editing: this.props.error.length > 0 });
   }
 
-  componentDidUpdate() {
-    if (this.state.editing) {
-      this.field.focus();
-    } else {
-      this.field = null;
-    }
-  }
+  // TODO: What was this focusing field for?
+  // componentDidUpdate() {
+  //   if (this.state.editing) {
+  //     this.field.focus();
+  //   } else {
+  //     this.field = null;
+  //   }
+  // }
 
   render() {
     const { editing } = this.state;

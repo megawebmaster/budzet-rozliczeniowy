@@ -13,6 +13,11 @@ import AddCategoryButton from './add-category-button.container';
 import './budget.css';
 
 class Budget extends Component {
+  static propTypes = {
+    expensesCategories: PropTypes.array.isRequired,
+    incomeCategories: PropTypes.array.isRequired,
+  };
+
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   render() {
@@ -39,11 +44,6 @@ class Budget extends Component {
   }
 }
 
-Budget.propTypes = {
-  expensesCategories: PropTypes.array.isRequired,
-  incomeCategories: PropTypes.array.isRequired,
-};
-
 const NavigableBudget = NavigableTable(Budget, {
   getItems: (props) => {
     const incomeCategories = props.incomeCategories.map(category => category.id);
@@ -54,5 +54,5 @@ const NavigableBudget = NavigableTable(Budget, {
   },
   bottomMargin: 130
 });
-export default injectIntl(NavigableBudget);
 
+export default injectIntl(NavigableBudget);

@@ -66,7 +66,10 @@ class BudgetTable extends Component {
         <TableBody>
           {categories.map(category => (
             <TableRow key={`budget-row-${category.id}`}>
-              <TableCell><CategoryName type={type} category={category} deletable={manageableCategories} /></TableCell>
+              <TableCell>
+                <CategoryName type={type} category={category} deletable={manageableCategories}
+                              editable={manageableCategories} />
+              </TableCell>
               <TableCell>
                 <PlannedInput categoryId={category.id} onMount={onInputMount.bind(null, 'planned', category.id)}
                               disabled={category.saving} />

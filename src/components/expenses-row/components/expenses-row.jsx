@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { TableRow, TableCell, Button, Loader } from 'semantic-ui-react';
+import { Button, Loader, TableCell, TableRow } from 'semantic-ui-react';
 
 import { PriceInput } from '../../price-input';
 import { CategoryField } from './category-field';
 import { DayField } from './day-field';
 import { DescriptionField } from './description-field';
+import { ErrorRow } from './error-row';
 
 export default class extends Component {
   static propTypes = {
@@ -20,7 +21,8 @@ export default class extends Component {
   };
   static defaultProps = {
     debounceTime: 1000,
-    onInputMount: (_type, _input) => {},
+    onInputMount: (_type, _input) => {
+    },
     onRemoveItem: null,
   };
 
@@ -69,28 +71,31 @@ export default class extends Component {
     const { categories, debounceTime, row: { category, day, price, description, errors } } = this.props;
 
     return (
-      <TableRow className="expenses-row" warning={Object.keys(errors).length > 0} onKeyDown={this.onKeyDown}>
-        <TableCell width={4}>
-          <CategoryField categories={categories} value={category} error={errors.category} debounceTime={debounceTime}
-                         onChange={this.updateCategory} onInputMount={this.mountCategory} />
-        </TableCell>
-        <TableCell width={3}>
-          <PriceInput value={price} placeholder={this.translate('expenses-row.price', 'Cena')} error={errors.price}
-                      debounceTime={debounceTime} onChange={this.updatePrice} onMount={this.mountPrice} />
-        </TableCell>
-        <TableCell width={1}>
-          <DayField value={day} error={errors.day} debounceTime={debounceTime} onInputMount={this.mountDay}
-                    onChange={this.updateDay} />
-        </TableCell>
-        <TableCell width={7}>
-          <DescriptionField value={description} error={errors.description} errorPosition="left"
-                            debounceTime={debounceTime} onChange={this.updateDescription}
-                            onInputMount={this.mountDescription} />
-        </TableCell>
-        <TableCell width={1} textAlign="center">
-          {this.renderActions()}
-        </TableCell>
-      </TableRow>
+      <Fragment>
+        <TableRow className="expenses-row" warning={Object.keys(errors).length > 0} onKeyDown={this.onKeyDown}>
+          <TableCell width={4}>
+            <CategoryField categories={categories} value={category} error={errors.category} debounceTime={debounceTime}
+                           onChange={this.updateCategory} onInputMount={this.mountCategory} />
+          </TableCell>
+          <TableCell width={3}>
+            <PriceInput value={price} placeholder={this.translate('expenses-row.price', 'Cena')} error={errors.price}
+                        debounceTime={debounceTime} onChange={this.updatePrice} onMount={this.mountPrice} />
+          </TableCell>
+          <TableCell width={1}>
+            <DayField value={day} error={errors.day} debounceTime={debounceTime} onInputMount={this.mountDay}
+                      onChange={this.updateDay} />
+          </TableCell>
+          <TableCell width={7}>
+            <DescriptionField value={description} error={errors.description} errorPosition="left"
+                              debounceTime={debounceTime} onChange={this.updateDescription}
+                              onInputMount={this.mountDescription} />
+          </TableCell>
+          <TableCell width={1} textAlign="center">
+            {this.renderActions()}
+          </TableCell>
+        </TableRow>
+        {errors.base && <ErrorRow error={errors.base} />}
+      </Fragment>
     );
   }
 }

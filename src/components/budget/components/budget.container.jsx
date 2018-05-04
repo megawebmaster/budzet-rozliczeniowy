@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import BudgetView from './budget';
@@ -10,14 +8,5 @@ const mapStateToProps = (state) => ({
   incomeCategories: incomeCategories(state),
 });
 
-const BudgetContainer = ({ expensesCategories, incomeCategories }) => (
-  <BudgetView expensesCategories={expensesCategories} incomeCategories={incomeCategories} />
-);
-
-BudgetContainer.propTypes = {
-  expensesCategories: PropTypes.array.isRequired,
-  incomeCategories: PropTypes.array.isRequired,
-};
-
-export default connect(mapStateToProps)(BudgetContainer);
+export default connect(mapStateToProps)(BudgetView);
 

@@ -48,6 +48,7 @@ const fetchCategories = async (budgetSlug) => {
     ...category,
     name: await Encryptor.decrypt(category.name),
     averageValue: await calculateAverageValue(category.averageValues),
+    error: '',
   })));
 };
 
@@ -79,7 +80,7 @@ const saveCategoryAction = async (type, name, budget, year, month, parent = null
   });
   const category = await response.json();
 
-  return { ...category, name };
+  return { ...category, name, error: '' };
 };
 
 /**
@@ -106,7 +107,7 @@ const updateCategoryAction = async (type, budget, id, values) => {
   });
   const category = await response.json();
 
-  return { ...category, name: values.name };
+  return { ...category, name: values.name, error: '' };
 };
 
 /**
@@ -141,6 +142,7 @@ const fetchCategoriesEpic = (action$) =>
     ))
 ;
 
+// TODO: Add support for errors
 const addCategoryEpic = (action$, store) =>
   action$
     .ofType(ADD_CATEGORY)
