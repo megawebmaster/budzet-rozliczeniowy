@@ -11,7 +11,7 @@ import {
 } from 'semantic-ui-react';
 
 import NavigableTable from '../../NavigableTable';
-import { ExpensesRow } from '../../expenses-row';
+import { ExpensesSavedRow } from '../../expenses-saved-row';
 import { ExpensesNewRow } from '../../expenses-new-row';
 
 import './expenses.css';
@@ -29,7 +29,6 @@ class Expenses extends Component {
   render() {
     const { rows, onInputMount, onFooterMount, onKeyDown, onFocus } = this.props;
 
-    // TODO: There is an issue with going with arrows in category dropdown - we should leave it alone?
     return (
       <div onKeyDown={onKeyDown} onFocus={onFocus}>
         <div className="expenses-table-header">
@@ -41,7 +40,7 @@ class Expenses extends Component {
                     {this.translate('expenses-grid.headers.category', 'Kategoria')}
                   </Button>
                 </TableHeaderCell>
-                <TableHeaderCell width={2} textAlign="center">
+                <TableHeaderCell width={3} textAlign="center">
                   {this.translate('expenses-grid.headers.price', 'Cena')}
                 </TableHeaderCell>
                 <TableHeaderCell width={1}>
@@ -49,7 +48,7 @@ class Expenses extends Component {
                     {this.translate('expenses-grid.headers.day', 'Dzień')}
                   </Button>
                 </TableHeaderCell>
-                <TableHeaderCell width={8}>
+                <TableHeaderCell width={7}>
                   {this.translate('expenses-grid.headers.description', 'Opis')}
                 </TableHeaderCell>
                 <TableHeaderCell width={1} />
@@ -59,7 +58,7 @@ class Expenses extends Component {
         </div>
         <Table singleLine striped compact className="expenses-table" attached>
           <TableBody>
-            {rows.map(row => <ExpensesRow key={`expenses-row-${row.id}`} row={row} onInputMount={onInputMount} />)}
+            {rows.map(row => <ExpensesSavedRow key={`expenses-row-${row.id}`} row={row} onInputMount={onInputMount} />)}
           </TableBody>
         </Table>
         <ExpensesNewRow onInputMount={onFooterMount} />

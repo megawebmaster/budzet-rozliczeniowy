@@ -1,7 +1,6 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/concatMap';
-import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/ignoreElements';
 import 'rxjs/add/operator/startWith';
@@ -27,6 +26,7 @@ async function submitValue(url, type, value, budgetValue) {
   const encryptedPrice = await Encryptor.encrypt(value.price.toString());
   const encryptedDescription = await Encryptor.encrypt(value.description);
   const encryptedBudgetValue = await Encryptor.encrypt(budgetValue.toString());
+  // TODO: Add support for failures
   const response = await fetch(url, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -47,7 +47,8 @@ async function submitValue(url, type, value, budgetValue) {
   return {
     ...expense,
     value: value.price,
-    description: value.description
+    description: value.description,
+    errors: {},
   };
 }
 
@@ -119,7 +120,8 @@ const fetchExpenses = async (budget, year, month) => {
   return Promise.all(expenses.map(async expense => ({
     ...expense,
     value: parseFloat(await Encryptor.decrypt(expense.value)),
-    description: await Encryptor.decrypt(expense.description)
+    description: await Encryptor.decrypt(expense.description),
+    errors: {},
   })));
 };
 
@@ -161,7 +163,6 @@ const addItemEpic = (action$, store) =>
 const saveItemEpic = (action$, store) =>
   action$
     .ofType(Actions.SAVE_ITEM)
-    .debounceTime(1000)
     .concatMap(action => {
       const state = store.getState();
       return saveItem({

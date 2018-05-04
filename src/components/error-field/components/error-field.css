@@ -1,0 +1,14 @@
+.error-field {
+	position: relative;
+}
+.error-field .ui.pointing.label {
+	position: absolute;
+	top: 5px;
+	z-index: 100;
+}
+.error-field .ui.pointing.label.left {
+	left: 100%;
+}
+.error-field .ui.pointing.label.right {
+	right: 100%;
+}

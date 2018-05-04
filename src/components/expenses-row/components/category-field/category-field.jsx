@@ -1,15 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
 import { Dropdown, DropdownSearchInput } from 'semantic-ui-react';
 
-class CategoryField extends Component {
-  translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
+export default class extends Component {
+  static propTypes = {
+    categories: PropTypes.array.isRequired,
+    error: PropTypes.bool.isRequired,
+    value: PropTypes.any.isRequired,
+    onBlur: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onFocus: PropTypes.func.isRequired,
+    onInputMount: PropTypes.func,
+  };
+  static defaultProps = {
+    onInputMount: (_type, _input) => {},
+  };
 
   state = {
     upward: false,
     open: false,
   };
+
+  translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   onOpen = () => {
     let element = this.dropdown;
@@ -19,40 +31,33 @@ class CategoryField extends Component {
       element = element.offsetParent;
     }
     this.setState({ upward: top > document.body.clientHeight - 260, open: true });
+    this.props.onFocus();
     this.dropdown.focus();
   };
+  onClose = () => {
+    this.setState({ open: false });
+    this.props.onBlur();
+  };
+  onChange = (_event, data) => this.props.onChange(data.value);
 
-  onClose = () => this.setState({ open: false });
+  renderInput = () => <DropdownSearchInput inputRef={this.mountDropdown} onKeyDown={this.hideOnKeyDown} />;
   hideOnKeyDown = (event) => this.state.open && event.stopPropagation();
-
   mountDropdown = (ref) => {
     this.dropdown = ref;
     this.props.onInputMount({ inputRef: ref });
   };
 
   render() {
-    const { value, categories, onUpdate } = this.props;
+    const { categories, error, value } = this.props;
     const { upward } = this.state;
 
     return (
-      <Dropdown fluid value={value} selection search options={categories} onChange={onUpdate} upward={upward}
-                onOpen={this.onOpen} onClose={this.onClose} openOnFocus={false} className="category-field"
-                placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
-                searchInput={<DropdownSearchInput inputRef={this.mountDropdown} onKeyDown={this.hideOnKeyDown} />}
+      <Dropdown fluid selection search className="category-field" value={value} options={categories} upward={upward}
+                openOnFocus={false} placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
+                error={error} onChange={this.onChange} onOpen={this.onOpen} onClose={this.onClose}
+                searchInput={this.renderInput()}
       />
     );
   }
 }
-
-CategoryField.defaultProps = {
-  onInputMount: (_type, _input) => {},
-};
-CategoryField.propTypes = {
-  categories: PropTypes.array.isRequired,
-  onInputMount: PropTypes.func,
-  onUpdate: PropTypes.func.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-export default  injectIntl(CategoryField);
 

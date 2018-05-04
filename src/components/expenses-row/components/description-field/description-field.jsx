@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'semantic-ui-react';
 
-import './day-field.css';
-
 export default class extends Component {
   static propTypes = {
     error: PropTypes.bool.isRequired,
     value: PropTypes.any.isRequired,
-    month: PropTypes.number.isRequired,
-    year: PropTypes.number.isRequired,
     onBlur: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func.isRequired,
@@ -21,12 +17,13 @@ export default class extends Component {
     onKeyDown: (_event, _data) => {},
   };
 
-  onChange = (_event, data) => this.props.onChange(data.value, { year: this.props.year, month: this.props.month });
+  onChange = (_event, data) => this.props.onChange(data.value);
 
   render() {
     const { error, value, onBlur, onFocus, onInputMount, onKeyDown } = this.props;
 
-    return <Input fluid className="input-day" value={value} onChange={this.onChange} error={error} onFocus={onFocus}
-                  onBlur={onBlur} onKeyDown={onKeyDown} ref={onInputMount} />;
+    return <Input fluid value={value} onChange={this.onChange} error={error} onFocus={onFocus} onBlur={onBlur}
+                  onKeyDown={onKeyDown} ref={onInputMount} />;
   }
 }
+

@@ -1,6 +1,9 @@
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 
 import { currencyLabel, maximumFractionDigits, minimumFractionDigits } from '../../configuration';
+import { ErrorField } from '../../error-field';
+import { PriceValidator } from '../../../validators';
 import PriceInput from './price-input';
 
 const mapStateToProps = (state) => ({
@@ -9,4 +12,4 @@ const mapStateToProps = (state) => ({
   minimumFractionDigits: minimumFractionDigits(state),
 });
 
-export const PriceInputContainer = connect(mapStateToProps)(PriceInput);
+export const PriceInputContainer = connect(mapStateToProps)(injectIntl(ErrorField(PriceInput, { validator: PriceValidator })));

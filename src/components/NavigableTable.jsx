@@ -40,7 +40,7 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
     }
     this.inputs[type][item] = input.inputRef;
   };
-  footerMount = (type, input) => {
+  footerMount = (type, _item, input) => {
     if (input === null || input.inputRef === null) {
       return;
     }

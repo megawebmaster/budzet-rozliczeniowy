@@ -64,6 +64,7 @@ const messages = {
   'budget.summary.left-real': '{value}',
   'add-button.save': 'Dodaj',
   'add-button.cancel': 'Anuluj',
+  'validation.required': 'Wymagany',
   'validation.day': 'Nieprawidłowy dzień: {value}',
   'validation.price.invalid': 'Nieprawidłowa wartość lub formuła',
   'price-input.average-help': 'Średnio: {value} {currency}',
