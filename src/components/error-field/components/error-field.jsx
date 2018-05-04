@@ -32,6 +32,10 @@ const ErrorField = (WrappedComponent, { validator }) => class extends Component 
   labelPointing = () => this.props.errorPosition === 'left' ? 'right' : 'left';
 
   validate = (value, options = {}) => {
+    if (value === this.props.value) {
+      return;
+    }
+
     try {
       this.props.onChange(validator(value, options));
     } catch(e) {
