@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { year } from '../location';
 
 export const budget = (state) => state.budget;
+export const errors = (state) => state.budget.errors;
 export const isLoading = (state) => state.budget.loading || state.categories.loading;
 export const categoryId = (state, props) => props.category ? props.category.id : props.categoryId;
 

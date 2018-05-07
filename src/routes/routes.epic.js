@@ -52,7 +52,7 @@ const fetchYearsEpic = (action$) =>
 const redirectToMonthlyBudgetEpic = (action$) =>
   action$
     .ofType(ROUTE_BUDGET)
-    .map((action) => {
+    .map(action => {
       const month = action.payload.month || (new Date()).getMonth() + 1;
       const year = action.payload.year || (new Date()).getFullYear();
       const budget = action.payload.budget;

@@ -4,6 +4,7 @@ import { SORT_EXPENSES } from './expenses.actions';
 
 const initialState = {
   loading: true,
+  errors: [],
 };
 
 const loadMonth = (state, year, month, values) => {

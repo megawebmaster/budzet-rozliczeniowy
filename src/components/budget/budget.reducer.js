@@ -4,6 +4,7 @@ import { ROUTE_BUDGET_MONTH } from '../../routes';
 
 const initialState = {
   loading: true,
+  errors: [],
 };
 
 const baseValue = { real: 0, savingReal: false, errorReal: '', planned: 0, savingPlanned: false, errorPlanned: '' };

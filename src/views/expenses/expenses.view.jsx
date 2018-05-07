@@ -1,15 +1,13 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { Segment } from 'semantic-ui-react';
 
-import { Expenses, isLoading } from '../../components/expenses';
+import { Expenses } from '../../components/expenses';
+import { ErrorMessage } from '../../components/error-message';
 import './expenses.css';
-import { month, year } from '../../components/location';
 
-const ExpensesView = ({ month, year, loading, intl }) => {
+const ExpensesView = ({ month, year, errors, loading, intl }) => {
   const translate = (id, message) => intl.formatMessage({ id, defaultMessage: message });
   const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);
   const params = { month: translate(`month.${month}`, month), year };
@@ -22,6 +20,7 @@ const ExpensesView = ({ month, year, loading, intl }) => {
       <Segment className="content-container-title">
         <h3>{format('views.expenses.header', 'Rozliczenie: {month} {year}', params)}</h3>
       </Segment>
+      {errors.map(error => <ErrorMessage key={error} error={error} />)}
       <Segment basic loading={loading} className="content-container expenses">
         <Expenses />
       </Segment>
@@ -32,14 +31,8 @@ const ExpensesView = ({ month, year, loading, intl }) => {
 ExpensesView.propTypes = {
   month: PropTypes.number.isRequired,
   year: PropTypes.number.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.string).isRequired,
   loading: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  year: year(state),
-  month: month(state),
-  loading: isLoading(state),
-});
-
-export default connect(mapStateToProps)(injectIntl(ExpensesView));
-
+export default ExpensesView;

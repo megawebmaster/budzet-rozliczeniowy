@@ -17,12 +17,10 @@ const loginUnauthenticated = (dispatch) => {
   }
 };
 
+// TODO: This needs to be visible on the page we are...
 const redirectAuthenticated = (dispatch) => {
   if (Authenticator.isLoggedIn()) {
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    dispatch(redirect({ type: ROUTE_BUDGET_MONTH, payload: { year, month } }));
+    dispatch(redirect({ type: ROUTE_LOGIN }));
   }
 };
 
@@ -32,8 +30,7 @@ export default {
     thunk: redirectAuthenticated
   },
   [ROUTE_LOGIN]: {
-    path: '/login',
-    thunk: redirectAuthenticated
+    path: '/login'
   },
   [ROUTE_BUDGET]: {
     path: '/:budget/:year/budget',

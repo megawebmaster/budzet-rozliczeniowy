@@ -19,6 +19,10 @@ export class Authenticator {
   }
 
   static validateLogin(callback) {
+    if (this.isLoggedIn()) {
+      return callback();
+    }
+
     auth.parseHash({ hash: window.location.hash }, (error, authentication) => {
       if (error) {
         // TODO: Handle errors

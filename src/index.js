@@ -39,6 +39,7 @@ const messages = {
   'month.10': 'Październik',
   'month.11': 'Listopad',
   'month.12': 'Grudzień',
+  'error-title': 'Coś poszło nie tak…',
   'header.budget': 'Budżet {value}',
   'header.menu.budget': 'Budżet',
   'header.menu.expenses': 'Wydatki',

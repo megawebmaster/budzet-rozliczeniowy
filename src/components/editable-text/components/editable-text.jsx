@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, ButtonGroup, Input, Loader } from 'semantic-ui-react';
+import { Button, ButtonGroup, Loader } from 'semantic-ui-react';
 
 import './editable-text.css';
 import { EditField } from './edit-field';
