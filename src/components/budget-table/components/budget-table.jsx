@@ -20,8 +20,8 @@ class BudgetTable extends Component {
     label: PropTypes.string.isRequired,
     manageableCategories: PropTypes.bool,
     onAdd: PropTypes.func.isRequired,
-    onEdit: PropTypes.func,
-    onRemove: PropTypes.func,
+    onEdit: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+    onRemove: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     onInputMount: PropTypes.func,
     summaryPlanned: PropTypes.number.isRequired,
     summaryReal: PropTypes.number.isRequired,
@@ -31,8 +31,8 @@ class BudgetTable extends Component {
 
   static defaultProps = {
     onInputMount: (_type, _category, _input) => {},
-    onEdit: () => {},
-    onRemove: () => {},
+    onEdit: false,
+    onRemove: false,
     manageableCategories: true,
     saving: false,
   };
@@ -40,6 +40,9 @@ class BudgetTable extends Component {
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
   currency = (value) => this.props.intl.formatNumber(value, { style: 'currency', currency: this.props.currency });
+
+  onUpdate = (value) => this.props.onEdit && this.props.onEdit(value);
+  onRemove = () => this.props.onRemove && this.props.onRemove();
 
   render() {
     const {
@@ -52,8 +55,8 @@ class BudgetTable extends Component {
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>
-              <EditableText text={label} deletable={!!onRemove} editable={!!onEdit} onDelete={onRemove}
-                            onUpdate={onEdit} saving={saving} />
+              <EditableText text={label} deletable={!!onRemove} editable={!!onEdit} onDelete={this.onRemove}
+                            onUpdate={this.onUpdate} saving={saving} />
             </TableHeaderCell>
             <TableHeaderCell width={4}>
               <span>{this.format('budget.table.header-planned', 'Planowane ({value})', { value: this.currency(summaryPlanned) })}</span>
