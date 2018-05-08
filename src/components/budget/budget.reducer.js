@@ -39,7 +39,8 @@ const updateValue = (state, categoryType, valueType, data, isSaving) => {
   const valueObject = {
     ...(getValue(state, categoryType, month, year, categoryId)),
     [valueType]: value,
-    [`saving${upperFirst(valueType)}`]: isSaving
+    [`saving${upperFirst(valueType)}`]: isSaving,
+    [`error${upperFirst(valueType)}`]: ''
   };
 
   return setValue(state, categoryType, month, year, categoryId, valueObject);
@@ -49,8 +50,8 @@ const addValueError = (state, categoryType, valueType, data, error) => {
   const { month, year, categoryId } = data;
   const valueObject = {
     ...(getValue(state, categoryType, month, year, categoryId)),
-    error,
-    [`saving${upperFirst(valueType)}`]: false
+    [`saving${upperFirst(valueType)}`]: false,
+    [`error${upperFirst(valueType)}`]: error,
   };
 
   return setValue(state, categoryType, month, year, categoryId, valueObject);
@@ -101,6 +102,10 @@ export const BudgetReducer = (state = initialState, action) => {
       return updateValue(state, action.payload.categoryType, action.payload.valueType, action.payload, false);
     case Actions.SAVE_FAIL:
       return addValueError(state, action.payload.categoryType, action.payload.valueType, action.payload, action.error);
+    case Actions.ADD_BUDGET_ERROR:
+      return { ...state, errors: [...state.errors, action.error], loading: false };
+    case Actions.CLEAR_BUDGET_ERRORS:
+      return { ...state, errors: [] };
     case ROUTE_BUDGET_MONTH:
       return { ...state, loading: true };
     default:

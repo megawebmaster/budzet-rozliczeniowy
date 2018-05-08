@@ -1,4 +1,7 @@
 import * as Actions from './categories.actions';
+import { ADD_BUDGET_ERROR } from '../budget/budget.actions';
+import { ADD_IRREGULAR_BUDGET_ERROR } from '../irregular-budget/irregular-budget.actions';
+import { ADD_EXPENSES_ERROR } from '../expenses/expenses.actions';
 
 const initialState = {
   loading: true,
@@ -70,6 +73,10 @@ export const CategoriesReducer = (state = initialState, action) => {
       return remove(state, action.payload.type, action.payload.id);
     case Actions.ADD_CATEGORY:
       return add(state, action.payload.id, action.payload.type, action.payload.name, action.payload.parentId);
+    case ADD_BUDGET_ERROR:
+    case ADD_IRREGULAR_BUDGET_ERROR:
+    case ADD_EXPENSES_ERROR:
+      return { ...state, loading: false };
     default:
       return state;
   }

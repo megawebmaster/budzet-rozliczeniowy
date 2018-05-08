@@ -8,9 +8,12 @@ import 'rxjs/add/operator/concatMap';
 import { Authenticator } from '../../App.auth';
 import { Encryptor } from '../../App.encryption';
 import * as Actions from './budget.actions';
-import { loadBudget } from './budget.actions';
+import { addBudgetError, loadBudget } from './budget.actions';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes';
 import { budget as budgetSelector, month, year } from '../location';
+import { updateBudgets } from '../configuration';
+import { fetchBudgets } from '../../routes/routes.epic';
+import { clearBudgetErrors } from './budget.actions';
 
 /**
  * @param budget string
@@ -58,9 +61,13 @@ const fetchBudget = async (budget, year, month) => {
       'Authorization': `Bearer ${Authenticator.getToken()}`,
     })
   });
-  const entries = await response.json();
+  const result = await response.json();
 
-  return await Promise.all(entries.map(async entry => ({
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
+
+  return await Promise.all(result.map(async entry => ({
     ...entry,
     plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
     real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
@@ -114,11 +121,19 @@ const loadBudgetEpic = (action$, store) =>
 
       return Observable
         .from(fetchBudget(budget, currentYear, currentMonth))
-        .map(entries => loadBudget(currentYear, currentMonth, entries));
+        .map(entries => loadBudget(currentYear, currentMonth, entries))
+        .catch(error => Observable.of(addBudgetError(error.message)));
     })
+;
+
+const clearBudgetsErrorsEpic = (action$) =>
+  action$
+    .filter(action => action.type.indexOf('Route/') === 0)
+    .map(() => clearBudgetErrors())
 ;
 
 export const budgetEpic = combineEpics(
   saveBudgetEpic,
-  loadBudgetEpic
+  loadBudgetEpic,
+  clearBudgetsErrorsEpic,
 );

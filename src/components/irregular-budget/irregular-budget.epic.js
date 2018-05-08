@@ -3,12 +3,19 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
 import { budget, year } from '../location';
-import { loadIrregularBudget } from './irregular-budget.actions';
-import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import * as Actions from './irregular-budget.actions';
+import { addIrregularBudgetError, clearIrregularBudgetErrors, loadIrregularBudget } from './irregular-budget.actions';
+import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import { Authenticator } from '../../App.auth';
 import { Encryptor } from '../../App.encryption';
 
+/**
+ * @param budget string
+ * @param year string
+ * @param categoryId number
+ * @param value number
+ * @returns {Promise<{plan: number, real: number}>}
+ */
 const saveIrregularValueAction = async (budget, year, categoryId, value) => {
   const encryptedValue = await Encryptor.encrypt(value.toString());
   const encryptedMonthlyValue = await Encryptor.encrypt((value / 10.0).toString());
@@ -33,6 +40,11 @@ const saveIrregularValueAction = async (budget, year, categoryId, value) => {
   };
 };
 
+/**
+ * @param budget string
+ * @param year string
+ * @returns {Promise}
+ */
 const fetchIrregularBudget = async (budget, year) => {
   const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/irregular`, {
     headers: new Headers({
@@ -41,9 +53,13 @@ const fetchIrregularBudget = async (budget, year) => {
       'Authorization': `Bearer ${Authenticator.getToken()}`,
     })
   });
-  const entries = await response.json();
+  const result = await response.json();
 
-  return Promise.all(entries.map(async entry => ({
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
+
+  return Promise.all(result.map(async entry => ({
     ...entry,
     plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
     real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
@@ -94,11 +110,19 @@ const loadIrregularBudgetEpic = (action$, store) =>
 
       return Observable
         .from(fetchIrregularBudget(currentBudget, currentYear))
-        .map(values => loadIrregularBudget(currentYear, values));
+        .map(values => loadIrregularBudget(currentYear, values))
+        .catch(error => Observable.of(addIrregularBudgetError(error.message)));
     })
+;
+
+const clearIrregularBudgetErrorsEpic = (action$) =>
+  action$
+    .filter(action => action.type.indexOf('Route/') === 0)
+    .map(() => clearIrregularBudgetErrors())
 ;
 
 export const irregularBudgetEpic = combineEpics(
   saveIrregularBudgetEpic,
-  loadIrregularBudgetEpic
+  loadIrregularBudgetEpic,
+  clearIrregularBudgetErrorsEpic,
 );

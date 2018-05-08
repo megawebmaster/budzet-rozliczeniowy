@@ -8,7 +8,6 @@ import CategoryName from './category-name.container';
 import { EditableText } from '../../editable-text';
 import './budget-table.css';
 
-// TODO: Show data-saving errors for adding subcategory
 class BudgetTable extends Component {
   static propTypes = {
     saving: PropTypes.bool,

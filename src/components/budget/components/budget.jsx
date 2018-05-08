@@ -22,7 +22,6 @@ class Budget extends Component {
 
   render() {
     const { expensesCategories, incomeCategories, onKeyDown, onFocus, onInputMount } = this.props;
-    // TODO: Show data-saving errors for adding category
 
     return (
       <div onKeyDown={onKeyDown} onFocus={onFocus}>

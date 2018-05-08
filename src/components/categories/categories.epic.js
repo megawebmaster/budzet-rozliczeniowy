@@ -5,18 +5,15 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/ignoreElements';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
-import {
-  ADD_CATEGORY,
-  REMOVE_CATEGORY,
-  UPDATE_CATEGORY,
-  replaceCategory,
-} from './categories.actions';
+import { ADD_CATEGORY, loadCategories, REMOVE_CATEGORY, replaceCategory, UPDATE_CATEGORY, } from './categories.actions';
 import { budget, month, year } from '../location';
 import { Authenticator } from '../../App.auth';
 import { Encryptor } from '../../App.encryption';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes/routes.actions';
-import { loadCategories } from './index';
 import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
+import { addBudgetError } from '../budget/budget.actions';
+import { addExpensesError } from '../expenses/expenses.actions';
+import { addIrregularBudgetError } from '../irregular-budget/irregular-budget.actions';
 
 // const halfHour = 30*60*1000;
 
@@ -42,9 +39,12 @@ const fetchCategories = async (budgetSlug) => {
       'Authorization': `Bearer ${Authenticator.getToken()}`,
     })
   });
-  const categories = await response.json();
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
 
-  return await Promise.all(categories.map(async category => ({
+  return await Promise.all(result.map(async category => ({
     ...category,
     name: await Encryptor.decrypt(category.name),
     averageValue: await calculateAverageValue(category.averageValues),
@@ -138,7 +138,21 @@ const fetchCategoriesEpic = (action$) =>
     .filter(action => [ROUTE_BUDGET_MONTH, ROUTE_BUDGET_IRREGULAR, ROUTE_EXPENSES_MONTH].indexOf(action.type) !== -1)
     // .throttleTime(halfHour)
     .mergeMap(action => (
-      Observable.from(fetchCategories(action.payload.budget)).map(loadCategories)
+      Observable
+        .from(fetchCategories(action.payload.budget))
+        .map(loadCategories)
+        .catch(error => {
+          switch(action.type){
+            case ROUTE_BUDGET_MONTH:
+              return Observable.of(addBudgetError(error.message));
+            case ROUTE_BUDGET_IRREGULAR:
+              return Observable.of(addIrregularBudgetError(error.message));
+            case ROUTE_EXPENSES_MONTH:
+              return Observable.of(addExpensesError(error.message));
+            default:
+              return Observable.of();
+          }
+        })
     ))
 ;
 

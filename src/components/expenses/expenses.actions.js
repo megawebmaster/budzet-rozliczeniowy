@@ -1,4 +1,6 @@
 export const LOAD_EXPENSES = 'ExpensesAction.LOAD_EXPENSES';
+export const ADD_EXPENSES_ERROR = 'ExpensesAction.ADD_ERROR';
+export const CLEAR_EXPENSES_ERRORS = 'ExpensesAction.CLEAR_ERRORS';
 export const SORT_EXPENSES = 'ExpensesAction.SORT_EXPENSES';
 export const ADD_ITEM = 'ExpensesAction.ADD_ITEM';
 export const SAVE_ITEM = 'ExpensesAction.SAVE_ITEM';
@@ -44,4 +46,15 @@ export const saveItemSuccess = (year, month, response) => ({
       description: response.description,
     },
   }
+});
+
+export const addExpensesError = (error) => ({
+  type: ADD_EXPENSES_ERROR,
+  payload: {},
+  error
+});
+
+export const clearExpensesErrors = () => ({
+  type: CLEAR_EXPENSES_ERRORS,
+  payload: {},
 });

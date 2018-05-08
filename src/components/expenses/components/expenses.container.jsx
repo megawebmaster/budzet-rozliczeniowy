@@ -1,9 +1,8 @@
-import React from 'react';
 import { connect } from 'react-redux';
 
 import Expenses from './expenses';
 import { monthExpenses } from '../expenses.selectors';
-import { year, month } from '../../location';
+import { month, year } from '../../location';
 import { sortExpenses } from '../expenses.actions';
 
 const mapStateToProps = (state) => ({
@@ -19,8 +18,4 @@ const mergeProps = (stateProps, dispatchProps) => ({
   sortRows: (field) => dispatchProps.sort(stateProps.year, stateProps.month, field),
 });
 
-const ExpensesContainer = ({ rows, sortRows }) => (
-  <Expenses rows={rows} sortRows={sortRows} />
-);
-
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ExpensesContainer);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Expenses);

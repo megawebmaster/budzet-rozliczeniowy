@@ -70,6 +70,10 @@ export default class extends Component {
   render() {
     const { categories, debounceTime, row: { category, day, price, description, errors } } = this.props;
 
+    if (categories.length === 0) {
+      return null;
+    }
+
     return (
       <Fragment>
         <TableRow className="expenses-row" warning={Object.keys(errors).length > 0} onKeyDown={this.onKeyDown}>

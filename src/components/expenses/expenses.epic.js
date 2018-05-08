@@ -9,10 +9,8 @@ import { Authenticator } from '../../App.auth';
 import { budget as budgetSelector, month, year } from '../location';
 import { ROUTE_EXPENSES_MONTH } from '../../routes';
 import * as Actions from './expenses.actions';
-import { loadExpenses } from './expenses.actions';
+import { addExpensesError, clearExpensesErrors, loadExpenses, saveItemSuccess, savingItem } from './expenses.actions';
 import { Encryptor } from '../../App.encryption';
-import { saveItemSuccess } from './expenses.actions';
-import { savingItem } from './expenses.actions';
 import { monthExpenses } from './expenses.selectors';
 
 /**
@@ -115,9 +113,13 @@ const fetchExpenses = async (budget, year, month) => {
       'Authorization': `Bearer ${Authenticator.getToken()}`,
     }),
   });
-  const expenses = await response.json();
+  const result = await response.json();
 
-  return Promise.all(expenses.map(async expense => ({
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
+
+  return Promise.all(result.map(async expense => ({
     ...expense,
     value: parseFloat(await Encryptor.decrypt(expense.value)),
     description: await Encryptor.decrypt(expense.description),
@@ -198,13 +200,21 @@ const loadExpensesEpic = (action$, store) =>
 
       return Observable
         .from(fetchExpenses(currentBudget, currentYear, currentMonth))
-        .map(values => loadExpenses(currentYear, currentMonth, values));
+        .map(values => loadExpenses(currentYear, currentMonth, values))
+        .catch(error => Observable.of(addExpensesError(error.message)));
     })
+;
+
+const clearExpensesErrorsEpic = (action$) =>
+  action$
+    .filter(action => action.type.indexOf('Route/') === 0)
+    .map(() => clearExpensesErrors())
 ;
 
 export const expensesEpic = combineEpics(
   addItemEpic,
   saveItemEpic,
   removeItemEpic,
-  loadExpensesEpic
+  loadExpensesEpic,
+  clearExpensesErrorsEpic,
 );
