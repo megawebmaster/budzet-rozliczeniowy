@@ -21,7 +21,7 @@ export const realIrregularExpenses = createSelector(
 
 export const categoryIrregularBudget = createCachedSelector(
   irregularYearBudget, categoryId,
-  (budget, categoryId) => budget[categoryId] || { planned: 0, savingPlanned: false, real: 0 }
+  (budget, categoryId) => budget[categoryId] || { planned: 0, savingPlanned: false, errorPlanned: '', real: 0 }
 )(
   (state, props) => `category-irregular-budget-${props.categoryId}`,
 );

@@ -39,7 +39,7 @@ const saveValueAction = async (budget, year, month, categoryId, valueType, value
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(result.error);
+    throw new Error(Object.values(result).join('\n'));
   }
 
   return await {
@@ -86,7 +86,7 @@ const saveChanges = (data, loaderType, successType, errorType) => {
     }))
     .catch(error => Observable.of({
       type: errorType,
-      payload: {},
+      payload: data,
       error: error.message,
     }))
     .startWith({

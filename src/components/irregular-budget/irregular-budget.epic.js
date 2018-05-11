@@ -31,12 +31,16 @@ const saveIrregularValueAction = async (budget, year, categoryId, value) => {
     }),
     method: 'PUT',
   });
-  const entry = await response.json();
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(Object.values(result).join('\n'));
+  }
 
   return await {
-    ...entry,
-    plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
-    real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
+    ...result,
+    plan: result.plan ? parseFloat(await Encryptor.decrypt(result.plan)) : 0,
+    real: result.real ? parseFloat(await Encryptor.decrypt(result.real)) : 0
   };
 };
 
@@ -68,18 +72,22 @@ const fetchIrregularBudget = async (budget, year) => {
 
 const saveIrregularChanges = (data, loaderType, successType, errorType) => {
   const { budget, year, categoryId, value } = data;
-  // TODO: Add support for handling errors
+
   return Observable
     .from(saveIrregularValueAction(budget, year, categoryId, value))
     .map(() => ({
       type: successType,
       payload: data
     }))
+    .catch(error => Observable.of({
+      type: errorType,
+      payload: data,
+      error: error.message,
+    }))
     .startWith({
       type: loaderType,
       payload: data,
     });
-  // errorType
 };
 
 const saveIrregularBudgetEpic = (action$, store) =>

@@ -49,7 +49,7 @@ export const IrregularBudgetReducer = (state = initialState, action) => {
     case Actions.LOAD_IRREGULAR_BUDGET:
       return loadIrregularBudget(state, action.payload.year, action.payload.values);
     case Actions.SAVING_IRREGULAR_BUDGET:
-      return updateValue(state, action, { planned: action.payload.value, savingPlanned: true });
+      return updateValue(state, action, { planned: action.payload.value, savingPlanned: true, errorPlanned: '' });
     case Actions.SAVE_IRREGULAR_SUCCESS:
       return updateValue(state, action, { savingPlanned: false });
     case Actions.SAVE_IRREGULAR_FAIL:

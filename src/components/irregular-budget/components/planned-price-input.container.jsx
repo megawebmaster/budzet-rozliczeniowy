@@ -6,6 +6,7 @@ import { saveIrregularValue } from '../irregular-budget.actions';
 
 const mapStateToProps = (state, ownProps) => ({
   value: categoryIrregularBudget(state, ownProps).planned,
+  error: categoryIrregularBudget(state, ownProps).errorPlanned,
   isSaving: categoryIrregularBudget(state, ownProps).savingPlanned,
 });
 const mapDispatchToProps = (dispatch, { categoryId }) => ({
