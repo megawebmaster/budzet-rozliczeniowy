@@ -53,6 +53,7 @@ const messages = {
   'expenses-row.price': 'Cena',
   'budget.income': 'Przychody',
   'budget.expenses': 'Wydatki',
+  'budget.irregular': 'Nieregularne wydatki',
   'budget.table.add-category': 'Dodaj kategorię',
   'budget.table.add-subcategory': 'Dodaj podkategorię',
   'budget.table.header-planned': 'Planowane ({value})',

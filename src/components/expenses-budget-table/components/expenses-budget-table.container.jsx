@@ -27,19 +27,18 @@ const mapDispatchToProps = (dispatch, { category }) => ({
   onEdit: (name) => dispatch(updateCategory('expense', category, { name })),
 });
 
-const ExpensesBudgetTable = ({ category, label, currency, categories, summaryPlanned, summaryReal, className,
+const ExpensesBudgetTable = ({ category, currency, categories, summaryPlanned, summaryReal, className,
                                addSubcategory, onEdit, onRemove, onInputMount }) => (
-  <BudgetTable type="expense" className={className} label={label} categories={categories} editableRealValues={false}
+  <BudgetTable category={category} className={className} categories={categories} editableRealValues={false}
                summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addSubcategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={ExpensePlannedPriceInput} RealInput={ExpenseRealPriceInput}
-               onRemove={onRemove} onEdit={onEdit} saving={category.saving} />
+               onRemove={onRemove} onEdit={onEdit} />
 );
 
 ExpensesBudgetTable.propTypes = {
   className: PropTypes.string,
   category: PropTypes.object.isRequired,
   onInputMount: PropTypes.func,
-  label: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExpensesBudgetTable);

@@ -19,24 +19,38 @@ class Budget extends Component {
   };
 
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
+  incomeCategory = {
+    name: this.translate('budget.income', 'Przychody'),
+    type: 'income',
+    error: '',
+    saved: true,
+    saving: false
+  };
+  irregularCategory = {
+    name: this.translate('budget.irregular', 'Nieregularne wydatki'),
+    type: 'irregular',
+    error: '',
+    saved: true,
+    saving: false
+  };
 
   render() {
     const { expensesCategories, incomeCategories, onKeyDown, onFocus, onInputMount } = this.props;
 
     return (
       <div onKeyDown={onKeyDown} onFocus={onFocus}>
-        <IncomeBudgetTable className="segment green" label={this.translate('budget.income', 'Przychody')}
-                           categories={incomeCategories} onInputMount={onInputMount} />
+        <IncomeBudgetTable className="segment green" category={this.incomeCategory} categories={incomeCategories}
+                           onInputMount={onInputMount} />
         <Segment attached="top" color="yellow">
           <h3>{this.translate('budget.expenses', 'Wydatki')}</h3>
         </Segment>
         <Segment attached>
           { expensesCategories.map(category =>
-            <ExpensesBudgetTable key={`category-${category.id}`} label={category.name} category={category}
-                                 onInputMount={onInputMount} />)}
+            <ExpensesBudgetTable key={`category-${category.id}`} category={category} onInputMount={onInputMount} />
+          )}
           <AddCategoryButton />
         </Segment>
-        <IrregularBudgetTable className="segment blue" label="Nieregularne wydatki" />
+        <IrregularBudgetTable className="segment blue" category={this.irregularCategory} />
         <BudgetSummary className="segment teal" />
       </div>
     );

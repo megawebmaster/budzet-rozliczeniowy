@@ -19,9 +19,9 @@ const mapDispatchToProps = (dispatch) => ({
   addCategory: (name) => dispatch(addCategory('irregular', name)),
 });
 
-const IrregularBudgetTable = ({ label, currency, categories, summaryPlanned, summaryReal, className, addCategory,
+const IrregularBudgetTable = ({ category, currency, categories, summaryPlanned, summaryReal, className, addCategory,
                                 onInputMount }) => (
-  <BudgetTable type="irregular" className={className} label={label} categories={categories} editableRealValues={false}
+  <BudgetTable category={category} className={className} categories={categories} editableRealValues={false}
                summaryPlanned={summaryPlanned} summaryReal={summaryReal} onAdd={addCategory} currency={currency}
                onInputMount={onInputMount} PlannedInput={IrregularPlannedPriceInput} RealInput={IrregularRealPriceInput} />
 );
@@ -30,10 +30,10 @@ IrregularBudgetTable.defaultProps = {
   onInputMount: (_type, _category, _input) => {},
 };
 IrregularBudgetTable.propTypes = {
+  category: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
   onInputMount: PropTypes.func,
-  label: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(IrregularBudgetTable);

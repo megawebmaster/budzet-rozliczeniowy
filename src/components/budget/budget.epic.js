@@ -8,12 +8,9 @@ import 'rxjs/add/operator/concatMap';
 import { Authenticator } from '../../App.auth';
 import { Encryptor } from '../../App.encryption';
 import * as Actions from './budget.actions';
-import { addBudgetError, loadBudget } from './budget.actions';
+import { addBudgetError, clearBudgetErrors, loadBudget } from './budget.actions';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes';
 import { budget as budgetSelector, month, year } from '../location';
-import { updateBudgets } from '../configuration';
-import { fetchBudgets } from '../../routes/routes.epic';
-import { clearBudgetErrors } from './budget.actions';
 
 /**
  * @param budget string
@@ -39,12 +36,16 @@ const saveValueAction = async (budget, year, month, categoryId, valueType, value
     }),
     method: 'PUT',
   });
-  const entry = await response.json();
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
 
   return await {
-    ...entry,
-    plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
-    real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
+    ...result,
+    plan: result.plan ? parseFloat(await Encryptor.decrypt(result.plan)) : 0,
+    real: result.real ? parseFloat(await Encryptor.decrypt(result.real)) : 0
   };
 };
 
@@ -76,18 +77,22 @@ const fetchBudget = async (budget, year, month) => {
 
 const saveChanges = (data, loaderType, successType, errorType) => {
   const { budget, year, month, categoryId, valueType, value } = data;
-  // TODO: Add support for handling errors
+
   return Observable
     .from(saveValueAction(budget, year, month, categoryId, valueType, value))
     .map(() => ({
       type: successType,
       payload: data
     }))
+    .catch(error => Observable.of({
+      type: errorType,
+      payload: {},
+      error: error.message,
+    }))
     .startWith({
       type: loaderType,
       payload: data,
     });
-  // errorType
 };
 
 const saveBudgetEpic = (action$, store) =>

@@ -24,6 +24,7 @@ const add = (state, id, type, name, parentId) => {
         deletedAt: null,
         averageValues: [],
         children: [],
+        saved: false,
         saving: true,
         error: '',
       }
@@ -31,7 +32,7 @@ const add = (state, id, type, name, parentId) => {
   };
 };
 
-const update = (state, type, original, category) => {
+const update = (state, type, original, values) => {
   const idx = state.data.findIndex(c => c.id === original.id);
 
   if (idx === -1) {
@@ -39,7 +40,7 @@ const update = (state, type, original, category) => {
   }
 
   const result = state.data.slice();
-  result.splice(idx, 1, category);
+  result.splice(idx, 1, { ...state.data[idx], ...values });
 
   return { ...state, data: result };
 };
@@ -63,16 +64,25 @@ export const CategoriesReducer = (state = initialState, action) => {
       return { loading: false, data: action.payload.categories };
     case Actions.UPDATE_CATEGORY:
       return update(state, action.payload.type, action.payload.category, {
-        ...action.payload.category,
         ...action.payload.values,
         saving: true,
+        error: '',
       });
     case Actions.REPLACE_CATEGORY:
-      return update(state, action.payload.type, action.payload.original, { ...action.payload.saved, saving: false });
+      return update(state, action.payload.type, action.payload.original, {
+        ...action.payload.saved,
+        saving: false,
+        saved: action.payload.saved.id < 1000000000000
+      });
     case Actions.REMOVE_CATEGORY:
       return remove(state, action.payload.type, action.payload.id);
     case Actions.ADD_CATEGORY:
       return add(state, action.payload.id, action.payload.type, action.payload.name, action.payload.parentId);
+    case Actions.SET_CATEGORY_ERROR:
+      return update(state, action.payload.type, action.payload.category, {
+        saving: false,
+        error: action.payload.error
+      });
     case ADD_BUDGET_ERROR:
     case ADD_IRREGULAR_BUDGET_ERROR:
     case ADD_EXPENSES_ERROR:

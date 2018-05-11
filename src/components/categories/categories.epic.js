@@ -5,7 +5,14 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/ignoreElements';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
-import { ADD_CATEGORY, loadCategories, REMOVE_CATEGORY, replaceCategory, UPDATE_CATEGORY, } from './categories.actions';
+import {
+  ADD_CATEGORY,
+  loadCategories,
+  REMOVE_CATEGORY,
+  replaceCategory,
+  setCategoryError,
+  UPDATE_CATEGORY,
+} from './categories.actions';
 import { budget, month, year } from '../location';
 import { Authenticator } from '../../App.auth';
 import { Encryptor } from '../../App.encryption';
@@ -49,6 +56,8 @@ const fetchCategories = async (budgetSlug) => {
     name: await Encryptor.decrypt(category.name),
     averageValue: await calculateAverageValue(category.averageValues),
     error: '',
+    saving: false,
+    saved: true,
   })));
 };
 
@@ -78,9 +87,13 @@ const saveCategoryAction = async (type, name, budget, year, month, parent = null
     }),
     method: 'POST',
   });
-  const category = await response.json();
+  const result = await response.json();
 
-  return { ...category, name, error: '' };
+  if (!response.ok) {
+    throw new Error(Object.values(result).join('\n'));
+  }
+
+  return { ...result, name, error: '' };
 };
 
 /**
@@ -105,9 +118,13 @@ const updateCategoryAction = async (type, budget, id, values) => {
     }),
     method: 'PATCH',
   });
-  const category = await response.json();
+  const result = await response.json();
 
-  return { ...category, name: values.name, error: '' };
+  if (!response.ok) {
+    throw new Error(Object.values(result).join('\n'));
+  }
+
+  return { ...result, name: values.name, error: '' };
 };
 
 /**
@@ -118,8 +135,8 @@ const updateCategoryAction = async (type, budget, id, values) => {
  * @param month string
  * @returns {Promise<Response>}
  */
-const deleteCategoryAction = (type, budget, id, year, month) => (
-  fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
+const deleteCategoryAction = async (type, budget, id, year, month) => {
+  const response = await fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
     method: 'DELETE',
     headers: new Headers({
       'Accept': 'application/json',
@@ -129,8 +146,13 @@ const deleteCategoryAction = (type, budget, id, year, month) => (
     body: JSON.stringify({
       type, year, month
     }),
-  })
-);
+  });
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw new Error(result.error);
+  }
+};
 
 // TODO: Figure out how to throttle requests until budget changes
 const fetchCategoriesEpic = (action$) =>
@@ -156,7 +178,6 @@ const fetchCategoriesEpic = (action$) =>
     ))
 ;
 
-// TODO: Add support for errors
 const addCategoryEpic = (action$, store) =>
   action$
     .ofType(ADD_CATEGORY)
@@ -170,7 +191,10 @@ const addCategoryEpic = (action$, store) =>
         month(state),
         action.payload.parentId
       );
-      return Observable.from(promise).map(category => replaceCategory(action.payload.type, action.payload, category));
+
+      return Observable.from(promise)
+        .map(category => replaceCategory(action.payload.type, action.payload, category))
+        .catch(error => Observable.of(setCategoryError(action.payload, error.message)));
     })
 ;
 
@@ -179,14 +203,28 @@ const updateCategoryEpic = (action$, store) =>
     .ofType(UPDATE_CATEGORY)
     .mergeMap(action => {
       const state = store.getState();
-      const promise = updateCategoryAction(
-        action.payload.type,
-        budget(state),
-        action.payload.category.id,
-        action.payload.values
-      );
+      let promise;
+      if (action.payload.category.saved) {
+        promise = updateCategoryAction(
+          action.payload.type,
+          budget(state),
+          action.payload.category.id,
+          action.payload.values
+        );
+      } else {
+        promise = saveCategoryAction(
+          action.payload.type,
+          action.payload.values.name,
+          budget(state),
+          year(state),
+          month(state),
+          action.payload.category.parent.id
+        );
+      }
 
-      return Observable.from(promise).map(category => replaceCategory(action.payload.type, action.payload.category, category));
+      return Observable.from(promise)
+        .map(category => replaceCategory(action.payload.type, action.payload.category, category))
+        .catch(error => Observable.of(setCategoryError(action.payload.category, error.message)));
     })
 ;
 

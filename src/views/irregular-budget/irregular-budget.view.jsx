@@ -13,6 +13,13 @@ import { ErrorMessage } from '../../components/error-message';
 
 const IrregularBudget = ({ categories, loading, errors, year, onFocus, onInputMount, onKeyDown, intl }) => {
   const format = (id, message, params) => intl.formatMessage({ id, defaultMessage: message }, params);
+  const irregularCategory = {
+    name: format('views.irregular-budget.table-label', 'Roczne wydatki nieregularne'),
+    type: 'irregular',
+    error: '',
+    saved: true,
+    saving: false,
+  };
 
   return (
     <div onKeyDown={onKeyDown} onFocus={onFocus}>
@@ -24,8 +31,8 @@ const IrregularBudget = ({ categories, loading, errors, year, onFocus, onInputMo
       </Segment>
       {errors.map(error => <ErrorMessage key={error} error={error} />)}
       <Segment basic loading={loading} className="irregular-container">
-        <IrregularBudgetTable className="segment blue" categories={categories} onInputMount={onInputMount}
-                              label={format('views.irregular-budget.table-label', 'Roczne wydatki nieregularne')} />
+        <IrregularBudgetTable className="segment blue" categories={categories} category={irregularCategory}
+                              onInputMount={onInputMount} />
       </Segment>
     </div>
   );

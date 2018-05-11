@@ -10,14 +10,22 @@ import './budget-table.css';
 
 class BudgetTable extends Component {
   static propTypes = {
-    saving: PropTypes.bool,
-    type: PropTypes.string.isRequired,
+    category: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      saved: PropTypes.bool.isRequired,
+      saving: PropTypes.bool.isRequired,
+      error: PropTypes.string.isRequired,
+    }),
+    // saving: PropTypes.bool,
+    // type: PropTypes.string.isRequired,
     categories: PropTypes.array.isRequired,
     className: PropTypes.string,
     currency: PropTypes.string.isRequired,
     editableRealValues: PropTypes.bool.isRequired,
-    label: PropTypes.string.isRequired,
+    // label: PropTypes.string.isRequired,
     manageableCategories: PropTypes.bool,
+    // error: PropTypes.string,
     onAdd: PropTypes.func.isRequired,
     onEdit: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     onRemove: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
@@ -42,20 +50,23 @@ class BudgetTable extends Component {
 
   onUpdate = (value) => this.props.onEdit && this.props.onEdit(value);
   onRemove = () => this.props.onRemove && this.props.onRemove();
+  onCancel = () => !this.props.category.saved && this.props.onRemove && this.props.onRemove();
 
   render() {
     const {
-      label, saving, type, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount,
+      category, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount,
       manageableCategories, onEdit, onRemove, PlannedInput, RealInput
     } = this.props;
 
+    // TODO: Replace EditableText with CategoryName?
     return (
       <Table className={`budget-table ${className ? className : ''}`} singleLine striped compact>
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>
-              <EditableText text={label} deletable={!!onRemove} editable={!!onEdit} onDelete={this.onRemove}
-                            onUpdate={this.onUpdate} saving={saving} />
+              <EditableText text={category.name} deletable={!!onRemove} editable={!!onEdit} onDelete={this.onRemove}
+                            onUpdate={this.onUpdate} onCancel={this.onCancel} saving={category.saving}
+                            error={category.error} />
             </TableHeaderCell>
             <TableHeaderCell width={4}>
               <span>{this.format('budget.table.header-planned', 'Planowane ({value})', { value: this.currency(summaryPlanned) })}</span>
@@ -66,19 +77,19 @@ class BudgetTable extends Component {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {categories.map(category => (
-            <TableRow key={`budget-row-${category.id}`}>
+          {categories.map(subcategory => (
+            <TableRow key={`budget-row-${subcategory.id}`}>
               <TableCell>
-                <CategoryName type={type} category={category} deletable={manageableCategories}
+                <CategoryName type={category.type} category={subcategory} deletable={manageableCategories}
                               editable={manageableCategories} />
               </TableCell>
               <TableCell>
-                <PlannedInput categoryId={category.id} onMount={onInputMount.bind(null, 'planned', category.id)}
-                              disabled={category.saving} />
+                <PlannedInput categoryId={subcategory.id} onMount={onInputMount.bind(null, 'planned', subcategory.id)}
+                              disabled={subcategory.saving || subcategory.error.length > 0} />
               </TableCell>
               <TableCell>
-                <RealInput categoryId={category.id} onMount={onInputMount.bind(null, 'real', category.id)}
-                           disabled={!editableRealValues || category.saving} />
+                <RealInput categoryId={subcategory.id} onMount={onInputMount.bind(null, 'real', subcategory.id)}
+                           disabled={!editableRealValues || subcategory.saving || subcategory.error.length > 0} />
               </TableCell>
             </TableRow>
           ))}
@@ -86,7 +97,7 @@ class BudgetTable extends Component {
         {manageableCategories && <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>
-              <AddSubcategoryButton onSave={onAdd} />
+              <AddSubcategoryButton onSave={onAdd} disabled={category.saving || category.error.length > 0} />
             </TableCell>
           </TableRow>
         </TableFooter>}

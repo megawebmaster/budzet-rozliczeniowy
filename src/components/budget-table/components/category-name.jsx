@@ -7,6 +7,7 @@ class CategoryName extends Component {
     category: PropTypes.object.isRequired,
     onEdit: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
     deletable: PropTypes.bool,
     editable: PropTypes.bool,
   };
@@ -17,11 +18,11 @@ class CategoryName extends Component {
   };
 
   render() {
-    const { category, deletable, editable, onRemove, onEdit } = this.props;
+    const { category, deletable, editable, onRemove, onEdit, onCancel } = this.props;
 
     return (
       <EditableText text={category.name} error={category.error} deletable={deletable} saving={category.saving}
-                    editable={editable} onUpdate={onEdit} onDelete={onRemove} />
+                    editable={editable} onUpdate={onEdit} onDelete={onRemove} onCancel={onCancel} />
     );
   }
 }

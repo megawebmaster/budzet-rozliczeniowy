@@ -20,9 +20,9 @@ const mapDispatchToProps = (dispatch) => ({
   addCategory: (name) => dispatch(addCategory('income', name)),
 });
 
-const IncomeBudgetTable = ({ label, categories, currency, summaryPlanned, summaryReal, className, addCategory,
+const IncomeBudgetTable = ({ category, categories, currency, summaryPlanned, summaryReal, className, addCategory,
                              onInputMount }) => (
-  <BudgetTable type="income" className={className} label={label} categories={categories} summaryPlanned={summaryPlanned}
+  <BudgetTable category={category} className={className} categories={categories} summaryPlanned={summaryPlanned}
                summaryReal={summaryReal} currency={currency} onAdd={addCategory} onInputMount={onInputMount}
                editableRealValues={true} PlannedInput={IncomePlannedPriceInput} RealInput={IncomeRealPriceInput} />
 );
@@ -31,10 +31,10 @@ IncomeBudgetTable.defaultProps = {
   onInputMount: (_type, _category, _input) => {},
 };
 IncomeBudgetTable.propTypes = {
+  category: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
   className: PropTypes.string,
   onInputMount: PropTypes.func,
-  label: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncomeBudgetTable);

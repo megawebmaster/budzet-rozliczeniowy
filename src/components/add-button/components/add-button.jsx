@@ -4,6 +4,16 @@ import { injectIntl } from 'react-intl';
 import { Button, Input } from 'semantic-ui-react';
 
 class AddButton extends Component {
+  static propTypes = {
+    disabled: PropTypes.bool,
+    label: PropTypes.string.isRequired,
+    size: PropTypes.string.isRequired,
+    onSave: PropTypes.func.isRequired,
+  };
+  static defaultProps = {
+    disabled: false,
+  };
+
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
 
   state = {
@@ -34,10 +44,10 @@ class AddButton extends Component {
   };
 
   renderButton = () => {
-    const { label, size } = this.props;
+    const { disabled, label, size } = this.props;
 
     return <Button fluid icon="plus" size={size} basic style={{ textAlign: 'left' }} content={label}
-                   onClick={this.showInput} />;
+                   onClick={this.showInput} disabled={disabled} />;
   };
 
   renderInput = () => {
@@ -71,12 +81,6 @@ class AddButton extends Component {
     return adding ? this.renderInput() : this.renderButton();
   }
 }
-
-AddButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  size: PropTypes.string.isRequired,
-  onSave: PropTypes.func.isRequired,
-};
 
 export default injectIntl(AddButton);
 

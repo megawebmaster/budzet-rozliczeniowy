@@ -34,7 +34,7 @@ const yearCategories = createSelector(
   (year, categories) => categories.filter(category => {
     const started = new Date(category.startedAt);
 
-    return started.getFullYear() === year && category.deletedAt === null;
+    return (category.startedAt === null || started.getFullYear() === year) && category.deletedAt === null;
   })
 );
 

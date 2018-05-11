@@ -18,6 +18,7 @@ class EditableText extends PureComponent {
     size: PropTypes.string,
     text: PropTypes.string.isRequired,
     onUpdate: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
   };
 
@@ -32,6 +33,7 @@ class EditableText extends PureComponent {
   state = {
     editing: false,
     value: '',
+    originalValue: '',
   };
 
   onKeyDown = (event) => {
@@ -49,11 +51,13 @@ class EditableText extends PureComponent {
 
   updateValue = (value) => this.setState({ value });
   showInput = () => this.setState({ editing: true });
-  // TODO: Check if this works as expected
-  hideInput = () => this.setState({ value: this.props.text, editing: false }, this.saveInput);
+  hideInput = () => {
+    this.setState({ value: this.props.originalValue, editing: this.props.error.length > 0 });
+    this.props.onCancel(this.state.originalValue);
+  };
 
   saveInput = () => {
-    if (this.state.value !== this.props.text) {
+    if (this.state.value !== this.props.text || this.props.error.length > 0) {
       this.props.onUpdate(this.state.value);
     }
     this.setState({ editing: false });
@@ -83,7 +87,14 @@ class EditableText extends PureComponent {
   };
 
   componentDidMount() {
-    this.setState({ value: this.props.text, editing: this.props.error.length > 0 });
+    this.setState({ value: this.props.text, originalValue: this.props.text, editing: this.props.error.length > 0 });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ value: nextProps.text, editing: nextProps.error.length > 0 });
+    if (!nextProps.saving && !nextProps.error.length > 0) {
+      this.setState({ originalValue: nextProps.text });
+    }
   }
 
   // TODO: What was this focusing field for?
