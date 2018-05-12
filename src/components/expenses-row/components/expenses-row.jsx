@@ -45,7 +45,7 @@ export default class extends Component {
   onKeyDown = (event) => {
     if (event.keyCode === 13) {
       event.stopPropagation();
-      this.props.onSaveItem();
+      this.setState({}, this.props.onSaveItem);
     }
   };
 
