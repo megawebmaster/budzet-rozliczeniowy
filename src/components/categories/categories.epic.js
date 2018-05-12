@@ -40,7 +40,7 @@ const calculateAverageValue = async (averageValues) => {
  * @returns {Promise<[any]>}
  */
 const fetchCategories = async (budgetSlug) => {
-  const response = await fetch(`http://localhost:8080/budgets/${budgetSlug}/categories`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budgetSlug}/categories`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,
@@ -72,7 +72,7 @@ const fetchCategories = async (budgetSlug) => {
  */
 const saveCategoryAction = async (type, name, budget, year, month, parent = null) => {
   const encryptedName = await Encryptor.encrypt(name);
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/categories`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ const saveCategoryAction = async (type, name, budget, year, month, parent = null
  */
 const updateCategoryAction = async (type, budget, id, values) => {
   const encryptedName = await Encryptor.encrypt(values.name);
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories/${id}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ const updateCategoryAction = async (type, budget, id, values) => {
  * @returns {Promise<Response>}
  */
 const deleteCategoryAction = async (type, budget, id, year, month) => {
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/categories/${id}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories/${id}`, {
     method: 'DELETE',
     headers: new Headers({
       'Accept': 'application/json',

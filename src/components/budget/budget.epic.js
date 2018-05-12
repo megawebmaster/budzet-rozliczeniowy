@@ -23,7 +23,7 @@ import { budget as budgetSelector, month, year } from '../location';
  */
 const saveValueAction = async (budget, year, month, categoryId, valueType, value) => {
   const encryptedValue = await Encryptor.encrypt(value.toString());
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${categoryId}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/entries/${categoryId}`, {
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: new Headers({
       'Accept': 'application/json',
@@ -56,7 +56,7 @@ const saveValueAction = async (budget, year, month, categoryId, valueType, value
  * @returns {Promise<[any]>}
  */
 const fetchBudget = async (budget, year, month) => {
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/entries/${month}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/entries/${month}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,

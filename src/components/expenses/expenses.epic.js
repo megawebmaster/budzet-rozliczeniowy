@@ -59,7 +59,7 @@ async function submitValue(url, type, value, budgetValue) {
  * @returns {Promise<{value: *, description: *}>}
  */
 const addValueAction = async (budget, year, month, value, budgetValue) => (
-  await submitValue(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}`, 'POST', value, budgetValue)
+  await submitValue(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}`, 'POST', value, budgetValue)
 );
 
 /**
@@ -71,7 +71,7 @@ const addValueAction = async (budget, year, month, value, budgetValue) => (
  * @returns {Promise<{value: *, description: *}>}
  */
 const saveValueAction = async (budget, year, month, value, budgetValue) => (
-  await submitValue(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}/${value.id}`, 'PUT', value, budgetValue)
+  await submitValue(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}/${value.id}`, 'PUT', value, budgetValue)
 );
 
 /**
@@ -84,7 +84,7 @@ const saveValueAction = async (budget, year, month, value, budgetValue) => (
  */
 const deleteValueAction = async ({ budget, year, month, row, budgetValue }) => {
   const encryptedBudgetValue = await Encryptor.encrypt(budgetValue.toString());
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}/${row.id}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}/${row.id}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ const deleteValueAction = async ({ budget, year, month, row, budgetValue }) => {
  * @returns {Promise<[any]>}
  */
 const fetchExpenses = async (budget, year, month) => {
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/expenses/${month}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ import { Encryptor } from '../../App.encryption';
 const saveIrregularValueAction = async (budget, year, categoryId, value) => {
   const encryptedValue = await Encryptor.encrypt(value.toString());
   const encryptedMonthlyValue = await Encryptor.encrypt((value / 10.0).toString());
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/irregular/${categoryId}`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/irregular/${categoryId}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const saveIrregularValueAction = async (budget, year, categoryId, value) => {
  * @returns {Promise}
  */
 const fetchIrregularBudget = async (budget, year) => {
-  const response = await fetch(`http://localhost:8080/budgets/${budget}/${year}/irregular`, {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/irregular`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json',

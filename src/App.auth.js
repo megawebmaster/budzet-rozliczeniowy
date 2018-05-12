@@ -3,7 +3,7 @@ import { WebAuth } from 'auth0-js';
 const auth = new WebAuth({
   clientID: 'PqsSsHBLYS3MDS2FXthxnouqES3Amiu9',
   domain: 'megawebmaster.eu.auth0.com',
-  redirectUri: 'http://localhost:3000/login',
+  redirectUri: process.env.REACT_APP_URL+'/login',
   responseType: 'token id_token',
   scope: 'openid profile email'
 });
@@ -59,7 +59,7 @@ export class Authenticator {
     localStorage.removeItem('expires_at');
     auth.logout({
       clientID: 'PqsSsHBLYS3MDS2FXthxnouqES3Amiu9',
-      returnTo: 'http://localhost:3000',
+      returnTo: process.env.REACT_APP_URL,
     });
   }
 }

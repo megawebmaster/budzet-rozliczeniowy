@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ddb5f569-d4cf-481e-82c5-8a0cdd0e8ff5" name="budzet.megawebmaster.pl" url="https://budzet.megawebmaster.pl">
+        <fileTransfer host="s49.hekko.pl" port="21" rootFolder="/domains/budzet.megawebmaster.pl">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="cbd296d5-2f6c-47a3-85de-6d3dc42edda0" name="api.budzet.megawebmaster.pl" url="https://api.budzet.megawebmaster.pl">
+        <fileTransfer host="s49.hekko.pl" port="21" rootFolder="/domains/api.budzet.megawebmaster.pl">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

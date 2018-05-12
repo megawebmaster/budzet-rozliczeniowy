@@ -2,6 +2,25 @@
 <project version="4">
   <component name="PublishConfigData">
     <serverData>
+      <paths name="api.budzet.megawebmaster.pl">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$/../budzet-rozliczeniowy-api" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/../budzet-rozliczeniowy-api/.env" />
+            <excludedPath local="true" path="$PROJECT_DIR$/../budzet-rozliczeniowy-api/.env.dist" />
+            <excludedPath local="true" path="$PROJECT_DIR$/../budzet-rozliczeniowy-api/.env.production" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="budzet.megawebmaster.pl">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/private_html" local="$PROJECT_DIR$/build" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="fhustep.hekko.pl">
         <serverdata>
           <mappings>

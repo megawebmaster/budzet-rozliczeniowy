@@ -11,7 +11,7 @@ import { Authenticator } from '../App.auth';
 const halfHour = 30*60*1000;
 
 export const fetchBudgets = () => (
-  fetch('http://localhost:8080/budgets', {
+  fetch(`${process.env.REACT_APP_API_URL}/budgets`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,
@@ -21,7 +21,7 @@ export const fetchBudgets = () => (
 );
 
 const fetchAvailableYears = (budgetSlug) => (
-  fetch(`http://localhost:8080/budgets/${budgetSlug}`, {
+  fetch(`${process.env.REACT_APP_API_URL}/budgets/${budgetSlug}`, {
     headers: new Headers({
       'Accept': 'application/json',
       'Authorization': `Bearer ${Authenticator.getToken()}`,
