@@ -21,6 +21,7 @@ import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import { addBudgetError } from '../budget/budget.actions';
 import { addExpensesError } from '../expenses/expenses.actions';
 import { addIrregularBudgetError } from '../irregular-budget/irregular-budget.actions';
+import { findCategory } from './categories.selectors';
 
 // const halfHour = 30*60*1000;
 
@@ -183,14 +184,29 @@ const addCategoryEpic = (action$, store) =>
     .ofType(ADD_CATEGORY)
     .mergeMap(action => {
       const state = store.getState();
-      const promise = saveCategoryAction(
-        action.payload.type,
-        action.payload.name,
-        budget(state),
-        year(state),
-        month(state),
-        action.payload.parentId
-      );
+      const category = findCategory(state, action.payload.id, action.payload.name, action.payload.type, action.payload.parentId);
+      let promise;
+      if (category) {
+        promise = updateCategoryAction(
+          action.payload.type,
+          budget(state),
+          category.id,
+          {
+            name: action.payload.name,
+            year: year(state),
+            month: month(state),
+          }
+        );
+      } else {
+        promise = saveCategoryAction(
+          action.payload.type,
+          action.payload.name,
+          budget(state),
+          year(state),
+          month(state),
+          action.payload.parentId
+        );
+      }
 
       return Observable.from(promise)
         .map(category => replaceCategory(action.payload.type, action.payload, category))
@@ -203,13 +219,18 @@ const updateCategoryEpic = (action$, store) =>
     .ofType(UPDATE_CATEGORY)
     .mergeMap(action => {
       const state = store.getState();
+      const category = findCategory(state, action.payload.id, action.payload.name, action.payload.type, action.payload.parentId);
       let promise;
-      if (action.payload.category.saved) {
+      if (category || action.payload.category.saved) {
         promise = updateCategoryAction(
           action.payload.type,
           budget(state),
           action.payload.category.id,
-          action.payload.values
+          {
+            ...action.payload.values,
+            year: year(state),
+            month: month(state)
+          }
         );
       } else {
         promise = saveCategoryAction(
@@ -218,7 +239,7 @@ const updateCategoryEpic = (action$, store) =>
           budget(state),
           year(state),
           month(state),
-          action.payload.category.parent.id
+          (action.payload.category.parent || {id: null}).id
         );
       }
 

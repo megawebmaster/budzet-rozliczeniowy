@@ -38,6 +38,20 @@ const yearCategories = createSelector(
   })
 );
 
+const categoriesOfType = (state, type) => {
+  return categories(state).filter(category => category.type === type);
+};
+
+export const findCategory = (state, id, name, type, parentId = null) => {
+  const categories = categoriesOfType(state, type);
+
+  return categories.find(category =>
+    category.id !== id &&
+    category.name === name &&
+    (category.parent || {id: null}).id === parentId
+  );
+};
+
 export const incomeCategories = createSelector(
   [accessibleCategories],
   (categories) => parseChildrenCategories(categories.filter(category => category.type === 'income'))
