@@ -19,7 +19,11 @@ export default class extends Component {
   hide = () => this.setState({ visible: false });
 
   render() {
-    return this.state.visible && (
+    if (!this.state.visible) {
+      return null;
+    }
+
+    return (
       <TableRow className="error-row">
         <TableCell colSpan={5}>
           <Message onDismiss={this.hide} error>

@@ -30,16 +30,16 @@ const sortItems = (state, year, month, field) => {
 const addItem = (state, year, month, value) => {
   const selectedYear = state[year] || {};
   const selectedMonth = selectedYear[month].slice() || [];
-  selectedMonth.push({ ...value, saving: true });
+  selectedMonth.push(value);
 
   return { ...state, [year]: { ...selectedYear, [month]: selectedMonth } };
 };
 
-const saveItem = (state, year, month, value, isSaving) => {
+const saveItem = (state, year, month, value) => {
   const selectedYear = state[year] || {};
   const selectedMonth = selectedYear[month].slice() || [];
   const idx = selectedMonth.findIndex(item => item.id === value.id);
-  selectedMonth.splice(idx, 1, { ...value, saving: isSaving });
+  selectedMonth.splice(idx, 1, { ...selectedMonth[idx], ...value });
 
   return { ...state, [year]: { ...selectedYear, [month]: selectedMonth } };
 };
@@ -58,15 +58,33 @@ export const ExpensesReducer = (state = initialState, action) => {
     case Actions.LOAD_EXPENSES:
       return loadMonth(state, action.payload.year, action.payload.month, action.payload.values);
     case Actions.ADD_ITEM:
-      return addItem(state, action.payload.year, action.payload.month, action.payload.row);
+      return addItem(state, action.payload.year, action.payload.month, {
+        ...action.payload.row,
+        saved: false,
+        saving: true
+      });
     case Actions.SAVING_ROW:
-      return saveItem(state, action.payload.year, action.payload.month, action.payload.row, true);
+      return saveItem(state, action.payload.year, action.payload.month, { ...action.payload.row, saving: true });
     case Actions.SAVE_ITEM_SUCCESS:
+      return saveItem(state, action.payload.year, action.payload.month, {
+        ...action.payload.row,
+        saved: true,
+        saving: false
+      });
     case Actions.SAVE_ITEM_FAIL:
-      // TODO: Error handling for failures?
-      return saveItem(state, action.payload.year, action.payload.month, action.payload.row, false);
+      return saveItem(state, action.payload.year, action.payload.month, {
+        id: action.payload.row.id,
+        errors: action.error,
+        saving: false
+      });
     case Actions.REMOVE_ITEM:
       return removeItem(state, action.payload.year, action.payload.month, action.payload.row);
+    case Actions.REMOVE_ITEM_FAIL:
+      return addItem(state, action.payload.year, action.payload.month, {
+        ...action.payload.row,
+        errors: { base: action.error },
+        saving: false
+      });
     case Actions.SORT_EXPENSES:
       return sortItems(state, action.payload.year, action.payload.month, action.payload.field);
     case Actions.ADD_EXPENSES_ERROR:

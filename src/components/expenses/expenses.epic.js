@@ -12,6 +12,15 @@ import * as Actions from './expenses.actions';
 import { addExpensesError, clearExpensesErrors, loadExpenses, saveItemSuccess, savingItem } from './expenses.actions';
 import { Encryptor } from '../../App.encryption';
 import { monthExpenses } from './expenses.selectors';
+import { saveItemFailed } from './expenses.actions';
+import { removeItemFailed } from './expenses.actions';
+
+class SubmitExpenseError extends Error {
+  constructor(errors) {
+    super();
+    this.errors = errors;
+  }
+}
 
 /**
  * @param url string
@@ -24,7 +33,6 @@ async function submitValue(url, type, value, budgetValue) {
   const encryptedPrice = await Encryptor.encrypt(value.price.toString());
   const encryptedDescription = await Encryptor.encrypt(value.description);
   const encryptedBudgetValue = await Encryptor.encrypt(budgetValue.toString());
-  // TODO: Add support for failures
   const response = await fetch(url, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -40,10 +48,16 @@ async function submitValue(url, type, value, budgetValue) {
     }),
     method: type,
   });
-  const expense = await response.json();
+  const result = await response.json();
+
+  if(!response.ok) {
+    const baseKeys = Object.keys(result).filter(key => key.indexOf('budget_') === 0);
+    const base = baseKeys.map(key => result[key]).join(', ');
+    throw new SubmitExpenseError({ ...result, base });
+  }
 
   return {
-    ...expense,
+    ...result,
     value: value.price,
     description: value.description,
     errors: {},
@@ -95,8 +109,13 @@ const deleteValueAction = async ({ budget, year, month, row, budgetValue }) => {
     }),
     method: 'DELETE',
   });
+  const result = await response.json();
 
-  return await response.json();
+  if (!response.ok) {
+    throw new Error(Object.values(result).join(', '));
+  }
+
+  return result;
 };
 
 /**
@@ -124,30 +143,31 @@ const fetchExpenses = async (budget, year, month) => {
     value: parseFloat(await Encryptor.decrypt(expense.value)),
     description: await Encryptor.decrypt(expense.description),
     errors: {},
+    saved: true,
   })));
 };
 
 const addItem = (data) => {
   const { budget, year, month, row, budgetValue } = data;
-  // TODO: Add support for handling errors
+
   return Observable
     .from(addValueAction(budget, year, month, row, budgetValue))
-    .map(result => saveItemSuccess(year, month, result));
-  // Actions.SAVE_ITEM_FAIL
+    .map(result => saveItemSuccess(year, month, result))
+    .catch(error => Observable.of(saveItemFailed(year, month, row, error.errors)));
 };
 const saveItem = (data) => {
   const { budget, year, month, row, budgetValue } = data;
-  // TODO: Add support for handling errors
+
   return Observable
     .from(saveValueAction(budget, year, month, row, budgetValue))
     .map(result => saveItemSuccess(year, month, result))
+    .catch(error => Observable.of(saveItemFailed(year, month, row, error.errors)))
     .startWith(savingItem(year, month, row));
-  // Actions.ADD_ITEM_FAIL
 };
-const calculateBudgetValue = (state, { row }) => (
+const calculateBudgetValue = (state, { row }, baseValue) => (
   monthExpenses(state)
     .filter(expense => expense.category === row.category && expense.id !== row.id)
-    .reduce((result, expense) => result + expense.price, row.price)
+    .reduce((result, expense) => result + expense.price, baseValue)
 );
 
 const addItemEpic = (action$, store) =>
@@ -158,37 +178,50 @@ const addItemEpic = (action$, store) =>
       return addItem({
         ...action.payload,
         budget: budgetSelector(state),
-        budgetValue: calculateBudgetValue(state, action.payload),
+        budgetValue: calculateBudgetValue(state, action.payload, action.payload.row.price),
       });
     })
 ;
+
 const saveItemEpic = (action$, store) =>
   action$
     .ofType(Actions.SAVE_ITEM)
     .concatMap(action => {
       const state = store.getState();
-      return saveItem({
-        ...action.payload,
-        budget: budgetSelector(state),
-        budgetValue: calculateBudgetValue(state, action.payload),
-      });
+
+      if (action.payload.row.saved) {
+        return saveItem({
+          ...action.payload,
+          budget: budgetSelector(state),
+          budgetValue: calculateBudgetValue(state, action.payload, action.payload.row.price),
+        });
+      } else {
+        return addItem({
+          ...action.payload,
+          budget: budgetSelector(state),
+          budgetValue: calculateBudgetValue(state, action.payload, action.payload.row.price),
+        });
+      }
     })
 ;
+
 const removeItemEpic = (action$, store) =>
   action$
     .ofType(Actions.REMOVE_ITEM)
-    .do(action => {
+    .concatMap(action => {
       const state = store.getState();
-      // TODO: Add support for errors
-      deleteValueAction({
-        ...action.payload,
-        budget: budgetSelector(state),
-        budgetValue: calculateBudgetValue(state, action.payload),
-      });
-        // budgetSelector(state), action.payload.year, action.payload.month, action.payload.row);
+
+      return Observable
+        .from(deleteValueAction({
+          ...action.payload,
+          budget: budgetSelector(state),
+          budgetValue: calculateBudgetValue(state, action.payload, 0.0),
+        }))
+        .catch(error => Observable.of(removeItemFailed(year(state), month(state), action.payload.row, error.message)))
+      ;
     })
-    .ignoreElements()
 ;
+
 const loadExpensesEpic = (action$, store) =>
   action$
     .ofType(ROUTE_EXPENSES_MONTH)

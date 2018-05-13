@@ -21,8 +21,7 @@ export default class extends Component {
   };
   static defaultProps = {
     debounceTime: 1000,
-    onInputMount: (_type, _input) => {
-    },
+    onInputMount: (_type, _input) => {},
     onRemoveItem: null,
   };
 
@@ -50,13 +49,13 @@ export default class extends Component {
   };
 
   renderActions = () => {
-    const { saving, errors } = this.props.row;
+    const { saved, saving, errors } = this.props.row;
 
     if (saving) {
       return <Loader active inline="centered" />;
     }
 
-    if (Object.keys(errors).length > 0) {
+    if (!saved && Object.keys(errors).length > 0) {
       return <Button color="green" icon="save" tabIndex="-1" onClick={this.saveItem} />;
     }
 
@@ -98,7 +97,7 @@ export default class extends Component {
             {this.renderActions()}
           </TableCell>
         </TableRow>
-        {errors.base && <ErrorRow error={errors.base} />}
+        {errors.base ? <ErrorRow error={errors.base} /> : null}
       </Fragment>
     );
   }

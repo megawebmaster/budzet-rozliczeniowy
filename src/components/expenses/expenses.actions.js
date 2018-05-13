@@ -5,6 +5,7 @@ export const SORT_EXPENSES = 'ExpensesAction.SORT_EXPENSES';
 export const ADD_ITEM = 'ExpensesAction.ADD_ITEM';
 export const SAVE_ITEM = 'ExpensesAction.SAVE_ITEM';
 export const REMOVE_ITEM = 'ExpensesAction.REMOVE_ITEM';
+export const REMOVE_ITEM_FAIL = 'ExpensesAction.REMOVE_ITEM_FAIL';
 export const SAVING_ROW = 'ExpensesAction.SAVING_ROW';
 export const SAVE_ITEM_SUCCESS = 'ExpensesAction.SAVE_ITEM_SUCCESS';
 export const SAVE_ITEM_FAIL = 'ExpensesAction.SAVE_ITEM_FAIL';
@@ -46,6 +47,24 @@ export const saveItemSuccess = (year, month, response) => ({
       description: response.description,
     },
   }
+});
+export const saveItemFailed = (year, month, row, error) => ({
+  type: SAVE_ITEM_FAIL,
+  payload: {
+    year,
+    month,
+    row,
+  },
+  error
+});
+export const removeItemFailed = (year, month, row, error) => ({
+  type: REMOVE_ITEM_FAIL,
+  payload: {
+    year,
+    month,
+    row,
+  },
+  error
 });
 
 export const addExpensesError = (error) => ({
