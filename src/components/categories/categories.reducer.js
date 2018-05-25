@@ -8,7 +8,8 @@ const initialState = {
   data: []
 };
 
-const add = (state, id, type, name, parentId) => {
+const add = (state, category) => {
+  const { parentId, ...values } = category;
   const parent = parentId ? {id: parentId} : null;
 
   return {
@@ -16,10 +17,6 @@ const add = (state, id, type, name, parentId) => {
     data: [
       ...state.data,
       {
-        id,
-        type,
-        name,
-        parent,
         startedAt: null,
         deletedAt: null,
         averageValues: [],
@@ -27,6 +24,9 @@ const add = (state, id, type, name, parentId) => {
         saved: false,
         saving: true,
         error: '',
+        deleteError: '',
+        parent,
+        ...values,
       }
     ]
   };
@@ -67,6 +67,7 @@ export const CategoriesReducer = (state = initialState, action) => {
         ...action.payload.values,
         saving: true,
         error: '',
+        deleteError: '',
       });
     case Actions.REPLACE_CATEGORY:
       return update(state, action.payload.type, action.payload.original, {
@@ -75,13 +76,15 @@ export const CategoriesReducer = (state = initialState, action) => {
         saved: action.payload.saved.id < 1000000000000
       });
     case Actions.REMOVE_CATEGORY:
-      return remove(state, action.payload.type, action.payload.id);
+      return remove(state, action.payload.type, action.payload.category.id);
+    case Actions.REMOVE_CATEGORY_ERROR:
+      return add(state, { ...action.payload.category, deleteError: action.error });
     case Actions.ADD_CATEGORY:
-      return add(state, action.payload.id, action.payload.type, action.payload.name, action.payload.parentId);
+      return add(state, action.payload);
     case Actions.SET_CATEGORY_ERROR:
       return update(state, action.payload.type, action.payload.category, {
         saving: false,
-        error: action.payload.error
+        error: action.error
       });
     case ADD_BUDGET_ERROR:
     case ADD_IRREGULAR_BUDGET_ERROR:

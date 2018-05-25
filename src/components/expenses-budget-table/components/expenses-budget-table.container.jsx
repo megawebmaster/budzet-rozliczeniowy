@@ -23,7 +23,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, { category }) => ({
   addSubcategory: (name) => dispatch(addCategory('expense', name, category.id)),
-  onRemove: () => dispatch(removeCategory('expense', category.id)),
+  onRemove: () => dispatch(removeCategory('expense', category)),
   onEdit: (name) => dispatch(updateCategory('expense', category, { name })),
 });
 

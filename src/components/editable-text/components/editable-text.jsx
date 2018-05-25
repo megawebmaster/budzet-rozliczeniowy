@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, ButtonGroup, Loader } from 'semantic-ui-react';
+import { Button, ButtonGroup, Icon, Label, Loader } from 'semantic-ui-react';
 
 import './editable-text.css';
 import { EditField } from './edit-field';
@@ -11,6 +11,7 @@ class EditableText extends PureComponent {
 
   static propTypes = {
     deletable: PropTypes.bool,
+    deleteError: PropTypes.string,
     editable: PropTypes.bool,
     error: PropTypes.string,
     intl: PropTypes.object.isRequired,
@@ -24,6 +25,7 @@ class EditableText extends PureComponent {
 
   static defaultProps = {
     deletable: false,
+    deleteError: '',
     editable: false,
     error: '',
     saving: false,
@@ -64,15 +66,18 @@ class EditableText extends PureComponent {
   };
 
   renderText = () => {
-    const { text, deletable, editable, saving, onDelete } = this.props;
+    const { text, deleteError, deletable, editable, saving, onDelete } = this.props;
 
     return (
       <Fragment>
-        {!saving && <ButtonGroup floated="right">
+        {!saving && <ButtonGroup>
           {editable && <Button icon="pencil" color="teal" size="mini" onClick={this.showInput} />}
           {deletable && <Button icon="trash" color="red" size="mini" onClick={onDelete} />}
         </ButtonGroup>}
-        <Loader active={saving} inline />
+        <Loader active={saving} size="small" inline />
+        {deleteError && <Label color="red" className="error-label">
+          <Icon name="exclamation triangle" /> {deleteError}
+        </Label>}
         <span>{text}</span>
       </Fragment>
     );

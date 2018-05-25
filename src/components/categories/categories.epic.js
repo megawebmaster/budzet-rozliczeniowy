@@ -1,14 +1,13 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/ignoreElements';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import {
   ADD_CATEGORY,
   loadCategories,
   REMOVE_CATEGORY,
+  removeCategoryError,
   replaceCategory,
   setCategoryError,
   UPDATE_CATEGORY,
@@ -56,6 +55,7 @@ const fetchCategories = async (budgetSlug) => {
     ...category,
     name: await Encryptor.decrypt(category.name),
     averageValue: await calculateAverageValue(category.averageValues),
+    deleteError: '',
     error: '',
     saving: false,
     saved: true,
@@ -125,7 +125,7 @@ const updateCategoryAction = async (type, budget, id, values) => {
     throw new Error(Object.values(result).join('\n'));
   }
 
-  return { ...result, name: values.name, error: '' };
+  return { ...result, name: values.name, error: '', deleteError: '' };
 };
 
 /**
@@ -149,10 +149,13 @@ const deleteCategoryAction = async (type, budget, id, year, month) => {
     }),
   });
 
+  const result = await response.json();
+
   if (!response.ok) {
-    const result = await response.json();
     throw new Error(result.error);
   }
+
+  return result;
 };
 
 // TODO: Figure out how to throttle requests until budget changes
@@ -184,32 +187,21 @@ const addCategoryEpic = (action$, store) =>
     .ofType(ADD_CATEGORY)
     .mergeMap(action => {
       const state = store.getState();
-      const category = findCategory(state, action.payload.id, action.payload.name, action.payload.type, action.payload.parentId);
+      const { id, name, type, parentId } = action.payload;
+      const category = findCategory(state, id, name, type, parentId);
       let promise;
       if (category) {
-        promise = updateCategoryAction(
-          action.payload.type,
-          budget(state),
-          category.id,
-          {
-            name: action.payload.name,
-            year: year(state),
-            month: month(state),
-          }
-        );
+        promise = updateCategoryAction(type, budget(state), category.id, {
+          name: name,
+          year: year(state),
+          month: month(state),
+        });
       } else {
-        promise = saveCategoryAction(
-          action.payload.type,
-          action.payload.name,
-          budget(state),
-          year(state),
-          month(state),
-          action.payload.parentId
-        );
+        promise = saveCategoryAction(type, name, budget(state), year(state), month(state), parentId);
       }
 
       return Observable.from(promise)
-        .map(category => replaceCategory(action.payload.type, action.payload, category))
+        .map(savedCategory => replaceCategory(type, action.payload, savedCategory))
         .catch(error => Observable.of(setCategoryError(action.payload, error.message)));
     })
 ;
@@ -219,50 +211,38 @@ const updateCategoryEpic = (action$, store) =>
     .ofType(UPDATE_CATEGORY)
     .mergeMap(action => {
       const state = store.getState();
-      const category = findCategory(state, action.payload.id, action.payload.name, action.payload.type, action.payload.parentId);
+      const { id, name, type, parentId, category, values } = action.payload;
+      const existingCategory = findCategory(state, id, name, type, parentId);
+
       let promise;
-      if (category || action.payload.category.saved) {
-        promise = updateCategoryAction(
-          action.payload.type,
-          budget(state),
-          action.payload.category.id,
-          {
-            ...action.payload.values,
-            year: year(state),
-            month: month(state)
-          }
-        );
+      if (existingCategory || category.saved) {
+        promise = updateCategoryAction(type, budget(state), category.id, {
+          ...values,
+          year: year(state),
+          month: month(state)
+        });
       } else {
-        promise = saveCategoryAction(
-          action.payload.type,
-          action.payload.values.name,
-          budget(state),
-          year(state),
-          month(state),
-          (action.payload.category.parent || {id: null}).id
-        );
+        const parent = (category.parent || { id: null }).id;
+        promise = saveCategoryAction(type, values.name, budget(state), year(state), month(state), parent);
       }
 
       return Observable.from(promise)
-        .map(category => replaceCategory(action.payload.type, action.payload.category, category))
-        .catch(error => Observable.of(setCategoryError(action.payload.category, error.message)));
+        .map(savedCategory => replaceCategory(type, category, savedCategory))
+        .catch(error => Observable.of(setCategoryError(category, error.message)));
     })
 ;
 
 const removeCategoryEpic = (action$, store) =>
   action$
     .ofType(REMOVE_CATEGORY)
-    .do(action => {
+    .mergeMap(action => {
       const state = store.getState();
-      deleteCategoryAction(
-        action.payload.type,
-        budget(state),
-        action.payload.id,
-        year(state),
-        month(state)
-      );
+      const { type, category } = action.payload;
+
+      return Observable
+        .from(deleteCategoryAction(type, budget(state), category.id, year(state), month(state)))
+        .catch(error => Observable.of(removeCategoryError(category, error.message)));
     })
-    .ignoreElements()
 ;
 
 export const categoriesEpic = combineEpics(

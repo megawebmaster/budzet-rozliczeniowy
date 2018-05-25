@@ -4,6 +4,7 @@ export const SET_CATEGORY_ERROR = 'CategoriesAction.SET_CATEGORY_ERROR';
 export const UPDATE_CATEGORY = 'CategoriesAction.UPDATE_CATEGORY';
 export const REPLACE_CATEGORY = 'CategoriesAction.REPLACE_CATEGORY';
 export const REMOVE_CATEGORY = 'CategoriesAction.REMOVE_CATEGORY';
+export const REMOVE_CATEGORY_ERROR = 'CategoriesAction.REMOVE_CATEGORY_ERROR';
 
 export const loadCategories = (categories) => ({
   type: LOAD_CATEGORIES,
@@ -17,9 +18,9 @@ export const replaceCategory = (type, original, saved) => ({
   type: REPLACE_CATEGORY,
   payload: { type, original, saved }
 });
-export const removeCategory = (type, id) => ({
+export const removeCategory = (type, category) => ({
   type: REMOVE_CATEGORY,
-  payload: { type, id }
+  payload: { type, category }
 });
 export const addCategory = (type, name, parentId = null) => ({
   type: ADD_CATEGORY,
@@ -27,5 +28,11 @@ export const addCategory = (type, name, parentId = null) => ({
 });
 export const setCategoryError = (category, error) => ({
   type: SET_CATEGORY_ERROR,
-  payload: { category, error }
+  payload: { category },
+  error
+});
+export const removeCategoryError = (category, error) => ({
+  type: REMOVE_CATEGORY_ERROR,
+  payload: { category },
+  error
 });

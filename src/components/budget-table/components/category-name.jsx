@@ -21,8 +21,9 @@ class CategoryName extends Component {
     const { category, deletable, editable, onRemove, onEdit, onCancel } = this.props;
 
     return (
-      <EditableText text={category.name} error={category.error} deletable={deletable} saving={category.saving}
-                    editable={editable} onUpdate={onEdit} onDelete={onRemove} onCancel={onCancel} />
+      <EditableText text={category.name} error={category.error} deletable={deletable} deleteError={category.deleteError}
+                    saving={category.saving} editable={editable} onUpdate={onEdit} onDelete={onRemove}
+                    onCancel={onCancel} />
     );
   }
 }

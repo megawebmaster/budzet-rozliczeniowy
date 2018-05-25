@@ -1,8 +1,17 @@
+.editable-text {
+	position: relative;
+}
 .editable-text span {
 	display: inline-block;
 }
-.editable-text .ui.loader {
+.editable-text .ui.inline.loader {
 	float: right;
+	margin-top: 2px;
+}
+.editable-text .ui.buttons {
+	position: absolute;
+	right: 0;
+	z-index: 2;
 }
 .editable-text button.ui.button {
   opacity: 0;
@@ -12,6 +21,17 @@
 .editable-text:hover button.ui.button {
 	opacity: 1;
 	transition: 250ms ease;
+}
+.editable-text .label.error-label {
+	position: absolute;
+	right: 0;
+	top: 1px;
+	transition: right 250ms ease 50ms;
+	z-index: 1;
+}
+.editable-text:hover .label.error-label {
+	right: 65px;
+	transition: right 150ms linear;
 }
 .editable-text .input input {
 	padding-top: .632em;
