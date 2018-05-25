@@ -49,7 +49,7 @@ export const validate = (value, { editing }) => {
 
   const valueToParse = value.toString();
   try {
-    const formula = valueToParse.replace(/,/g, '.');
+    const formula = valueToParse.replace(/,/g, '.').replace(/ /g, '');
 
     return parser.parse(formula).evaluate();
   } catch(e) {
