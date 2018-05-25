@@ -52,7 +52,7 @@ class EditableText extends PureComponent {
   updateValue = (value) => this.setState({ value });
   showInput = () => this.setState({ editing: true });
   hideInput = () => {
-    this.setState({ value: this.props.originalValue, editing: this.props.error.length > 0 });
+    this.setState({ value: this.state.originalValue, editing: this.props.error.length > 0 });
     this.props.onCancel(this.state.originalValue);
   };
 
@@ -83,7 +83,7 @@ class EditableText extends PureComponent {
     const { value } = this.state;
 
     return <EditField placeholder={label} size={size} value={value} error={error} onChange={this.updateValue}
-                      onSave={this.saveInput} onCancel={this.hideInput} />;
+                      onSave={this.saveInput} onCancel={this.hideInput} inputRef={ref => this.field = ref} />;
   };
 
   componentDidMount() {
@@ -97,14 +97,13 @@ class EditableText extends PureComponent {
     }
   }
 
-  // TODO: What was this focusing field for?
-  // componentDidUpdate() {
-  //   if (this.state.editing) {
-  //     this.field.focus();
-  //   } else {
-  //     this.field = null;
-  //   }
-  // }
+  componentDidUpdate() {
+    if (this.state.editing) {
+      this.field.focus();
+    } else {
+      this.field = null;
+    }
+  }
 
   render() {
     const { editing } = this.state;

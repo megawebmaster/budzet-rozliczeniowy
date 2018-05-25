@@ -7,8 +7,10 @@ const mapDispatchToProps = (dispatch, { type, category }) => ({
   onRemove: () => dispatch(removeCategory(type, category.id)),
   onEdit: (name) => dispatch(updateCategory(type, category, { name })),
   onCancel: (originalName) => {
+    if (originalName === category.name) {
+      return;
+    }
     if (category.saved) {
-      console.log('original', originalName);
       dispatch(updateCategory(type, category, { name: originalName }));
     } else {
       dispatch(removeCategory(type, category.id));
