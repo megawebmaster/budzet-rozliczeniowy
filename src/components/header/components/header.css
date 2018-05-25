@@ -1,3 +1,6 @@
 .ui.tabular.menu.main-menu {
 	background-color: #f3f3f3;
 }
+.main-menu .ui.dropdown.active > .text {
+	font-weight: normal;
+}
