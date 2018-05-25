@@ -16,6 +16,10 @@ export class Encryptor {
     localStorage.setItem('encryption-password', password);
   }
 
+  static removePassword() {
+    localStorage.removeItem('encryption-password');
+  }
+
   static hasEncryptionPassword() {
     return this.getPassword() !== null;
   }

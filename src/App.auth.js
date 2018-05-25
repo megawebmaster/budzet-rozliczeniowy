@@ -1,4 +1,5 @@
 import { WebAuth } from 'auth0-js';
+import { Encryptor } from './App.encryption';
 
 const auth = new WebAuth({
   clientID: 'PqsSsHBLYS3MDS2FXthxnouqES3Amiu9',
@@ -57,6 +58,7 @@ export class Authenticator {
     localStorage.removeItem('jwt');
     localStorage.removeItem('expiration');
     localStorage.removeItem('expires_at');
+    Encryptor.removePassword();
     auth.logout({
       clientID: 'PqsSsHBLYS3MDS2FXthxnouqES3Amiu9',
       returnTo: process.env.REACT_APP_URL,
