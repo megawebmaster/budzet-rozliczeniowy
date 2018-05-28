@@ -63,10 +63,19 @@ const fetchIrregularBudget = async (budget, year) => {
     throw new Error(result.error);
   }
 
+  const getRealValue = async (entry) => {
+    /** @var string[] values */
+    const values = await Promise.all(entry.monthlyRealValues.map(async value =>
+      parseFloat(await Encryptor.decrypt(value))
+    ));
+
+    return values.reduce((result, value) => result + value, 0.0);
+  };
+
   return Promise.all(result.map(async entry => ({
     ...entry,
     plan: entry.plan ? parseFloat(await Encryptor.decrypt(entry.plan)) : 0,
-    real: entry.real ? parseFloat(await Encryptor.decrypt(entry.real)) : 0
+    real: entry.monthlyRealValues ? await getRealValue(entry) : 0,
   })));
 };
 

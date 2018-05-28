@@ -31,6 +31,7 @@ const loadIrregularBudget = (state, year, values) => {
       ...baseValue,
       planned: entry.plan,
       real: entry.real,
+      monthlyRealValues: entry.monthlyRealValues,
     }
   });
 
