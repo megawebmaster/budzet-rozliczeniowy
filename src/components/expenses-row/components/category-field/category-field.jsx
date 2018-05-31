@@ -41,7 +41,7 @@ export default class extends Component {
   onChange = (_event, data) => this.props.onChange(data.value);
 
   renderInput = () => <DropdownSearchInput inputRef={this.mountDropdown} onKeyDown={this.hideOnKeyDown} />;
-  hideOnKeyDown = (event) => this.state.open && event.stopPropagation();
+  hideOnKeyDown = (event) => event.stopPropagation();
   mountDropdown = (ref) => {
     this.dropdown = ref;
     this.props.onInputMount({ inputRef: ref });

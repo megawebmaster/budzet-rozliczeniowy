@@ -34,12 +34,13 @@ export const savingItem = (year, month, row) => ({
   type: SAVING_ROW,
   payload: { year, month, row }
 });
-export const saveItemSuccess = (year, month, response) => ({
+export const saveItemSuccess = (year, month, current, response) => ({
   type: SAVE_ITEM_SUCCESS,
   payload: {
     year,
     month,
-    row: {
+    current,
+    saved: {
       id: response.id,
       category: response.category.id,
       price: response.value,

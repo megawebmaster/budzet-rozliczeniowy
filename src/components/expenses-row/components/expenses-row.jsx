@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Loader, TableCell, TableRow } from 'semantic-ui-react';
+import { Button, ButtonGroup, Loader, TableCell, TableRow } from 'semantic-ui-react';
 
 import { PriceInput } from '../../price-input';
 import { CategoryField } from './category-field';
@@ -56,6 +56,13 @@ export default class extends Component {
     }
 
     if (!saved && Object.keys(errors).length > 0) {
+      if (this.props.onRemoveItem) {
+        return <ButtonGroup>
+          <Button color="green" icon="save" tabIndex="-1" onClick={this.saveItem} />
+          <Button color="red" icon="trash" tabIndex="-1" onClick={this.removeItem} />
+        </ButtonGroup>;
+      }
+
       return <Button color="green" icon="save" tabIndex="-1" onClick={this.saveItem} />;
     }
 

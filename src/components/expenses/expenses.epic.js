@@ -152,7 +152,7 @@ const addItem = (data) => {
 
   return Observable
     .from(addValueAction(budget, year, month, row, budgetValue))
-    .map(result => saveItemSuccess(year, month, result))
+    .map(result => saveItemSuccess(year, month, row, result))
     .catch(error => Observable.of(saveItemFailed(year, month, row, error.errors)));
 };
 const saveItem = (data) => {
@@ -160,7 +160,7 @@ const saveItem = (data) => {
 
   return Observable
     .from(saveValueAction(budget, year, month, row, budgetValue))
-    .map(result => saveItemSuccess(year, month, result))
+    .map(result => saveItemSuccess(year, month, row, result))
     .catch(error => Observable.of(saveItemFailed(year, month, row, error.errors)))
     .startWith(savingItem(year, month, row));
 };
@@ -218,6 +218,7 @@ const removeItemEpic = (action$, store) =>
           budgetValue: calculateBudgetValue(state, action.payload, 0.0),
         }))
         .catch(error => Observable.of(removeItemFailed(year(state), month(state), action.payload.row, error.message)))
+        .ignoreElements()
       ;
     })
 ;

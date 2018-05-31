@@ -47,14 +47,11 @@ export const validate = (value, { editing }) => {
     throw new Error();
   }
 
-  const valueToParse = value.toString();
   try {
-    const formula = valueToParse.replace(/,/g, '.').replace(/ /g, '');
+    const formula = value.toString().replace(/,/g, '.').replace(/ /g, '');
 
     return parser.parse(formula).evaluate();
   } catch(e) {
-    if (valueToParse.length > 0) {
-      throw new Error('validation.price.invalid');
-    }
+    throw new Error('validation.price.invalid');
   }
 };

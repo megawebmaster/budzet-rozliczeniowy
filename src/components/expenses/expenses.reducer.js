@@ -13,7 +13,9 @@ const loadMonth = (state, year, month, values) => {
     category: expense.category.id,
     price: expense.value,
     day: expense.day,
-    description: expense.description
+    description: expense.description,
+    saved: expense.saved,
+    errors: expense.errors,
   }));
 
   return { ...state, loading: false, [year]: { ...selectedYear, [month]: result } };
@@ -35,11 +37,11 @@ const addItem = (state, year, month, value) => {
   return { ...state, [year]: { ...selectedYear, [month]: selectedMonth } };
 };
 
-const saveItem = (state, year, month, value) => {
+const saveItem = (state, year, month, current, values) => {
   const selectedYear = state[year] || {};
   const selectedMonth = selectedYear[month].slice() || [];
-  const idx = selectedMonth.findIndex(item => item.id === value.id);
-  selectedMonth.splice(idx, 1, { ...selectedMonth[idx], ...value });
+  const idx = selectedMonth.findIndex(item => item.id === current.id);
+  selectedMonth.splice(idx, 1, { ...selectedMonth[idx], ...values });
 
   return { ...state, [year]: { ...selectedYear, [month]: selectedMonth } };
 };
@@ -64,16 +66,18 @@ export const ExpensesReducer = (state = initialState, action) => {
         saving: true
       });
     case Actions.SAVING_ROW:
-      return saveItem(state, action.payload.year, action.payload.month, { ...action.payload.row, saving: true });
+      return saveItem(state, action.payload.year, action.payload.month, action.payload.row, {
+        saving: true
+      });
     case Actions.SAVE_ITEM_SUCCESS:
-      return saveItem(state, action.payload.year, action.payload.month, {
-        ...action.payload.row,
+      return saveItem(state, action.payload.year, action.payload.month, action.payload.current, {
+        ...action.payload.saved,
+        errors: {},
         saved: true,
         saving: false
       });
     case Actions.SAVE_ITEM_FAIL:
-      return saveItem(state, action.payload.year, action.payload.month, {
-        id: action.payload.row.id,
+      return saveItem(state, action.payload.year, action.payload.month, action.payload.row, {
         errors: action.error,
         saving: false
       });

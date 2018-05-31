@@ -25,13 +25,3 @@ export const categoryIrregularBudget = createCachedSelector(
 )(
   (state, props) => `category-irregular-budget-${props.categoryId}`,
 );
-
-export const categoryIrregularBudgetRealValue = createCachedSelector(
-  categoryIrregularBudget,
-  (values) => {
-    console.log('monthly values?', values);
-    return values.monthlyRealValues.reduce((result, value) => result + value, 0.0)
-  }
-)(
-  (state, props) => `category-irregular-budget-real-value-${props.categoryId}`,
-);

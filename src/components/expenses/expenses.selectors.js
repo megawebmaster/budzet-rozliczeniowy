@@ -7,7 +7,7 @@ export const isLoading = (state) => state.expenses.loading || state.categories.l
 
 export const yearExpenses = createSelector(
   [expenses, year],
-  (expenses, year) => expenses[year] || []
+  (expenses, year) => expenses[year] || {}
 );
 
 export const monthExpenses = createSelector(
