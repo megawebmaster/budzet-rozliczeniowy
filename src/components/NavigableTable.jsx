@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import jump from 'jump.js';
 
+const HEADER_ROW = 'navigable-header-row';
 const FOOTER_ROW = 'navigable-footer-row';
 const ENTER = 13;
 const ARROW_UP = 38;
 const ARROW_DOWN = 40;
-// const ARROW_LEFT = 37;
-// const ARROW_RIGHT = 39;
 
 const duration = distance => {
   if (distance < 60) {
@@ -23,8 +22,12 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
       index: -1,
       type: null,
     },
+    hasHeader: false,
     hasFooter: false,
   };
+  inputs = {};
+  header = {};
+  footer = {};
 
   setItems = (props) => {
     this.setState({ items: getItems(props) });
@@ -39,6 +42,15 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
       this.inputs[type] = {};
     }
     this.inputs[type][item] = input.inputRef;
+  };
+  headerMount = (type, _item, input) => {
+    if (input === null || input.inputRef === null) {
+      return;
+    }
+    input.inputRef.dataset.item = HEADER_ROW;
+    input.inputRef.dataset.type = type;
+    this.header[type] = input.inputRef;
+    this.setState({ hasHeader: true });
   };
   footerMount = (type, _item, input) => {
     if (input === null || input.inputRef === null) {
@@ -60,15 +72,25 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
     }
   };
   moveFocus = (delta) => {
-    const { current, items, hasFooter } = this.state;
+    const { current, items, hasHeader, hasFooter } = this.state;
     const rows = Object.keys(this.inputs[current.type]).length;
     let elem, input;
     let next = current.index + delta;
 
-    if (next < 0) {
-      return;
-    }
-    if (next < rows) {
+    if (hasHeader && current.index === HEADER_ROW) {
+      if (delta === -1) {
+        return;
+      }
+      next = 0;
+      input = elem = this.inputs[current.type][items[next]];
+    } else if (next < 0) {
+      if (hasHeader) {
+        next = HEADER_ROW;
+        input = elem = this.header[current.type];
+      } else {
+        return;
+      }
+    } else if (next < rows) {
       input = elem = this.inputs[current.type][items[next]];
     } else if (hasFooter && next >= rows) {
       input = elem = this.footer[current.type];
@@ -122,6 +144,10 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
     const data = e.target.dataset;
 
     if (data.item) {
+      if (current.index === HEADER_ROW || data.item === HEADER_ROW) {
+        this.setState({ current: { index: HEADER_ROW, type: data.type }});
+        return;
+      }
       if (current.index === FOOTER_ROW || data.item === FOOTER_ROW) {
         this.setState({ current: { index: FOOTER_ROW, type: data.type }});
         return;
@@ -136,15 +162,13 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
     this.setItems(nextProps);
   }
 
-  componentWillMount() {
-    this.inputs = {};
-    this.footer = {};
+  componentDidMount() {
     this.setItems(this.props);
   }
 
   render() {
     return <WrappedTable {...this.props} onInputMount={this.inputMount} onFooterMount={this.footerMount}
-                         onKeyDown={this.onKeyDown} onFocus={this.onFocus} />;
+                         onHeaderMount={this.headerMount} onKeyDown={this.onKeyDown} onFocus={this.onFocus} />;
   }
 };
 
