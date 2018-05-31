@@ -32,9 +32,8 @@ const sortItems = (state, year, month, field) => {
 const addItem = (state, year, month, value) => {
   const selectedYear = state[year] || {};
   const selectedMonth = selectedYear[month].slice() || [];
-  selectedMonth.push(value);
 
-  return { ...state, [year]: { ...selectedYear, [month]: selectedMonth } };
+  return { ...state, [year]: { ...selectedYear, [month]: [value, ...selectedMonth] } };
 };
 
 const saveItem = (state, year, month, current, values) => {

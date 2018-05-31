@@ -28,8 +28,6 @@ export default class extends Component {
     this.props.onAddItem(this.state);
     this.reset();
     this.categoryField.focus();
-    // TODO: Use jump.js
-    setTimeout(() => window.scrollBy({ top: document.body.offsetHeight, left: 0, behavior: 'smooth' }));
   };
 
   mountInput = (type, item, input) => {
@@ -44,7 +42,7 @@ export default class extends Component {
   render() {
     return (
       <div className="expenses-new-row">
-        <Table singleLine compact basic="very" sortable attached="bottom">
+        <Table singleLine compact basic="very" sortable attached>
           <TableBody>
             <ExpensesRow row={this.state} onInputMount={this.mountInput} onSaveItem={this.addItem} debounceTime={0}
                          onUpdateField={this.updateField} />

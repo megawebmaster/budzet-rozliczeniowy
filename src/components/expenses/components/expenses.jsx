@@ -27,7 +27,7 @@ class Expenses extends Component {
   sortDay = () => this.props.sortRows('day');
 
   render() {
-    const { rows, onInputMount, onFooterMount, onKeyDown, onFocus } = this.props;
+    const { rows, onInputMount, onHeaderMount, onKeyDown, onFocus } = this.props;
 
     return (
       <div onKeyDown={onKeyDown} onFocus={onFocus}>
@@ -56,12 +56,12 @@ class Expenses extends Component {
             </TableHeader>
           </Table>
         </div>
-        <Table singleLine striped compact className="expenses-table" attached>
+        <ExpensesNewRow onInputMount={onHeaderMount} />
+        {rows.length > 0 && <Table singleLine striped compact className="expenses-table" attached="bottom">
           <TableBody>
             {rows.map(row => <ExpensesSavedRow key={`expenses-row-${row.id}`} row={row} onInputMount={onInputMount} />)}
           </TableBody>
-        </Table>
-        <ExpensesNewRow onInputMount={onFooterMount} />
+        </Table>}
       </div>
     );
   }
@@ -69,7 +69,7 @@ class Expenses extends Component {
 
 const NavigableExpenses = NavigableTable(Expenses, {
   getItems: ({ rows }) => rows.map(row => row.id),
-  topMargin: 60,
-  bottomMargin: 60
+  topMargin: 120,
+  bottomMargin: 0
 });
 export default injectIntl(NavigableExpenses);
