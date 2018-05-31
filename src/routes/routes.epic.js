@@ -10,6 +10,9 @@ import { Authenticator } from '../App.auth';
 
 const halfHour = 30*60*1000;
 
+/**
+ * @returns {Promise<Response>}
+ */
 export const fetchBudgets = () => (
   fetch(`${process.env.REACT_APP_API_URL}/budgets`, {
     headers: new Headers({

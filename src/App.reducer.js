@@ -9,6 +9,7 @@ import { CategoriesReducer } from './components/categories';
 import { BudgetReducer } from './components/budget';
 import { IrregularBudgetReducer } from './components/irregular-budget';
 import { ExpensesReducer } from './components/expenses';
+import { LoginReducer } from './components/login';
 
 const history = createHistory();
 const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = connectRoutes(history, routesMap);
@@ -21,4 +22,5 @@ export const appReducer = combineReducers({
   irregular_budget: IrregularBudgetReducer,
   expenses: ExpensesReducer,
   configuration: ConfigurationReducer,
+  login: LoginReducer,
 });
