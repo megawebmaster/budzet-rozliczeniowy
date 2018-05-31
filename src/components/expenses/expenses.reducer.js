@@ -66,12 +66,13 @@ export const ExpensesReducer = (state = initialState, action) => {
       });
     case Actions.SAVING_ROW:
       return saveItem(state, action.payload.year, action.payload.month, action.payload.row, {
+        ...action.payload.row,
+        errors: {},
         saving: true
       });
     case Actions.SAVE_ITEM_SUCCESS:
       return saveItem(state, action.payload.year, action.payload.month, action.payload.current, {
-        ...action.payload.saved,
-        errors: {},
+        id: action.payload.saved.id,
         saved: true,
         saving: false
       });

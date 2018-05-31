@@ -74,7 +74,7 @@ export default class extends Component {
   };
 
   render() {
-    const { categories, debounceTime, row: { category, day, price, description, errors } } = this.props;
+    const { categories, debounceTime, row } = this.props;
 
     if (categories.length === 0) {
       return null;
@@ -82,21 +82,22 @@ export default class extends Component {
 
     return (
       <Fragment>
-        <TableRow className="expenses-row" warning={Object.keys(errors).length > 0} onKeyDown={this.onKeyDown}>
+        <TableRow className="expenses-row" warning={Object.keys(row.errors).length > 0} onKeyDown={this.onKeyDown}>
           <TableCell width={4}>
-            <CategoryField categories={categories} value={category} error={errors.category} debounceTime={debounceTime}
-                           onChange={this.updateCategory} onInputMount={this.mountCategory} />
+            <CategoryField categories={categories} value={row.category} row={row} error={row.errors.category}
+                           debounceTime={debounceTime} onChange={this.updateCategory} onInputMount={this.mountCategory} />
           </TableCell>
           <TableCell width={3}>
-            <PriceInput value={price} placeholder={this.translate('expenses-row.price', 'Cena')} error={errors.price}
-                        debounceTime={debounceTime} onChange={this.updatePrice} onMount={this.mountPrice} />
+            <PriceInput value={row.price} placeholder={this.translate('expenses-row.price', 'Cena')} row={row}
+                        error={row.errors.price} debounceTime={debounceTime} onChange={this.updatePrice}
+                        onMount={this.mountPrice} />
           </TableCell>
           <TableCell width={1}>
-            <DayField value={day} error={errors.day} debounceTime={debounceTime} onInputMount={this.mountDay}
-                      onChange={this.updateDay} />
+            <DayField value={row.day} row={row} error={row.errors.day} debounceTime={debounceTime}
+                      onChange={this.updateDay} onInputMount={this.mountDay} />
           </TableCell>
           <TableCell width={7}>
-            <DescriptionField value={description} error={errors.description} errorPosition="left"
+            <DescriptionField value={row.description} row={row} error={row.errors.description} errorPosition="left"
                               debounceTime={debounceTime} onChange={this.updateDescription}
                               onInputMount={this.mountDescription} />
           </TableCell>
@@ -104,7 +105,7 @@ export default class extends Component {
             {this.renderActions()}
           </TableCell>
         </TableRow>
-        {errors.base ? <ErrorRow error={errors.base} /> : null}
+        {row.errors.base ? <ErrorRow error={row.errors.base} /> : null}
       </Fragment>
     );
   }
