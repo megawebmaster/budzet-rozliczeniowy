@@ -11,6 +11,11 @@ export const setEncryptionPassword = () => ({
   error: '',
 });
 
+export const setEncryptionPasswordError = (error) => ({
+  type: SET_ENCRYPTION_PASSWORD,
+  error
+});
+
 export const magicMessageSent = () => ({
   type: MAGIC_MESSAGE_SENT
 });

@@ -5,3 +5,6 @@ div.login-form {
 	height: 100%;
 	background-color: #f7f7f7;
 }
+div.login-form .ui.error.message .content {
+	text-align: left;
+}

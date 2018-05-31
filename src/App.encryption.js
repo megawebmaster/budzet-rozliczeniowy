@@ -1,4 +1,10 @@
 import openpgp, { message, util } from 'openpgp';
+import { Observable } from 'rxjs/Rx';
+import { redirect } from 'redux-first-router';
+import 'rxjs/add/operator/mergeAll';
+
+import { setEncryptionPasswordError } from './components/login';
+import { ROUTE_LOGIN } from './routes';
 
 export const initEncryption = () => {
   openpgp.initWorker({
@@ -10,6 +16,9 @@ export const initEncryption = () => {
   });
   openpgp.config = { aead_protect: true };
 };
+
+function EncryptorError() {}
+EncryptorError.prototype = new Error();
 
 export class Encryptor {
   static setPassword(password) {
@@ -41,13 +50,30 @@ export class Encryptor {
   }
 
   static async decrypt(ciphertext) {
-    const password = this.getPassword();
-    const sourceArray = util.b64_to_Uint8Array(ciphertext);
-    const plaintext = await openpgp.decrypt({
-      message: message.read(sourceArray),
-      passwords: [password],
-    });
+    try {
+      const password = this.getPassword();
+      const sourceArray = util.b64_to_Uint8Array(ciphertext);
+      const plaintext = await openpgp.decrypt({
+        message: message.read(sourceArray),
+        passwords: [password],
+      });
 
-    return plaintext.data;
+      return plaintext.data;
+    } catch(e) {
+      throw new EncryptorError();
+    }
   }
 }
+
+export const handleEncryptionError = (handler) => (error) => {
+  if (error instanceof EncryptorError) {
+    Encryptor.removePassword();
+
+    return Observable.of([
+      redirect({ type: ROUTE_LOGIN }),
+      setEncryptionPasswordError('errors.invalid-encryption-password'),
+    ]).mergeAll();
+  }
+
+  return handler(error);
+};

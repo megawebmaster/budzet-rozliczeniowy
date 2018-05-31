@@ -40,6 +40,7 @@ const messages = {
   'month.11': 'Listopad',
   'month.12': 'Grudzień',
   'error-title': 'Coś poszło nie tak…',
+  'errors.invalid-encryption-password': 'Nieprawidłowe hasło szyfrujące',
   'header.budget': 'Budżet {value}',
   'header.menu.budget': 'Budżet',
   'header.menu.expenses': 'Wydatki',

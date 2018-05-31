@@ -14,7 +14,7 @@ import {
 } from './categories.actions';
 import { budget, month, year } from '../location';
 import { Authenticator } from '../../App.auth';
-import { Encryptor } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes/routes.actions';
 import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import { addBudgetError } from '../budget/budget.actions';
@@ -167,7 +167,7 @@ const fetchCategoriesEpic = (action$) =>
       Observable
         .from(fetchCategories(action.payload.budget))
         .map(loadCategories)
-        .catch(error => {
+        .catch(handleEncryptionError(error => {
           switch(action.type){
             case ROUTE_BUDGET_MONTH:
               return Observable.of(addBudgetError(error.message));
@@ -178,7 +178,7 @@ const fetchCategoriesEpic = (action$) =>
             default:
               return Observable.of();
           }
-        })
+        }))
     ))
 ;
 

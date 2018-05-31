@@ -7,7 +7,7 @@ import * as Actions from './irregular-budget.actions';
 import { addIrregularBudgetError, clearIrregularBudgetErrors, loadIrregularBudget } from './irregular-budget.actions';
 import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import { Authenticator } from '../../App.auth';
-import { Encryptor } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 
 /**
  * @param budget string
@@ -128,7 +128,7 @@ const loadIrregularBudgetEpic = (action$, store) =>
       return Observable
         .from(fetchIrregularBudget(currentBudget, currentYear))
         .map(values => loadIrregularBudget(currentYear, values))
-        .catch(error => Observable.of(addIrregularBudgetError(error.message)));
+        .catch(handleEncryptionError(error => Observable.of(addIrregularBudgetError(error.message))));
     })
 ;
 

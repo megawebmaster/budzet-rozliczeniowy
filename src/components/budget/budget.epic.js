@@ -6,7 +6,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
 
 import { Authenticator } from '../../App.auth';
-import { Encryptor } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import * as Actions from './budget.actions';
 import { addBudgetError, clearBudgetErrors, loadBudget } from './budget.actions';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes';
@@ -127,7 +127,7 @@ const loadBudgetEpic = (action$, store) =>
       return Observable
         .from(fetchBudget(budget, currentYear, currentMonth))
         .map(entries => loadBudget(currentYear, currentMonth, entries))
-        .catch(error => Observable.of(addBudgetError(error.message)));
+        .catch(handleEncryptionError(error => Observable.of(addBudgetError(error.message))));
     })
 ;
 

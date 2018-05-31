@@ -10,7 +10,7 @@ import { budget as budgetSelector, month, year } from '../location';
 import { ROUTE_EXPENSES_MONTH } from '../../routes';
 import * as Actions from './expenses.actions';
 import { addExpensesError, clearExpensesErrors, loadExpenses, saveItemSuccess, savingItem } from './expenses.actions';
-import { Encryptor } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import { monthExpenses } from './expenses.selectors';
 import { saveItemFailed } from './expenses.actions';
 import { removeItemFailed } from './expenses.actions';
@@ -235,7 +235,7 @@ const loadExpensesEpic = (action$, store) =>
       return Observable
         .from(fetchExpenses(currentBudget, currentYear, currentMonth))
         .map(values => loadExpenses(currentYear, currentMonth, values))
-        .catch(error => Observable.of(addExpensesError(error.message)));
+        .catch(handleEncryptionError(error => Observable.of(addExpensesError(error.message))));
     })
 ;
 
