@@ -24,7 +24,15 @@ export default class extends Component {
 
   removeItem = () => this.props.onRemoveItem(this.state);
   saveItem = () => this.props.onSaveItem(this.state);
-  updateField = (field, value) => value !== undefined && this.setState({ [field]: value }, this.saveItem);
+  updateField = (field, value) => value !== undefined && this.setState({
+    [field]: value,
+    errors: Object.keys(this.state.errors)
+      .filter(key => key !== field)
+      .reduce((errors, key) => {
+        errors[key] = this.state.errors[key];
+        return errors;
+      }, {})
+  }, this.saveItem);
 
   componentDidMount() {
     this.setState(this.props.row);

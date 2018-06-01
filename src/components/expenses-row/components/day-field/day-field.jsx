@@ -18,15 +18,16 @@ export default class extends Component {
   };
   static defaultProps = {
     onInputMount: (_type, _input) => {},
-    onKeyDown: (_event, _data) => {},
+    onKeyDown: (_event) => {},
   };
 
   onChange = (_event, data) => this.props.onChange(data.value, { year: this.props.year, month: this.props.month });
+  onKeyDown = (event) => this.props.onKeyDown(event, { year: this.props.year, month: this.props.month });
 
   render() {
-    const { error, value, onBlur, onFocus, onInputMount, onKeyDown } = this.props;
+    const { error, value, onBlur, onFocus, onInputMount } = this.props;
 
     return <Input fluid className="input-day" value={value} onChange={this.onChange} error={error} onFocus={onFocus}
-                  onBlur={onBlur} onKeyDown={onKeyDown} ref={onInputMount} />;
+                  onBlur={onBlur} onKeyDown={this.onKeyDown} ref={onInputMount} />;
   }
 }

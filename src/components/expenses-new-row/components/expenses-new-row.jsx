@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Table, TableBody } from 'semantic-ui-react';
 import { ExpensesRow } from '../../expenses-row';
+import { validate as expenseValidator } from '../../../validators/expense.validator';
 import './expenses-new-row.css';
 
 const newRowState = {
@@ -25,8 +26,15 @@ export default class extends Component {
   state = { ...newRowState, id: Date.now() };
 
   addItem = () => {
+    const errors = expenseValidator(this.state);
+
+    if (Object.keys(errors).length > 0) {
+      this.setState({ errors });
+      return;
+    }
+
     this.props.onAddItem(this.state);
-    this.reset();
+    this.setState({ ...newRowState, id: Date.now() });
     this.categoryField.focus();
   };
 
@@ -36,8 +44,16 @@ export default class extends Component {
     }
     this.props.onInputMount(type, item, input);
   };
-  updateField = (field, value) => value !== undefined && this.setState({ [field]: value });
-  reset = () => this.setState({ ...newRowState, id: Date.now() });
+
+  updateField = (field, value) => value !== undefined && this.setState({
+    [field]: value,
+    errors: Object.keys(this.state.errors)
+      .filter(key => key !== field)
+      .reduce((errors, key) => {
+        errors[key] = this.state.errors[key];
+        return errors;
+      }, {})
+  });
 
   render() {
     return (

@@ -1,6 +1,6 @@
 export const validate = (value, { year, month }) => {
   if (value.length === 0) {
-    throw new Error('validation.required');
+    return value;
   }
 
   const day = parseInt(value, 10);

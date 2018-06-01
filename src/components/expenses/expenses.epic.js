@@ -1,6 +1,7 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/concatMap';
+import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/ignoreElements';
 import 'rxjs/add/operator/startWith';
@@ -8,6 +9,7 @@ import 'rxjs/add/operator/startWith';
 import { Authenticator } from '../../App.auth';
 import { budget as budgetSelector, month, year } from '../location';
 import { ROUTE_EXPENSES_MONTH } from '../../routes';
+import { validate as expenseValidator } from '../../validators/expense.validator';
 import * as Actions from './expenses.actions';
 import { addExpensesError, clearExpensesErrors, loadExpenses, saveItemSuccess, savingItem } from './expenses.actions';
 import { Encryptor, handleEncryptionError } from '../../App.encryption';
@@ -30,6 +32,12 @@ class SubmitExpenseError extends Error {
  * @returns {Promise<{value: *, description: *}>}
  */
 async function submitValue(url, type, value, budgetValue) {
+  const errors = expenseValidator(value);
+
+  if (Object.keys(errors).length > 0) {
+    throw new SubmitExpenseError(errors);
+  }
+
   const encryptedPrice = await Encryptor.encrypt(value.price.toString());
   const encryptedDescription = await Encryptor.encrypt(value.description);
   const encryptedBudgetValue = await Encryptor.encrypt(budgetValue.toString());
@@ -173,6 +181,7 @@ const calculateBudgetValue = (state, { row }, baseValue) => (
 const addItemEpic = (action$, store) =>
   action$
     .ofType(Actions.ADD_ITEM)
+    .debounceTime(500)
     .concatMap(action => {
       const state = store.getState();
       return addItem({
@@ -186,6 +195,7 @@ const addItemEpic = (action$, store) =>
 const saveItemEpic = (action$, store) =>
   action$
     .ofType(Actions.SAVE_ITEM)
+    .debounceTime(500)
     .concatMap(action => {
       const state = store.getState();
 

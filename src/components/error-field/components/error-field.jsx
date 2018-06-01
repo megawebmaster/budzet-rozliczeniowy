@@ -11,6 +11,7 @@ const ErrorField = (WrappedComponent, { validator }) => class extends Component 
     intl: PropTypes.object.isRequired,
     onCancel: PropTypes.func,
     onChange: PropTypes.func.isRequired,
+    onKeyDown: PropTypes.func,
     value: PropTypes.any.isRequired,
   };
 
@@ -18,6 +19,7 @@ const ErrorField = (WrappedComponent, { validator }) => class extends Component 
     error: '',
     errorPosition: 'right',
     onCancel: () => {},
+    onKeyDown: (_event) => {},
   };
 
   state = {
@@ -27,9 +29,27 @@ const ErrorField = (WrappedComponent, { validator }) => class extends Component 
   };
 
   format = (id, params) => this.props.intl.formatMessage({ id }, params);
+  translateError = (id) => !id ? '' : this.props.intl.formatMessage({ id, defaultMessage: id });
+  labelPointing = () => this.props.errorPosition === 'left' ? 'right' : 'left';
   onFocus = () => this.setState({ focused: true });
   onBlur = () => this.setState({ focused: false });
-  labelPointing = () => this.props.errorPosition === 'left' ? 'right' : 'left';
+
+  onKeyDown = (event, options = {}) => {
+    if (event.keyCode === 13) {
+      try {
+        validator(event.target.value, options);
+        this.props.onKeyDown(event);
+      } catch(e) {
+        const error = e.message ? this.format(e.message, { value: event.target.value }) : '';
+        if (error) {
+          event.preventDefault();
+          event.stopPropagation();
+          this.props.onCancel();
+        }
+        this.setState({ error, value: event.target.value });
+      }
+    }
+  };
 
   validate = (value, options = {}) => {
     try {
@@ -42,11 +62,11 @@ const ErrorField = (WrappedComponent, { validator }) => class extends Component 
   };
 
   componentDidMount() {
-    this.setState({ error: this.props.error, value: this.props.value });
+    this.setState({ error: this.translateError(this.props.error), value: this.props.value });
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ error: nextProps.error, value: nextProps.value });
+    this.setState({ error: this.translateError(nextProps.error), value: nextProps.value });
   }
 
   render() {
@@ -56,7 +76,7 @@ const ErrorField = (WrappedComponent, { validator }) => class extends Component 
     return (
       <div className="error-field">
         <WrappedComponent {...props} value={value} error={!!error} onChange={this.validate} onFocus={this.onFocus}
-                          onBlur={this.onBlur} />
+                          onBlur={this.onBlur} onKeyDown={this.onKeyDown} />
         {focused && error && <Label pointing={this.labelPointing()} color="red">{error}</Label>}
       </div>
     );

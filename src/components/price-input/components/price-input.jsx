@@ -19,6 +19,7 @@ export default class extends Component {
     onBlur: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func.isRequired,
+    onKeyDown: PropTypes.func,
     onMount: PropTypes.func,
   };
 
@@ -28,6 +29,7 @@ export default class extends Component {
     isSaving: false,
     placeholder: '',
     value: '',
+    onKeyDown: (_event) => {},
     onMount: (_input) => {},
   };
 
@@ -66,12 +68,14 @@ export default class extends Component {
   };
 
   onKeyDown = (event) => {
+    this.props.onKeyDown(event, { editing: false });
     if (event.keyCode === 13) {
       this.props.onChange(this.props.value, { editing: false });
     }
   };
 
   updateValue = (_e, data) => this.props.onChange(data.value, { editing: this.state.focused });
+  saveRef = (input) => this.input = input;
 
   getLoadingProps = () => {
     if (this.props.isSaving) {
@@ -101,7 +105,7 @@ export default class extends Component {
         <Input placeholder={placeholder} fluid value={this.value()} disabled={disabled} error={error}
                label={{ basic: true, content: currencyLabel }} labelPosition="right" onChange={this.updateValue}
                onFocus={this.focus} onBlur={this.blur} onKeyDown={this.onKeyDown} {...this.getLoadingProps()}
-               ref={(element) => this.input = element} />
+               ref={this.saveRef} />
         {focused && help && !error && <Label pointing="left" color="teal">{help}</Label>}
       </div>
     );

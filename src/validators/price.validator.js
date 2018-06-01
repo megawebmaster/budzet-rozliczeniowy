@@ -46,6 +46,9 @@ export const validate = (value, { editing }) => {
   if (editing) {
     throw new Error();
   }
+  if (value.length === 0) {
+    return value;
+  }
 
   try {
     const formula = value.toString().replace(/,/g, '.').replace(/ /g, '');

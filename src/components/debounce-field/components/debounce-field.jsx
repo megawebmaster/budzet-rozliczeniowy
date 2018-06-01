@@ -22,10 +22,25 @@ const DebounceField = (WrappedComponent) => class extends Component {
   onChange = (value) => {
     this.setState({ value, error: '' });
     this.cancel();
-    this.timeout = setTimeout(() => this.props.onChange(value), this.props.debounceTime);
+    this.timeout = setTimeout(() => {
+      this.props.onChange(value);
+      this.timeout = null;
+    }, this.props.debounceTime);
   };
 
-  cancel = () => this.timeout && clearTimeout(this.timeout);
+  onKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      this.cancel();
+      this.props.onChange(this.state.value);
+    }
+  };
+
+  cancel = () => {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+  };
 
   componentDidMount() {
     this.setState({ value: this.props.value, error: this.props.error });
@@ -38,9 +53,12 @@ const DebounceField = (WrappedComponent) => class extends Component {
 
   render() {
     const { value, error } = this.state;
-    const { onUpdate: _onUpdate, ...props} = this.props;
+    const { onUpdate: _onUpdate, ...props } = this.props;
 
-    return <WrappedComponent {...props} error={error} value={value} onChange={this.onChange} onCancel={this.cancel} />
+    return (
+      <WrappedComponent {...props} error={error} value={value} onChange={this.onChange} onCancel={this.cancel}
+                        onKeyDown={this.onKeyDown} />
+    );
   }
 };
 

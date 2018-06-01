@@ -72,7 +72,8 @@ export const ExpensesReducer = (state = initialState, action) => {
       });
     case Actions.SAVE_ITEM_SUCCESS:
       return saveItem(state, action.payload.year, action.payload.month, action.payload.current, {
-        id: action.payload.saved.id,
+        ...action.payload.saved,
+        errors: {},
         saved: true,
         saving: false
       });
