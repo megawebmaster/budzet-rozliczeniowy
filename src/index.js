@@ -87,6 +87,7 @@ const messages = {
   'views.login.new-message': 'Nie masz jeszcze konta? Po prostu zaloguj się, a my utworzymy je dla Ciebie!',
   'views.login.check-mailbox-title': 'Magiczny link wysłany',
   'views.login.check-mailbox': 'Sprawdź swoją skrzynkę e-mail i kliknij na link w wiadomości od nas, żeby się zalogować',
+  'views.login.go-to-mailbox': 'Idź do swojej skrzynki: {value}',
   'views.login.logging-in': 'Logowanie w toku…',
   'views.login.encryption-password': 'Podaj hasło szyfrujące',
   'views.login.encryption-button': 'Odszyfruj dane',

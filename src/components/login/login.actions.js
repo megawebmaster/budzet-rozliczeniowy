@@ -16,6 +16,7 @@ export const setEncryptionPasswordError = (error) => ({
   error
 });
 
-export const magicMessageSent = () => ({
-  type: MAGIC_MESSAGE_SENT
+export const magicMessageSent = (email) => ({
+  type: MAGIC_MESSAGE_SENT,
+  payload: { email }
 });

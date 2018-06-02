@@ -24,7 +24,7 @@ export default class extends PureComponent {
     const { email } = this.state;
 
     this.setState({ sending: true }, () => {
-      Authenticator.login(email, this.props.magicMessageSent);
+      Authenticator.login(email, () => this.props.magicMessageSent(email));
     });
   };
 
