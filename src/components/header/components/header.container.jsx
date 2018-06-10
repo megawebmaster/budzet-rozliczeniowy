@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 
 import Header from './header';
 import { budget, month, pageType, year } from '../../location';
@@ -19,4 +20,4 @@ const mapDispatchToProps = () => ({
   onLogout: () => Authenticator.logout(),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Header));

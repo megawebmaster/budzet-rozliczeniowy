@@ -1,0 +1,17 @@
+.ui.button.basic.scroll-up {
+	position: fixed;
+	bottom: 50px;
+	left: 8%;
+	box-shadow: none;
+	opacity: 0;
+	visibility: hidden;
+	transition: visibility 100ms linear, opacity 100ms linear;
+}
+.ui.button.basic.scroll-up.visible {
+	visibility: visible;
+	opacity: 1;
+	transition: visibility 100ms linear, opacity 100ms linear;
+}
+.ui.button.basic.scroll-up:focus {
+	box-shadow: none;
+}
