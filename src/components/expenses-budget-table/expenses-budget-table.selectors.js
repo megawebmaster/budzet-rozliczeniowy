@@ -1,22 +1,21 @@
 import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
-import { month } from '../location';
 import { reduceBudgetType } from '../budget/budget.helpers';
-import { yearBudget, categoryId } from '../budget/budget.selectors';
+import { categoryId, monthBudget } from '../budget/budget.selectors';
 import { expensesCategories } from '../categories';
 
 const reduceCategoryBudgetType = (type, budget, categoryIds) => (
-  Object.keys(budget).reduce((result, categoryId) => (
-    categoryIds.indexOf(categoryId) > -1 ? result + budget[categoryId][type] : result
+  budget.reduce((result, entry) => (
+    categoryIds.indexOf(entry.categoryId) > -1 ? result + entry[type].value : result
   ), 0.0)
 );
 
 export const monthExpensesBudget = createSelector(
-  [yearBudget, month], (yearlyBudget, month) => yearlyBudget.expense[month] || {}
+  [monthBudget], budget => budget.filter(entry => entry.type === 'expense') || []
 );
 
 export const plannedExpenses = createSelector(
-  monthExpensesBudget, reduceBudgetType.bind(null, 'planned')
+  monthExpensesBudget, reduceBudgetType.bind(null, 'plan')
 );
 export const realExpenses = createSelector(
   monthExpensesBudget, reduceBudgetType.bind(null, 'real')
@@ -26,8 +25,8 @@ export const expensesPlannedSummaries = createSelector(
   [monthExpensesBudget, expensesCategories], (budget, categories) => {
     const summaries = {};
     categories.forEach((category) => {
-      const childrenIds = category.children.map((child) => child.id.toString());
-      summaries[category.id] = reduceCategoryBudgetType('planned', budget, childrenIds);
+      const childrenIds = category.children.map((child) => child.id);
+      summaries[category.id] = reduceCategoryBudgetType('plan', budget, childrenIds);
     });
 
     return summaries;
@@ -37,7 +36,7 @@ export const expensesRealSummaries = createSelector(
   [monthExpensesBudget, expensesCategories], (budget, categories) => {
     const summaries = {};
     categories.forEach((category) => {
-      const childrenIds = category.children.map((child) => child.id.toString());
+      const childrenIds = category.children.map((child) => child.id);
       summaries[category.id] = reduceCategoryBudgetType('real', budget, childrenIds);
     });
 
@@ -68,7 +67,12 @@ export const expensesTableRealSummary = createCachedSelector(
 
 export const categoryExpenses = createCachedSelector(
   monthExpensesBudget, categoryId,
-  (expenses, categoryId) => expenses[categoryId] || { planned: 0, savingPlanned: false, real: 0 }
+  (budget, categoryId) => budget.find(entry => entry.categoryId === categoryId) || {
+    plan: { value: 0.0, error: '', saving: false },
+    real: { value: 0.0, error: '', saving: false },
+    type: 'expense',
+    categoryId: categoryId,
+  }
 )(
   (state, props) => `category-expenses-${props.categoryId}`,
 );

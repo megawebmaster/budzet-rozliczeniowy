@@ -1,5 +1,5 @@
 export const reduceBudgetType = (type, budget) => (
-  Object.keys(budget).reduce((result, categoryId) => result + (budget[categoryId][`error${upperFirst(type)}`].length === 0 ? budget[categoryId][type] : 0.0), 0.0)
+  budget.reduce((result, entry) => result + (entry[type].error.length === 0 ? entry[type].value : 0.0), 0.0)
 );
 
 export const upperFirst = (text) => (

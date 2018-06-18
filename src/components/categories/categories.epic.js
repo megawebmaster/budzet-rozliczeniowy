@@ -5,6 +5,9 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import {
   ADD_CATEGORY,
+  DECRYPT_CATEGORIES,
+  decryptCategories,
+  LOAD_ENCODED_CATEGORIES,
   loadCategories,
   REMOVE_CATEGORY,
   removeCategoryError,
@@ -12,9 +15,9 @@ import {
   setCategoryError,
   UPDATE_CATEGORY,
 } from './categories.actions';
-import { budget, month, year } from '../location';
+import { budget as budgetSelector, budget, month, year } from '../location';
 import { Authenticator } from '../../App.auth';
-import { Encryptor, handleEncryptionError } from '../../App.encryption';
+import { Encryptor, handleEncryptionError2 } from '../../App.encryption';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes/routes.actions';
 import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import { addBudgetError } from '../budget/budget.actions';
@@ -47,19 +50,12 @@ const fetchCategories = async (budgetSlug) => {
     })
   });
   const result = await response.json();
+
   if (!response.ok) {
     throw new Error(result.error);
   }
 
-  return await Promise.all(result.map(async category => ({
-    ...category,
-    name: await Encryptor.decrypt(category.name),
-    averageValue: await calculateAverageValue(category.averageValues),
-    deleteError: '',
-    error: '',
-    saving: false,
-    saved: true,
-  })));
+  return result;
 };
 
 /**
@@ -72,7 +68,7 @@ const fetchCategories = async (budgetSlug) => {
  * @returns {Promise<{name: *}>}
  */
 const saveCategoryAction = async (type, name, budget, year, month, parent = null) => {
-  const encryptedName = await Encryptor.encrypt(name);
+  const encryptedName = await Encryptor.encrypt2(budget, name);
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories`, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -105,7 +101,7 @@ const saveCategoryAction = async (type, name, budget, year, month, parent = null
  * @returns {Promise<{name: *}>}
  */
 const updateCategoryAction = async (type, budget, id, values) => {
-  const encryptedName = await Encryptor.encrypt(values.name);
+  const encryptedName = await Encryptor.encrypt2(budget, values.name);
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories/${id}`, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -166,8 +162,18 @@ const fetchCategoriesEpic = (action$) =>
     .mergeMap(action => (
       Observable
         .from(fetchCategories(action.payload.budget))
+        .map(categories => categories.map(category => ({
+          ...category,
+          name: '',
+          encoded: category.name,
+          averageValue: 0,
+          deleteError: '',
+          error: '',
+          saving: false,
+          saved: true,
+        })))
         .map(loadCategories)
-        .catch(handleEncryptionError(error => {
+        .catch(error => {
           switch(action.type){
             case ROUTE_BUDGET_MONTH:
               return Observable.of(addBudgetError(error.message));
@@ -178,8 +184,43 @@ const fetchCategoriesEpic = (action$) =>
             default:
               return Observable.of();
           }
-        }))
+        })
     ))
+;
+
+const decodeCategoriesEpic = action$ =>
+  action$
+    .ofType(LOAD_ENCODED_CATEGORIES)
+    .map(action => decryptCategories(action.payload.categories))
+;
+
+const decryptCategoriesEpic = (action$, store) =>
+  action$
+    .ofType(DECRYPT_CATEGORIES)
+    .mergeMap(action => {
+      const { categories } = action.payload;
+      const state = store.getState();
+      const budget = budgetSelector(state);
+
+      if (!Encryptor.hasEncryptionPassword2(budget)) {
+        // TODO: Proper action creator and type
+        return Observable.of({ type: 'ASK_ENCRYPTION_PASSWORD', payload: { action } });
+      }
+
+      const actions = categories.map(async category => {
+        return replaceCategory(category.type, category, {
+          ...category,
+          name: await Encryptor.decrypt2(budget, category.encoded),
+          averageValue: await calculateAverageValue(category.averageValues),
+          encoded: false,
+        });
+      });
+
+      return Observable
+        .from(actions)
+        .catch(handleEncryptionError2(budget))
+        .mergeAll();
+    })
 ;
 
 const addCategoryEpic = (action$, store) =>
@@ -247,6 +288,8 @@ const removeCategoryEpic = (action$, store) =>
 
 export const categoriesEpic = combineEpics(
   fetchCategoriesEpic,
+  decodeCategoriesEpic,
+  decryptCategoriesEpic,
   addCategoryEpic,
   updateCategoryEpic,
   removeCategoryEpic,

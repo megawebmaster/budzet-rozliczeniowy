@@ -1,4 +1,7 @@
-export const LOAD_EXPENSES = 'ExpensesAction.LOAD_EXPENSES';
+export const LOAD_ENCRYPTED_EXPENSES = 'ExpensesAction.LOAD_ENCRYPTED_EXPENSES';
+export const DECRYPT_EXPENSES = 'ExpensesAction.DECRYPT_EXPENSES';
+export const DECRYPT_EXPENSE = 'ExpensesAction.DECRYPT_EXPENSE';
+
 export const ADD_EXPENSES_ERROR = 'ExpensesAction.ADD_ERROR';
 export const CLEAR_EXPENSES_ERRORS = 'ExpensesAction.CLEAR_ERRORS';
 export const SORT_EXPENSES = 'ExpensesAction.SORT_EXPENSES';
@@ -23,8 +26,16 @@ export const removeItem = (row, year, month) => ({
   payload: { row, year, month }
 });
 export const loadExpenses = (year, month, values) => ({
-  type: LOAD_EXPENSES,
+  type: LOAD_ENCRYPTED_EXPENSES,
   payload: { year, month, values }
+});
+export const decryptExpenses = (year, month, expenses) => ({
+  type: DECRYPT_EXPENSES,
+  payload: { year, month, expenses }
+});
+export const decryptExpense = (budget, year, month, expense) => ({
+  type: DECRYPT_EXPENSE,
+  payload: { budget, year, month, expense }
 });
 export const sortExpenses = (year, month, field) => ({
   type: SORT_EXPENSES,
@@ -34,19 +45,13 @@ export const savingItem = (year, month, row) => ({
   type: SAVING_ROW,
   payload: { year, month, row }
 });
-export const saveItemSuccess = (year, month, current, response) => ({
+export const saveItemSuccess = (year, month, current, result) => ({
   type: SAVE_ITEM_SUCCESS,
   payload: {
     year,
     month,
     current,
-    saved: {
-      id: response.id,
-      category: response.category.id,
-      price: response.value,
-      day: response.day,
-      description: response.description,
-    },
+    saved: result,
   }
 });
 export const saveItemFailed = (year, month, row, error) => ({

@@ -8,17 +8,8 @@ const initialState = {
 
 const loadMonth = (state, year, month, values) => {
   const selectedYear = state[year] || {};
-  const result = values.map(expense => ({
-    id: expense.id,
-    category: expense.category.id,
-    price: expense.value,
-    day: expense.day,
-    description: expense.description,
-    saved: expense.saved,
-    errors: expense.errors,
-  }));
 
-  return { ...state, loading: false, [year]: { ...selectedYear, [month]: result } };
+  return { ...state, loading: false, [year]: { ...selectedYear, [month]: values } };
 };
 
 const sortItems = (state, year, month, field) => {
@@ -56,7 +47,7 @@ const removeItem = (state, year, month, value) => {
 
 export const ExpensesReducer = (state = initialState, action) => {
   switch(action.type){
-    case Actions.LOAD_EXPENSES:
+    case Actions.LOAD_ENCRYPTED_EXPENSES:
       return loadMonth(state, action.payload.year, action.payload.month, action.payload.values);
     case Actions.ADD_ITEM:
       return addItem(state, action.payload.year, action.payload.month, {

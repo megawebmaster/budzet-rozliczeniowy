@@ -1,4 +1,6 @@
-export const LOAD_CATEGORIES = 'CategoriesAction.LOAD_CATEGORIES';
+export const LOAD_ENCODED_CATEGORIES = 'CategoriesAction.LOAD_ENCODED_CATEGORIES';
+export const DECRYPT_CATEGORIES = 'CategoriesAction.DECRYPT_CATEGORIES';
+
 export const ADD_CATEGORY = 'CategoriesAction.ADD_CATEGORY';
 export const SET_CATEGORY_ERROR = 'CategoriesAction.SET_CATEGORY_ERROR';
 export const UPDATE_CATEGORY = 'CategoriesAction.UPDATE_CATEGORY';
@@ -7,7 +9,11 @@ export const REMOVE_CATEGORY = 'CategoriesAction.REMOVE_CATEGORY';
 export const REMOVE_CATEGORY_ERROR = 'CategoriesAction.REMOVE_CATEGORY_ERROR';
 
 export const loadCategories = (categories) => ({
-  type: LOAD_CATEGORIES,
+  type: LOAD_ENCODED_CATEGORIES,
+  payload: { categories }
+});
+export const decryptCategories = (categories) => ({
+  type: DECRYPT_CATEGORIES,
   payload: { categories }
 });
 export const updateCategory = (type, category, values) => ({

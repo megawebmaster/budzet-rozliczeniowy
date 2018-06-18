@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { year } from '../location';
+import { month, year } from '../location';
 
 export const budget = (state) => state.budget;
 export const errors = (state) => state.budget.errors;
@@ -8,5 +8,10 @@ export const categoryId = (state, props) => props.category ? props.category.id :
 
 export const yearBudget = createSelector(
   [budget, year],
-  (budget, year) => budget[year] || { income: {}, expense: {}, irregular: {} }
+  (budget, year) => budget[year] || {}
+);
+
+export const monthBudget = createSelector(
+  [yearBudget, month],
+  (budget, month) => budget[month] || []
 );

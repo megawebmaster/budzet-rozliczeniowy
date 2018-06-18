@@ -1,22 +1,27 @@
 import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
-import { month } from '../location';
 import { reduceBudgetType } from '../budget/budget.helpers';
-import { yearBudget, categoryId } from '../budget/budget.selectors';
+import { categoryId, monthBudget } from '../budget/budget.selectors';
 
 export const monthIncomeBudget = createSelector(
-  [yearBudget, month], (yearlyBudget, month) => yearlyBudget.income[month] || {}
+  [monthBudget],
+  budget => budget.filter(entry => entry.type === 'income') || []
 );
 
 export const plannedIncome = createSelector(
-  monthIncomeBudget, reduceBudgetType.bind(null, 'planned')
+  monthIncomeBudget, reduceBudgetType.bind(null, 'plan')
 );
 export const realIncome = createSelector(
   monthIncomeBudget, reduceBudgetType.bind(null, 'real')
 );
 export const categoryIncome = createCachedSelector(
   monthIncomeBudget, categoryId,
-  (income, categoryId) => income[categoryId] || { planned: 0, savingPlanned: false, real: 0, savingReal: false }
+  (budget, categoryId) => budget.find(entry => entry.categoryId === categoryId) || {
+    plan: { value: 0.0, error: '', saving: false },
+    real: { value: 0.0, error: '', saving: false },
+    type: 'income',
+    categoryId: categoryId,
+  }
 )(
   (state, props) => `category-income-${props.categoryId}`,
 );

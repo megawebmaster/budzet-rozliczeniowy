@@ -1,5 +1,4 @@
 import * as Actions from './budget.actions';
-import { upperFirst } from './budget.helpers';
 import { ROUTE_BUDGET_MONTH } from '../../routes';
 
 const initialState = {
@@ -7,101 +6,81 @@ const initialState = {
   errors: [],
 };
 
-const baseValue = { real: 0, savingReal: false, errorReal: '', planned: 0, savingPlanned: false, errorPlanned: '' };
-const getValue = (state, categoryType, month, year, categoryId) => {
-  const selectedYear = state[year] || { income: {}, expense: {}, irregular: {} };
-  const selectedYearType = selectedYear[categoryType] || {};
-  const selectedYearTypeMonth = selectedYearType[month] || {};
-  return selectedYearTypeMonth[categoryId] || { ...baseValue };
-};
-const setValue = (state, categoryType, month, year, categoryId, value) => {
-  const selectedYear = state[year] || { income: {}, expense: {}, irregular: {} };
-  const selectedYearType = selectedYear[categoryType] || {};
-  const selectedYearTypeMonth = selectedYearType[month] || {};
-
-  return {
-    ...state,
-    [year]: {
-      ...selectedYear,
-      [categoryType]: {
-        ...selectedYear[categoryType],
-        [month]: {
-          ...selectedYearTypeMonth,
-          [categoryId]: value,
-        },
-      },
-    },
-  };
+const baseValue = {
+  plan: {
+    value: 0,
+    error: '',
+    saving: false,
+    encoded: false,
+  },
+  real: {
+    value: 0,
+    error: '',
+    saving: false,
+    encoded: false,
+  },
+  type: '',
+  categoryId: '',
 };
 
-const updateValue = (state, categoryType, valueType, data, isSaving) => {
-  const { month, year, categoryId, value } = data;
-  const valueObject = {
-    ...(getValue(state, categoryType, month, year, categoryId)),
-    [valueType]: value,
-    [`saving${upperFirst(valueType)}`]: isSaving,
-    [`error${upperFirst(valueType)}`]: ''
-  };
+const setValue = (state, year, month, categoryId, value) => {
+  const selectedYear = state[year] || {};
+  const selectedMonth = selectedYear[month].slice() || [];
+  const idx = selectedMonth.findIndex(entry => entry.categoryId === categoryId);
 
-  return setValue(state, categoryType, month, year, categoryId, valueObject);
+  if (idx < 0) {
+    throw new Error(`Invalid value for year ${year}, month ${month} and category ${categoryId}`);
+  }
+
+  selectedMonth.splice(idx, 1, {
+    ...baseValue,
+    ...selectedMonth[idx],
+    ...value,
+    plan: { ...selectedMonth[idx].plan, ...(value.plan || {}) },
+    real: { ...selectedMonth[idx].real, ...(value.real || {}) },
+  });
+
+  return { ...state, [year]: { ...selectedYear, [month]: selectedMonth } };
 };
 
-const addValueError = (state, categoryType, valueType, data, error) => {
-  const { month, year, categoryId } = data;
-  const valueObject = {
-    ...(getValue(state, categoryType, month, year, categoryId)),
-    [`saving${upperFirst(valueType)}`]: false,
-    [`error${upperFirst(valueType)}`]: error,
-  };
-
-  return setValue(state, categoryType, month, year, categoryId, valueObject);
-};
-
-// TODO: Get rid of type in hash - move it elsewhere
 // TODO: Improve recalculating trees - update only required branches (reselect + immutable)
 const loadMonth = (state, year, month, values) => {
-  const selectedYear = state[year] || { income: {}, expense: {}, irregular: {} };
-
-  const monthValues = { income: {}, expense: {}, irregular: {} };
-  values.forEach(entry => {
-    monthValues[entry.category.type][entry.category.id] = {
-      ...baseValue,
-      planned: entry.plan,
-      real: entry.real,
-    }
-  });
+  const selectedYear = state[year] || {};
+  const monthValues = values.map(entry => ({
+    ...baseValue,
+    ...entry,
+    plan: { ...baseValue.plan, ...entry.plan },
+    real: { ...baseValue.real, ...entry.real },
+  }));
 
   return {
     ...state,
     loading: false,
     [year]: {
       ...selectedYear,
-      income: {
-        ...selectedYear.income,
-        [month]: monthValues.income
-      },
-      expense: {
-        ...selectedYear.expense,
-        [month]: monthValues.expense
-      },
-      irregular: {
-        ...selectedYear.irregular,
-        [month]: monthValues.irregular
-      },
+      [month]: monthValues
     }
   };
 };
 
 export const BudgetReducer = (state = initialState, action) => {
   switch(action.type){
-    case Actions.LOAD_BUDGET:
+    case Actions.LOAD_ENCRYPTED_BUDGET:
       return loadMonth(state, action.payload.year, action.payload.month, action.payload.values);
+    case Actions.UPDATE_BUDGET_ENTRY:
+      return setValue(state, action.payload.year, action.payload.month, action.payload.categoryId, action.payload.value);
     case Actions.SAVING_BUDGET:
-      return updateValue(state, action.payload.categoryType, action.payload.valueType, action.payload, true);
+      return setValue(state, action.payload.year, action.payload.month, action.payload.categoryId, {
+        [action.payload.valueType]: { value: action.payload.value, saving: true }
+      });
     case Actions.SAVE_SUCCESS:
-      return updateValue(state, action.payload.categoryType, action.payload.valueType, action.payload, false);
+      return setValue(state, action.payload.year, action.payload.month, action.payload.categoryId, {
+        [action.payload.valueType]: { saving: false }
+      });
     case Actions.SAVE_FAIL:
-      return addValueError(state, action.payload.categoryType, action.payload.valueType, action.payload, action.error);
+      return setValue(state, action.payload.year, action.payload.month, action.payload.categoryId, {
+        [action.payload.valueType]: { error: action.error, saving: false }
+      });
     case Actions.ADD_BUDGET_ERROR:
       return { ...state, errors: [...state.errors, action.error], loading: false };
     case Actions.CLEAR_BUDGET_ERRORS:

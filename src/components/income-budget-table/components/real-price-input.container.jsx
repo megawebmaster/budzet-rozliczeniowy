@@ -4,11 +4,15 @@ import { PriceInput } from '../../price-input';
 import { saveValue } from '../../budget';
 import { categoryIncome } from '../income-budget-table.selectors';
 
-const mapStateToProps = (state, ownProps) => ({
-  value: categoryIncome(state, ownProps).real,
-  error: categoryIncome(state, ownProps).errorReal,
-  isSaving: categoryIncome(state, ownProps).savingReal,
-});
+const mapStateToProps = (state, ownProps) => {
+  const entry = categoryIncome(state, ownProps).real;
+
+  return ({
+    value: entry.encoded ? 0 : entry.value,
+    error: entry.error,
+    isSaving: entry.saving,
+  });
+};
 const mapDispatchToProps = (dispatch, { categoryId }) => ({
   onChange: (value) => dispatch(saveValue('income', 'real', categoryId, value)),
 });
