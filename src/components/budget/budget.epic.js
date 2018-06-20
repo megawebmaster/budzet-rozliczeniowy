@@ -22,6 +22,7 @@ import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes';
 import { budget as budgetSelector, month as monthSelector, year as yearSelector } from '../location';
 import { DECRYPT_BUDGET_ENTRY } from './budget.actions';
 import { decryptBudgetEntry } from './budget.actions';
+import { requirePassword } from '../password-requirement';
 
 /**
  * @param budget string
@@ -160,8 +161,7 @@ const decryptBudgetEntryEpic = action$ =>
       const { budget, year, month, entry } = action.payload;
 
       if (!Encryptor.hasEncryptionPassword2(budget)) {
-        // TODO: Proper action creator and type
-        return Observable.of({ type: 'ASK_ENCRYPTION_PASSWORD', payload: { action } });
+        return Observable.of(requirePassword(action));
       }
 
       const promise = async () => updateBudgetEntry(year, month, entry.categoryId, {
@@ -177,7 +177,8 @@ const decryptBudgetEntryEpic = action$ =>
 
       return Observable
         .from(promise())
-        .catch(handleEncryptionError2(budget));
+        .catch(handleEncryptionError2(budget, action))
+      ;
     })
 ;
 

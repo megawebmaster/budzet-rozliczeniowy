@@ -4,6 +4,7 @@ import { Button, Header, Segment } from 'semantic-ui-react';
 
 const domainsMap = {
   'gmail.com': 'https://mail.google.com',
+  'googlemail.com': 'https://mail.google.com',
   'yahoo.com': 'https://mail.yahoo.com',
   'outlook.com': 'https://outlook.live.com/owa/',
   'hotmail.com': 'https://outlook.live.com/owa/',
@@ -27,6 +28,7 @@ const domainsMap = {
 };
 const systemMap = {
   'gmail.com': 'GMail',
+  'googlemail.com': 'GMail',
   'yahoo.com': 'Yahoo',
   'outlook.com': 'Outlook',
   'hotmail.com': 'Outlook',

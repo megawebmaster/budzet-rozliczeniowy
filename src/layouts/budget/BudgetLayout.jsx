@@ -5,6 +5,7 @@ import { Grid, GridColumn, Menu, MenuItem } from 'semantic-ui-react';
 
 import { Header } from '../../components/header';
 import { MonthList } from '../../components/month-list';
+import { PasswordRequirement } from '../../components/password-requirement';
 import { ROUTE_BUDGET_IRREGULAR, ROUTE_BUDGET_MONTH } from '../../routes';
 import { budget, year } from '../../components/location';
 import './budget-layout.css';
@@ -17,20 +18,22 @@ const mapStateToProps = (state) => ({
 const BudgetLayout = ({ children, year, budget }) => (
   <Fragment>
     <Header year={year} />
-    <Grid padded="horizontally">
-      <GridColumn width={3} className="menu-column">
-        <Menu vertical fluid>
-          <MenuItem name="irregular" as={NavLink} activeClassName="active"
-                    to={{ type: ROUTE_BUDGET_IRREGULAR, payload: { budget, year } }}>
-            Nieregularne
-          </MenuItem>
-        </Menu>
-        <MonthList baseRoute={{ type: ROUTE_BUDGET_MONTH, payload: { budget, year } }} />
-      </GridColumn>
-      <GridColumn width={13}>
-        {children}
-      </GridColumn>
-    </Grid>
+    <PasswordRequirement>
+      <Grid padded="horizontally">
+        <GridColumn width={3} className="menu-column">
+          <Menu vertical fluid>
+            <MenuItem name="irregular" as={NavLink} activeClassName="active"
+                      to={{ type: ROUTE_BUDGET_IRREGULAR, payload: { budget, year } }}>
+              Nieregularne
+            </MenuItem>
+          </Menu>
+          <MonthList baseRoute={{ type: ROUTE_BUDGET_MONTH, payload: { budget, year } }} />
+        </GridColumn>
+        <GridColumn width={13}>
+          {children}
+        </GridColumn>
+      </Grid>
+    </PasswordRequirement>
   </Fragment>
 );
 

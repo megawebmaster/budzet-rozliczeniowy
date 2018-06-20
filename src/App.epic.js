@@ -6,6 +6,7 @@ import { expensesEpic } from './components/expenses';
 import { irregularBudgetEpic } from './components/irregular-budget';
 import { categoriesEpic } from './components/categories';
 import { loginEpic } from './components/login';
+import { passwordRequirementEpic } from './components/password-requirement';
 
 export const appEpic = combineEpics(
   routesEpic,
@@ -13,5 +14,6 @@ export const appEpic = combineEpics(
   expensesEpic,
   irregularBudgetEpic,
   categoriesEpic,
-  loginEpic
+  loginEpic,
+  passwordRequirementEpic,
 );

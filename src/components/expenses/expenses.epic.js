@@ -27,6 +27,7 @@ import {
 } from './expenses.actions';
 import { Encryptor, handleEncryptionError2 } from '../../App.encryption';
 import { monthExpenses } from './expenses.selectors';
+import { requirePassword } from '../password-requirement';
 
 class SubmitExpenseError extends Error {
   constructor(errors) {
@@ -39,19 +40,20 @@ class SubmitExpenseError extends Error {
  * @param url string
  * @param type string
  * @param value object
+ * @param budget string
  * @param budgetValue number
  * @returns {Promise<{value: *, description: *}>}
  */
-async function submitValue(url, type, value, budgetValue) {
+async function submitValue(url, type, value, budget, budgetValue) {
   const errors = expenseValidator(value);
 
   if (Object.keys(errors).length > 0) {
     throw new SubmitExpenseError(errors);
   }
 
-  const encryptedPrice = await Encryptor.encrypt(value.price.toString());
-  const encryptedDescription = await Encryptor.encrypt(value.description);
-  const encryptedBudgetValue = await Encryptor.encrypt(budgetValue.toString());
+  const encryptedPrice = await Encryptor.encrypt2(budget, value.price.toString());
+  const encryptedDescription = await Encryptor.encrypt2(budget, value.description);
+  const encryptedBudgetValue = await Encryptor.encrypt2(budget, budgetValue.toString());
   const response = await fetch(url, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -93,7 +95,13 @@ async function submitValue(url, type, value, budgetValue) {
  * @returns {Promise<{value: *, description: *}>}
  */
 const addValueAction = async (budget, year, month, value, budgetValue) => (
-  await submitValue(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}`, 'POST', value, budgetValue)
+  await submitValue(
+    `${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}`,
+    'POST',
+    value,
+    budget,
+    budgetValue
+  )
 );
 
 /**
@@ -105,7 +113,13 @@ const addValueAction = async (budget, year, month, value, budgetValue) => (
  * @returns {Promise<{value: *, description: *}>}
  */
 const saveValueAction = async (budget, year, month, value, budgetValue) => (
-  await submitValue(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}/${value.id}`, 'PUT', value, budgetValue)
+  await submitValue(
+    `${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}/${value.id}`,
+    'PUT',
+    value,
+    budget,
+    budgetValue
+  )
 );
 
 /**
@@ -294,8 +308,7 @@ const decryptExpenseEpic = action$ =>
       const { budget, year, month, expense } = action.payload;
 
       if (!Encryptor.hasEncryptionPassword2(budget)) {
-        // TODO: Proper action creator and type
-        return Observable.of({ type: 'ASK_ENCRYPTION_PASSWORD', payload: { action } });
+        return Observable.of(requirePassword(action));
       }
 
       const promise = async () => saveItemSuccess(year, month, expense, {
@@ -307,7 +320,7 @@ const decryptExpenseEpic = action$ =>
 
       return Observable
         .from(promise())
-        .catch(handleEncryptionError2(budget));
+        .catch(handleEncryptionError2(budget, action));
     })
 ;
 

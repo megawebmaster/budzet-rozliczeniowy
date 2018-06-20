@@ -5,6 +5,7 @@ import 'rxjs/add/operator/mergeAll';
 
 import { setEncryptionPasswordError } from './components/login';
 import { ROUTE_LOGIN } from './routes';
+import { requirePassword, requirePasswordError } from './components/password-requirement';
 
 export const initEncryption = () => {
   openpgp.initWorker({
@@ -14,12 +15,19 @@ export const initEncryption = () => {
   openpgp.config = { aead_protect: true };
 };
 
-function EncryptorError() {}
-EncryptorError.prototype = new Error();
+function EncryptorError(message) {
+  this.name = 'EncryptorError';
+  this.message = message || '';
+}
+EncryptorError.prototype = Error.prototype;
 
 export class Encryptor {
   static setPassword(password) {
     localStorage.setItem('encryption-password', password);
+  }
+
+  static setPassword2(budget, password) {
+    localStorage.setItem(`encryption-password-${budget}`, password);
   }
 
   static removePassword() {
@@ -114,15 +122,13 @@ export const handleEncryptionError = (handler) => (error) => {
   return handler(error);
 };
 
-export const handleEncryptionError2 = (budget) => (error) => {
+export const handleEncryptionError2 = (budget, action) => (error) => {
   if (error instanceof EncryptorError) {
-    // Encryptor.removePassword2(budget);
+    Encryptor.removePassword2(budget);
 
     return Observable.of([
-      // redirect({ type: ROUTE_LOGIN }),
-      // TODO: Proper action creator and type
-      { type: 'ASK_ENCRYPTION_PASSWORD', error: '' },
-      // setEncryptionPasswordError('errors.invalid-encryption-password'),
+      requirePasswordError('errors.invalid-encryption-password'),
+      requirePassword(action),
     ]).mergeAll();
   }
 

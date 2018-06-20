@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { month, year } from '../location';
+import { isRequirngPassword } from '../password-requirement';
 
 export const budget = (state) => state.budget;
 export const errors = (state) => state.budget.errors;
@@ -21,7 +22,9 @@ const categoriesLoading = (state) =>
   state.categories.data.some(category => category.encrypted)
 ;
 export const isLoading = createSelector(
-  [monthBudget, budgetLoading, categoriesLoading],
-  (budget, budgetLoading, categoriesLoading) =>
-    budgetLoading || categoriesLoading || budget.some(entry => entry.plan.encrypted || entry.real.encrypted)
+  [monthBudget, budgetLoading, categoriesLoading, isRequirngPassword],
+  (budget, budgetLoading, categoriesLoading, requirePassword) =>
+    !requirePassword && (
+      budgetLoading || categoriesLoading || budget.some(entry => entry.plan.encrypted || entry.real.encrypted)
+    )
 );

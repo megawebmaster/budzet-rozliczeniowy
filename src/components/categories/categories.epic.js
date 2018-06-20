@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/throttleTime';
 import {
   ADD_CATEGORY,
   DECRYPT_CATEGORIES,
@@ -24,16 +25,17 @@ import { addBudgetError } from '../budget/budget.actions';
 import { addExpensesError } from '../expenses/expenses.actions';
 import { addIrregularBudgetError } from '../irregular-budget/irregular-budget.actions';
 import { findCategory } from './categories.selectors';
+import { requirePassword } from '../password-requirement';
 
-// const halfHour = 30*60*1000;
+const halfHour = 30 * 60 * 1000;
 
-const calculateAverageValue = async (averageValues) => {
+const calculateAverageValue = async (budget, averageValues) => {
   if (averageValues.length === 0) {
     return 0.0;
   }
 
   /** @var array */
-  const decryptedValues = await Promise.all(averageValues.map(async value => await Encryptor.decrypt(value)));
+  const decryptedValues = await Promise.all(averageValues.map(async value => await Encryptor.decrypt2(budget, value)));
 
   return decryptedValues.reduce((result, value) => result + parseFloat(value), 0.0) / averageValues.length;
 };
@@ -158,7 +160,7 @@ const deleteCategoryAction = async (type, budget, id, year, month) => {
 const fetchCategoriesEpic = (action$) =>
   action$
     .filter(action => [ROUTE_BUDGET_MONTH, ROUTE_BUDGET_IRREGULAR, ROUTE_EXPENSES_MONTH].indexOf(action.type) !== -1)
-    // .throttleTime(halfHour)
+    .throttleTime(halfHour)
     .mergeMap(action => (
       Observable
         .from(fetchCategories(action.payload.budget))
@@ -203,21 +205,21 @@ const decryptCategoriesEpic = (action$, store) =>
       const budget = budgetSelector(state);
 
       if (!Encryptor.hasEncryptionPassword2(budget)) {
-        // TODO: Proper action creator and type
-        return Observable.of({ type: 'ASK_ENCRYPTION_PASSWORD', payload: { action } });
+        return Observable.of(requirePassword(action));
       }
 
       const actions = categories.map(async category => replaceCategory(category.type, category, {
         ...category,
         name: await Encryptor.decrypt2(budget, category.encrypted),
-        averageValue: await calculateAverageValue(category.averageValues),
+        averageValue: await calculateAverageValue(budget, category.averageValues),
         encrypted: false,
       }));
 
       return Observable
         .from(actions)
-        .catch(handleEncryptionError2(budget))
-        .mergeAll();
+        .mergeAll()
+        .catch(handleEncryptionError2(budget, action))
+      ;
     })
 ;
 
