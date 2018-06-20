@@ -8,9 +8,6 @@ import { ROUTE_LOGIN } from './routes';
 
 export const initEncryption = () => {
   openpgp.initWorker({
-    workers: [
-      new Worker('/encryptionWorker.js'),
-    ],
     n: 1,
     path: '/encryptionWorker.js'
   });

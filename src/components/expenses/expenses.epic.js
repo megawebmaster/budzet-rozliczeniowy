@@ -77,6 +77,7 @@ async function submitValue(url, type, value, budgetValue) {
 
   return {
     ...result,
+    category: result.category.id,
     price: value.price,
     description: value.description,
     errors: {},

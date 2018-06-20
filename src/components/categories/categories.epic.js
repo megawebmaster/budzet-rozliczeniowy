@@ -165,7 +165,7 @@ const fetchCategoriesEpic = (action$) =>
         .map(categories => categories.map(category => ({
           ...category,
           name: '',
-          encoded: category.name,
+          encrypted: category.name,
           averageValue: 0,
           deleteError: '',
           error: '',
@@ -207,14 +207,12 @@ const decryptCategoriesEpic = (action$, store) =>
         return Observable.of({ type: 'ASK_ENCRYPTION_PASSWORD', payload: { action } });
       }
 
-      const actions = categories.map(async category => {
-        return replaceCategory(category.type, category, {
-          ...category,
-          name: await Encryptor.decrypt2(budget, category.encoded),
-          averageValue: await calculateAverageValue(category.averageValues),
-          encoded: false,
-        });
-      });
+      const actions = categories.map(async category => replaceCategory(category.type, category, {
+        ...category,
+        name: await Encryptor.decrypt2(budget, category.encrypted),
+        averageValue: await calculateAverageValue(category.averageValues),
+        encrypted: false,
+      }));
 
       return Observable
         .from(actions)

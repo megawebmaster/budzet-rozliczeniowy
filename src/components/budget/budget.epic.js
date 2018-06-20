@@ -121,8 +121,8 @@ const loadBudgetEpic = (action$, store) =>
       return Observable
         .from(fetchBudget(budget, currentYear, currentMonth))
         .map(entries => entries.map(entry => ({
-          plan: { encoded: entry.plan },
-          real: { encoded: entry.real },
+          plan: { encrypted: entry.plan },
+          real: { encrypted: entry.real },
           categoryId: entry.category.id,
           type: entry.category.type,
         })))
@@ -150,6 +150,9 @@ const decryptBudgetEpic = (action$, store) =>
     })
 ;
 
+const decryptValue = async (budget, value) => (
+  value.encrypted ? parseFloat(await Encryptor.decrypt2(budget, value.encrypted)) : (value.value || 0)
+);
 const decryptBudgetEntryEpic = action$ =>
   action$
     .ofType(DECRYPT_BUDGET_ENTRY)
@@ -163,12 +166,12 @@ const decryptBudgetEntryEpic = action$ =>
 
       const promise = async () => updateBudgetEntry(year, month, entry.categoryId, {
         plan: {
-          value: entry.plan.encoded ? parseFloat(await Encryptor.decrypt2(budget, entry.plan.encoded)) : (entry.plan.value || 0),
-          encoded: false,
+          value: await decryptValue(budget, entry.plan),
+          encrypted: false,
         },
         real: {
-          value: entry.real.encoded ? parseFloat(await Encryptor.decrypt2(budget, entry.real.encoded)) : (entry.real.value || 0),
-          encoded: false,
+          value: await decryptValue(budget, entry.real),
+          encrypted: false,
         },
       });
 
