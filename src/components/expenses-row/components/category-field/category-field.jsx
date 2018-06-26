@@ -5,6 +5,7 @@ import { Dropdown, DropdownSearchInput } from 'semantic-ui-react';
 export default class extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
+    disabled: PropTypes.bool,
     error: PropTypes.bool.isRequired,
     value: PropTypes.any.isRequired,
     onBlur: PropTypes.func.isRequired,
@@ -13,6 +14,7 @@ export default class extends Component {
     onInputMount: PropTypes.func,
   };
   static defaultProps = {
+    disabled: false,
     onInputMount: (_type, _input) => {},
   };
 
@@ -48,13 +50,13 @@ export default class extends Component {
   };
 
   render() {
-    const { categories, error, value } = this.props;
+    const { categories, disabled, error, value } = this.props;
     const { upward } = this.state;
 
     return (
       <Dropdown fluid selection search className="category-field" value={value} options={categories} upward={upward}
                 openOnFocus={false} placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
-                error={error} onChange={this.onChange} onOpen={this.onOpen} onClose={this.onClose}
+                error={error} disabled={disabled} onChange={this.onChange} onOpen={this.onOpen} onClose={this.onClose}
                 searchInput={this.renderInput()}
       />
     );

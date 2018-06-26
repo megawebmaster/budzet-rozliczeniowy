@@ -249,7 +249,7 @@ const removeItemEpic = (action$, store) =>
         }))
         .catch(error => Observable.of(removeItemFailed(year(state), month(state), action.payload.row, error.message)))
         .ignoreElements()
-        ;
+      ;
     })
 ;
 

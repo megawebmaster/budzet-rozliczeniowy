@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
   const entry = categoryExpenses(state, ownProps).real;
 
   return ({
-    value: entry.encoded ? 0 : entry.value,
+    value: entry.encrypted ? 0 : entry.value,
     isSaving: entry.saving,
   });
 };

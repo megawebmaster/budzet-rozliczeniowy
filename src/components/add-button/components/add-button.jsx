@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Button, Input } from 'semantic-ui-react';
 
-class AddButton extends Component {
+class AddButton extends PureComponent {
   static propTypes = {
     disabled: PropTypes.bool,
     label: PropTypes.string.isRequired,

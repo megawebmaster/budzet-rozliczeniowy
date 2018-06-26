@@ -60,7 +60,7 @@ const remove = (state, type, id) => {
 
 export const CategoriesReducer = (state = initialState, action) => {
   switch(action.type){
-    case Actions.LOAD_ENCODED_CATEGORIES:
+    case Actions.LOAD_ENCRYPTED_CATEGORIES:
       return { loading: false, data: action.payload.categories };
     case Actions.UPDATE_CATEGORY:
       return update(state, action.payload.type, action.payload.category, {

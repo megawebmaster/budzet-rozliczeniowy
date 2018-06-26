@@ -5,7 +5,7 @@ export const UPDATE_BUDGET_ENTRY = 'BudgetAction.UPDATE_BUDGET_ENTRY';
 export const ADD_BUDGET_ERROR = 'BudgetAction.ADD_ERROR';
 export const CLEAR_BUDGET_ERRORS = 'BudgetAction.CLEAR_ERRORS';
 export const SAVE_BUDGET = 'BudgetAction.SAVE_BUDGET';
-export const SAVING_BUDGET = 'BudgetAction.UPDATE_BUDGET';
+export const SAVING_BUDGET = 'BudgetAction.SAVING_BUDGET';
 export const SAVE_SUCCESS = 'BudgetAction.SAVE_SUCCESS';
 export const SAVE_FAIL = 'BudgetAction.SAVE_FAIL';
 

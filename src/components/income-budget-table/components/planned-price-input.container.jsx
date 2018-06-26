@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
   const entry = categoryIncome(state, ownProps).plan;
 
   return ({
-    value: entry.encoded ? 0 : entry.value,
+    value: entry.encrypted ? 0 : entry.value,
     error: entry.error,
     isSaving: entry.saving,
   });

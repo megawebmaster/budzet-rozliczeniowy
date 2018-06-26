@@ -11,13 +11,13 @@ const baseValue = {
     value: 0,
     error: '',
     saving: false,
-    encoded: false,
+    encrypted: false,
   },
   real: {
     value: 0,
     error: '',
     saving: false,
-    encoded: false,
+    encrypted: false,
   },
   type: '',
   categoryId: '',
@@ -26,14 +26,14 @@ const baseValue = {
 const setValue = (state, year, month, categoryId, value) => {
   const selectedYear = state[year] || {};
   const selectedMonth = selectedYear[month].slice() || [];
-  const idx = selectedMonth.findIndex(entry => entry.categoryId === categoryId);
+  let idx = selectedMonth.findIndex(entry => entry.categoryId === categoryId);
 
   if (idx < 0) {
-    throw new Error(`Invalid value for year ${year}, month ${month} and category ${categoryId}`);
+    idx = selectedMonth.length;
+    selectedMonth.push({ ...baseValue, categoryId });
   }
 
   selectedMonth.splice(idx, 1, {
-    ...baseValue,
     ...selectedMonth[idx],
     ...value,
     plan: { ...selectedMonth[idx].plan, ...(value.plan || {}) },
@@ -71,7 +71,8 @@ export const BudgetReducer = (state = initialState, action) => {
       return setValue(state, action.payload.year, action.payload.month, action.payload.categoryId, action.payload.value);
     case Actions.SAVING_BUDGET:
       return setValue(state, action.payload.year, action.payload.month, action.payload.categoryId, {
-        [action.payload.valueType]: { value: action.payload.value, saving: true }
+        [action.payload.valueType]: { value: action.payload.value, saving: true },
+        type: action.payload.categoryType,
       });
     case Actions.SAVE_SUCCESS:
       return setValue(state, action.payload.year, action.payload.month, action.payload.categoryId, {

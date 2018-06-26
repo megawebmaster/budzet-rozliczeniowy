@@ -9,11 +9,11 @@ export const errors = (state) => state.irregular_budget.errors;
 export const isLoading = (state) => state.irregular_budget.loading;
 
 export const irregularYearBudget = createSelector(
-  [irregularBudget, year], (budget, year) => budget[year] || {}
+  [irregularBudget, year], (budget, year) => budget[year] || []
 );
 
 export const plannedIrregularExpenses = createSelector(
-  irregularYearBudget, reduceBudgetType.bind(null, 'planned')
+  irregularYearBudget, reduceBudgetType.bind(null, 'plan')
 );
 export const realIrregularExpenses = createSelector(
   irregularYearBudget, reduceBudgetType.bind(null, 'real')
@@ -21,7 +21,18 @@ export const realIrregularExpenses = createSelector(
 
 export const categoryIrregularBudget = createCachedSelector(
   irregularYearBudget, categoryId,
-  (budget, categoryId) => budget[categoryId] || { planned: 0, savingPlanned: false, errorPlanned: '', real: 0, monthlyRealValues: [] }
+  (budget, categoryId) => budget.find(entry => entry.categoryId === categoryId) || {
+    plan: { value: 0.0, error: '', saving: false },
+    real: { value: 0.0, error: '', saving: false },
+    type: 'irregular',
+    categoryId: categoryId,
+  }
 )(
   (state, props) => `category-irregular-budget-${props.categoryId}`,
 );
+// export const categoryIrregularBudget = createCachedSelector(
+//   irregularYearBudget, categoryId,
+//   (budget, categoryId) => budget[categoryId] || { planned: 0, savingPlanned: false, errorPlanned: '', real: 0, monthlyRealValues: [] }
+// )(
+//   (state, props) => `category-irregular-budget-${props.categoryId}`,
+// );

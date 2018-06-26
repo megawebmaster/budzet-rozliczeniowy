@@ -4,6 +4,7 @@ import { Input } from 'semantic-ui-react';
 
 export default class extends Component {
   static propTypes = {
+    disabled: PropTypes.bool,
     error: PropTypes.bool.isRequired,
     value: PropTypes.any.isRequired,
     onBlur: PropTypes.func.isRequired,
@@ -13,6 +14,7 @@ export default class extends Component {
     onKeyDown: PropTypes.func,
   };
   static defaultProps = {
+    disabled: false,
     onInputMount: (_type, _input) => {},
     onKeyDown: (_event, _data) => {},
   };
@@ -20,10 +22,10 @@ export default class extends Component {
   onChange = (_event, data) => this.props.onChange(data.value);
 
   render() {
-    const { error, value, onBlur, onFocus, onInputMount, onKeyDown } = this.props;
+    const { disabled, error, value, onBlur, onFocus, onInputMount, onKeyDown } = this.props;
 
-    return <Input fluid value={value} onChange={this.onChange} error={error} onFocus={onFocus} onBlur={onBlur}
-                  onKeyDown={onKeyDown} ref={onInputMount} />;
+    return <Input fluid value={value} disabled={disabled} onChange={this.onChange} error={error} onFocus={onFocus}
+                  onBlur={onBlur} onKeyDown={onKeyDown} ref={onInputMount} />;
   }
 }
 

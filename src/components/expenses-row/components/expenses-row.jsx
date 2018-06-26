@@ -85,20 +85,21 @@ export default class extends Component {
         <TableRow className="expenses-row" warning={Object.keys(row.errors).length > 0} onKeyDown={this.onKeyDown}>
           <TableCell width={4}>
             <CategoryField categories={categories} value={row.category} row={row} error={row.errors.category}
-                           debounceTime={debounceTime} onChange={this.updateCategory} onInputMount={this.mountCategory} />
+                           debounceTime={debounceTime} onChange={this.updateCategory} onInputMount={this.mountCategory}
+                           disabled={row.saving} />
           </TableCell>
           <TableCell width={3}>
             <PriceInput value={row.price} placeholder={this.translate('expenses-row.price', 'Cena')} row={row}
-                        error={row.errors.price} debounceTime={debounceTime} onChange={this.updatePrice}
-                        onMount={this.mountPrice} />
+                        error={row.errors.price} debounceTime={debounceTime} disabled={row.saving}
+                        onChange={this.updatePrice} onMount={this.mountPrice} />
           </TableCell>
           <TableCell width={1}>
-            <DayField value={row.day} row={row} error={row.errors.day} debounceTime={debounceTime}
+            <DayField value={row.day} row={row} error={row.errors.day} debounceTime={debounceTime} disabled={row.saving}
                       onChange={this.updateDay} onInputMount={this.mountDay} />
           </TableCell>
           <TableCell width={7}>
             <DescriptionField value={row.description} row={row} error={row.errors.description} errorPosition="left"
-                              debounceTime={debounceTime} onChange={this.updateDescription}
+                              debounceTime={debounceTime} disabled={row.saving} onChange={this.updateDescription}
                               onInputMount={this.mountDescription} />
           </TableCell>
           <TableCell width={1} textAlign="center">

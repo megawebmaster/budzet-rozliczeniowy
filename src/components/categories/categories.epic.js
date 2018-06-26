@@ -8,7 +8,7 @@ import {
   ADD_CATEGORY,
   DECRYPT_CATEGORIES,
   decryptCategories,
-  LOAD_ENCODED_CATEGORIES,
+  LOAD_ENCRYPTED_CATEGORIES,
   loadCategories,
   REMOVE_CATEGORY,
   removeCategoryError,
@@ -132,7 +132,7 @@ const updateCategoryAction = async (type, budget, id, values) => {
  * @param id number
  * @param year string
  * @param month string
- * @returns {Promise<Response>}
+ * @returns {Promise<boolean>}
  */
 const deleteCategoryAction = async (type, budget, id, year, month) => {
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories/${id}`, {
@@ -147,13 +147,12 @@ const deleteCategoryAction = async (type, budget, id, year, month) => {
     }),
   });
 
-  const result = await response.json();
-
   if (!response.ok) {
+    const result = await response.json();
     throw new Error(result.error);
   }
 
-  return result;
+  return true;
 };
 
 // TODO: Figure out how to throttle requests until budget changes
@@ -192,7 +191,7 @@ const fetchCategoriesEpic = (action$) =>
 
 const decodeCategoriesEpic = action$ =>
   action$
-    .ofType(LOAD_ENCODED_CATEGORIES)
+    .ofType(LOAD_ENCRYPTED_CATEGORIES)
     .map(action => decryptCategories(action.payload.categories))
 ;
 
