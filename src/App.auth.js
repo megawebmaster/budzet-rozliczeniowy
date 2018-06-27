@@ -58,7 +58,7 @@ export class Authenticator {
     localStorage.removeItem('jwt');
     localStorage.removeItem('expiration');
     localStorage.removeItem('expires_at');
-    Encryptor.removePassword();
+    Encryptor.removePasswords();
     auth.logout({
       clientID: 'PqsSsHBLYS3MDS2FXthxnouqES3Amiu9',
       returnTo: process.env.REACT_APP_URL,

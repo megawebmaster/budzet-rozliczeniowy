@@ -28,7 +28,7 @@ export default class extends Component {
   updatePassword = (event) => this.setState({ password: event.target.value });
 
   setEncryptionPassword = () => {
-    Encryptor.setPassword2(this.props.budget, this.state.password);
+    Encryptor.setPassword(this.props.budget, this.state.password);
     this.setState({ password: '' });
     this.props.continueActions();
   };

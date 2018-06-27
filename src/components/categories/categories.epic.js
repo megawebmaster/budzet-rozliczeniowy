@@ -18,7 +18,7 @@ import {
 } from './categories.actions';
 import { budget as budgetSelector, budget, month, year } from '../location';
 import { Authenticator } from '../../App.auth';
-import { Encryptor, handleEncryptionError2 } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes/routes.actions';
 import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import { addBudgetError } from '../budget/budget.actions';
@@ -35,7 +35,7 @@ const calculateAverageValue = async (budget, averageValues) => {
   }
 
   /** @var array */
-  const decryptedValues = await Promise.all(averageValues.map(async value => await Encryptor.decrypt2(budget, value)));
+  const decryptedValues = await Promise.all(averageValues.map(async value => await Encryptor.decrypt(budget, value)));
 
   return decryptedValues.reduce((result, value) => result + parseFloat(value), 0.0) / averageValues.length;
 };
@@ -70,7 +70,7 @@ const fetchCategories = async (budgetSlug) => {
  * @returns {Promise<{name: *}>}
  */
 const saveCategoryAction = async (type, name, budget, year, month, parent = null) => {
-  const encryptedName = await Encryptor.encrypt2(budget, name);
+  const encryptedName = await Encryptor.encrypt(budget, name);
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories`, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -103,7 +103,7 @@ const saveCategoryAction = async (type, name, budget, year, month, parent = null
  * @returns {Promise<{name: *}>}
  */
 const updateCategoryAction = async (type, budget, id, values) => {
-  const encryptedName = await Encryptor.encrypt2(budget, values.name);
+  const encryptedName = await Encryptor.encrypt(budget, values.name);
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/categories/${id}`, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -203,13 +203,13 @@ const decryptCategoriesEpic = (action$, store) =>
       const state = store.getState();
       const budget = budgetSelector(state);
 
-      if (!Encryptor.hasEncryptionPassword2(budget)) {
+      if (!Encryptor.hasEncryptionPassword(budget)) {
         return Observable.of(requirePassword(action));
       }
 
       const actions = categories.map(async category => replaceCategory(category.type, category, {
         ...category,
-        name: await Encryptor.decrypt2(budget, category.encrypted),
+        name: await Encryptor.decrypt(budget, category.encrypted),
         averageValue: await calculateAverageValue(budget, category.averageValues),
         encrypted: false,
       }));
@@ -217,7 +217,7 @@ const decryptCategoriesEpic = (action$, store) =>
       return Observable
         .from(actions)
         .mergeAll()
-        .catch(handleEncryptionError2(budget, action))
+        .catch(handleEncryptionError(budget, action))
       ;
     })
 ;

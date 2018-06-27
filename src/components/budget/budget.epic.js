@@ -7,7 +7,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/concatMap';
 
 import { Authenticator } from '../../App.auth';
-import { Encryptor, handleEncryptionError2 } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import * as Actions from './budget.actions';
 import {
   addBudgetError,
@@ -34,7 +34,7 @@ import { requirePassword } from '../password-requirement';
  * @returns {Promise<boolean>}
  */
 const saveValueAction = async (budget, year, month, categoryId, valueType, value) => {
-  const encryptedValue = await Encryptor.encrypt2(budget, value.toString());
+  const encryptedValue = await Encryptor.encrypt(budget, value.toString());
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/entries/${categoryId}`, {
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: new Headers({
@@ -152,7 +152,7 @@ const decryptBudgetEpic = (action$, store) =>
 ;
 
 const decryptValue = async (budget, value) => (
-  value.encrypted ? parseFloat(await Encryptor.decrypt2(budget, value.encrypted)) : (value.value || 0)
+  value.encrypted ? parseFloat(await Encryptor.decrypt(budget, value.encrypted)) : (value.value || 0)
 );
 const decryptBudgetEntryEpic = action$ =>
   action$
@@ -160,7 +160,7 @@ const decryptBudgetEntryEpic = action$ =>
     .mergeMap(action => {
       const { budget, year, month, entry } = action.payload;
 
-      if (!Encryptor.hasEncryptionPassword2(budget)) {
+      if (!Encryptor.hasEncryptionPassword(budget)) {
         return Observable.of(requirePassword(action));
       }
 
@@ -177,7 +177,7 @@ const decryptBudgetEntryEpic = action$ =>
 
       return Observable
         .from(promise())
-        .catch(handleEncryptionError2(budget, action))
+        .catch(handleEncryptionError(budget, action))
       ;
     })
 ;

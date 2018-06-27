@@ -25,7 +25,7 @@ import {
   saveItemSuccess,
   savingItem
 } from './expenses.actions';
-import { Encryptor, handleEncryptionError2 } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import { monthExpenses } from './expenses.selectors';
 import { requirePassword } from '../password-requirement';
 
@@ -51,9 +51,9 @@ async function submitValue(url, type, value, budget, budgetValue) {
     throw new SubmitExpenseError(errors);
   }
 
-  const encryptedPrice = await Encryptor.encrypt2(budget, value.price.toString());
-  const encryptedDescription = await Encryptor.encrypt2(budget, value.description);
-  const encryptedBudgetValue = await Encryptor.encrypt2(budget, budgetValue.toString());
+  const encryptedPrice = await Encryptor.encrypt(budget, value.price.toString());
+  const encryptedDescription = await Encryptor.encrypt(budget, value.description);
+  const encryptedBudgetValue = await Encryptor.encrypt(budget, budgetValue.toString());
   const response = await fetch(url, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -131,7 +131,7 @@ const saveValueAction = async (budget, year, month, value, budgetValue) => (
  * @returns {Promise<any>}
  */
 const deleteValueAction = async ({ budget, year, month, row, budgetValue }) => {
-  const encryptedBudgetValue = await Encryptor.encrypt2(budget, budgetValue.toString());
+  const encryptedBudgetValue = await Encryptor.encrypt(budget, budgetValue.toString());
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/expenses/${month}/${row.id}`, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -307,20 +307,20 @@ const decryptExpenseEpic = action$ =>
     .mergeMap(action => {
       const { budget, year, month, expense } = action.payload;
 
-      if (!Encryptor.hasEncryptionPassword2(budget)) {
+      if (!Encryptor.hasEncryptionPassword(budget)) {
         return Observable.of(requirePassword(action));
       }
 
       const promise = async () => saveItemSuccess(year, month, expense, {
-        price: expense.encryptedPrice ? parseFloat(await Encryptor.decrypt2(budget, expense.encryptedPrice)) : expense.price,
-        description: expense.encryptedDescription ? await Encryptor.decrypt2(budget, expense.encryptedDescription) : '',
+        price: expense.encryptedPrice ? parseFloat(await Encryptor.decrypt(budget, expense.encryptedPrice)) : expense.price,
+        description: expense.encryptedDescription ? await Encryptor.decrypt(budget, expense.encryptedDescription) : '',
         encryptedPrice: false,
         encryptedDescription: false,
       });
 
       return Observable
         .from(promise())
-        .catch(handleEncryptionError2(budget, action));
+        .catch(handleEncryptionError(budget, action));
     })
 ;
 

@@ -17,7 +17,7 @@ import {
 } from './irregular-budget.actions';
 import { ROUTE_BUDGET_IRREGULAR } from '../../routes';
 import { Authenticator } from '../../App.auth';
-import { Encryptor, handleEncryptionError2 } from '../../App.encryption';
+import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import { requirePassword } from '../password-requirement';
 
 /**
@@ -28,8 +28,8 @@ import { requirePassword } from '../password-requirement';
  * @returns {Promise<boolean>}
  */
 const saveIrregularValueAction = async (budget, year, categoryId, value) => {
-  const encryptedValue = await Encryptor.encrypt2(budget, value.toString());
-  const encryptedMonthlyValue = await Encryptor.encrypt2(budget, (value / 10.0).toString());
+  const encryptedValue = await Encryptor.encrypt(budget, value.toString());
+  const encryptedMonthlyValue = await Encryptor.encrypt(budget, (value / 10.0).toString());
   const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}/${year}/irregular/${categoryId}`, {
     headers: new Headers({
       'Accept': 'application/json',
@@ -145,12 +145,12 @@ const decryptIrregularBudgetEpic = (action$, store) =>
 ;
 
 const decryptValue = async (budget, value) => (
-  value.encrypted ? parseFloat(await Encryptor.decrypt2(budget, value.encrypted)) : (value.value || 0)
+  value.encrypted ? parseFloat(await Encryptor.decrypt(budget, value.encrypted)) : (value.value || 0)
 );
 const getRealValue = async (budget, entry) => {
   /** @var string[] values */
   const values = await Promise.all(entry.real.encrypted.map(async value =>
-    parseFloat(await Encryptor.decrypt2(budget, value))
+    parseFloat(await Encryptor.decrypt(budget, value))
   ));
 
   return values.reduce((result, value) => result + value, 0.0);
@@ -161,7 +161,7 @@ const decryptIrregularBudgetEntryEpic = action$ =>
     .mergeMap(action => {
       const { budget, year, entry } = action.payload;
 
-      if (!Encryptor.hasEncryptionPassword2(budget)) {
+      if (!Encryptor.hasEncryptionPassword(budget)) {
         return Observable.of(requirePassword(action));
       }
 
@@ -178,7 +178,7 @@ const decryptIrregularBudgetEntryEpic = action$ =>
 
       return Observable
         .from(promise())
-        .catch(handleEncryptionError2(budget, action))
+        .catch(handleEncryptionError(budget, action))
         ;
     })
 ;

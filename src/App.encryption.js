@@ -1,10 +1,7 @@
 import openpgp, { message, util } from 'openpgp';
 import { Observable } from 'rxjs/Rx';
-import { redirect } from 'redux-first-router';
 import 'rxjs/add/operator/mergeAll';
 
-import { setEncryptionPasswordError } from './components/login';
-import { ROUTE_LOGIN } from './routes';
 import { requirePassword, requirePasswordError } from './components/password-requirement';
 
 export const initEncryption = () => {
@@ -19,43 +16,37 @@ function EncryptorError(message) {
   this.name = 'EncryptorError';
   this.message = message || '';
 }
+
 EncryptorError.prototype = Error.prototype;
 
 export class Encryptor {
-  static setPassword(password) {
-    localStorage.setItem('encryption-password', password);
-  }
-
-  static setPassword2(budget, password) {
+  static setPassword(budget, password) {
+    const storedBudgetsPasswords = JSON.parse(localStorage.getItem('encryption-passwords-budgets') || '[]');
+    storedBudgetsPasswords.push(budget);
     localStorage.setItem(`encryption-password-${budget}`, password);
+    localStorage.setItem('encryption-passwords-budgets', JSON.stringify(storedBudgetsPasswords));
   }
 
-  static removePassword() {
-    localStorage.removeItem('encryption-password');
+  static removePasswords() {
+    const storedBudgetsPasswords = JSON.parse(localStorage.getItem('encryption-passwords-budgets') || '[]');
+    storedBudgetsPasswords.forEach(this.removePassword);
+    localStorage.removeItem('encryption-passwords-budgets');
   }
 
-  static removePassword2(budget) {
+  static removePassword(budget) {
     localStorage.removeItem(`encryption-password-${budget}`);
   }
 
-  static hasEncryptionPassword() {
-    return this.getPassword() !== null;
+  static hasEncryptionPassword(budget) {
+    return this.getPassword(budget) !== null;
   }
 
-  static hasEncryptionPassword2(budget) {
-    return this.getPassword2(budget) !== null;
-  }
-
-  static getPassword() {
-    return localStorage.getItem('encryption-password');
-  }
-
-  static getPassword2(budget) {
+  static getPassword(budget) {
     return localStorage.getItem(`encryption-password-${budget}`);
   }
 
-  static async encrypt(text) {
-    const password = this.getPassword();
+  static async encrypt(budget, text) {
+    const password = this.getPassword(budget);
     const encrypted = await openpgp.encrypt({
       data: text,
       passwords: [password],
@@ -66,36 +57,9 @@ export class Encryptor {
     return util.Uint8Array_to_b64(message);
   }
 
-  static async encrypt2(budget, text) {
-    const password = this.getPassword2(budget);
-    const encrypted = await openpgp.encrypt({
-      data: text,
-      passwords: [password],
-      armor: false,
-    });
-    const message = encrypted.message.packets.write();
-
-    return util.Uint8Array_to_b64(message);
-  }
-
-  static async decrypt(ciphertext) {
+  static async decrypt(budget, encryptedText) {
     try {
-      const password = this.getPassword();
-      const sourceArray = util.b64_to_Uint8Array(ciphertext);
-      const plaintext = await openpgp.decrypt({
-        message: message.read(sourceArray),
-        passwords: [password],
-      });
-
-      return plaintext.data;
-    } catch(e) {
-      throw new EncryptorError();
-    }
-  }
-
-  static async decrypt2(budget, encryptedText) {
-    try {
-      const password = this.getPassword2(budget);
+      const password = this.getPassword(budget);
       const sourceArray = util.b64_to_Uint8Array(encryptedText);
       const plaintext = await openpgp.decrypt({
         message: message.read(sourceArray),
@@ -109,22 +73,9 @@ export class Encryptor {
   }
 }
 
-export const handleEncryptionError = (handler) => (error) => {
+export const handleEncryptionError = (budget, action) => (error) => {
   if (error instanceof EncryptorError) {
-    Encryptor.removePassword();
-
-    return Observable.of([
-      redirect({ type: ROUTE_LOGIN }),
-      setEncryptionPasswordError('errors.invalid-encryption-password'),
-    ]).mergeAll();
-  }
-
-  return handler(error);
-};
-
-export const handleEncryptionError2 = (budget, action) => (error) => {
-  if (error instanceof EncryptorError) {
-    Encryptor.removePassword2(budget);
+    Encryptor.removePassword(budget);
 
     return Observable.of([
       requirePasswordError('errors.invalid-encryption-password'),
