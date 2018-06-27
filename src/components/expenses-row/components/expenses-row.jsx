@@ -49,9 +49,9 @@ export default class extends Component {
   };
 
   renderActions = () => {
-    const { saved, saving, errors } = this.props.row;
+    const { saved, saving, errors, encryptedPrice, encryptedDescription } = this.props.row;
 
-    if (saving) {
+    if (saving || encryptedPrice || encryptedDescription) {
       return <Loader active inline="centered" />;
     }
 
@@ -91,7 +91,7 @@ export default class extends Component {
           <TableCell width={3}>
             <PriceInput value={row.price} placeholder={this.translate('expenses-row.price', 'Cena')} row={row}
                         error={row.errors.price} debounceTime={debounceTime} disabled={row.saving}
-                        onChange={this.updatePrice} onMount={this.mountPrice} />
+                        decrypted={!row.encryptedPrice} onChange={this.updatePrice} onMount={this.mountPrice} />
           </TableCell>
           <TableCell width={1}>
             <DayField value={row.day} row={row} error={row.errors.day} debounceTime={debounceTime} disabled={row.saving}
@@ -99,8 +99,8 @@ export default class extends Component {
           </TableCell>
           <TableCell width={7}>
             <DescriptionField value={row.description} row={row} error={row.errors.description} errorPosition="left"
-                              debounceTime={debounceTime} disabled={row.saving} onChange={this.updateDescription}
-                              onInputMount={this.mountDescription} />
+                              debounceTime={debounceTime} disabled={row.saving || Boolean(row.encryptedDescription)}
+                              onChange={this.updateDescription} onInputMount={this.mountDescription} />
           </TableCell>
           <TableCell width={1} textAlign="center">
             {this.renderActions()}

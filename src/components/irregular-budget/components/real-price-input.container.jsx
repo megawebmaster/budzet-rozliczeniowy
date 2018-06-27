@@ -8,6 +8,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return ({
     value: entry.encrypted ? 0 : entry.value,
+    decrypted: !entry.encrypted,
     error: entry.error,
     isSaving: false,
     onChange: () => {},

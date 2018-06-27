@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownSearchInput } from 'semantic-ui-react';
+import { Dropdown, DropdownSearchInput, Input } from 'semantic-ui-react';
 
 export default class extends Component {
   static propTypes = {
@@ -52,6 +52,10 @@ export default class extends Component {
   render() {
     const { categories, disabled, error, value } = this.props;
     const { upward } = this.state;
+
+    if (value && categories.some(c => c.text === '!ENCRYPTED!')) {
+      return <Input fluid disabled />;
+    }
 
     return (
       <Dropdown fluid selection search className="category-field" value={value} options={categories} upward={upward}

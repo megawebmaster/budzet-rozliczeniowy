@@ -16,16 +16,9 @@ export const monthExpenses = createSelector(
 );
 
 const expensesLoading = (state) => state.expenses.loading;
-const categoriesLoading = (state) =>
-  state.categories.loading ||
-  state.categories.data.some(category => category.encrypted)
-;
+const categoriesLoading = (state) => state.categories.loading;
 export const isLoading = createSelector(
   [monthExpenses, expensesLoading, categoriesLoading, isRequirngPassword],
   (expenses, expensesLoading, categoriesLoading, requirePassword) =>
-    !requirePassword && (
-      expensesLoading ||
-      categoriesLoading ||
-      expenses.some(expense => expense.encryptedPrice || expense.encryptedDescription)
-    )
+    !requirePassword && (expensesLoading || categoriesLoading)
 );

@@ -6,8 +6,12 @@ import { PriceInputContainer as PriceInput } from './price-input.container';
 class PriceInputWithAverage extends PureComponent {
   static propTypes = {
     average: PropTypes.number,
+    currencyLabel: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
+    decrypted: PropTypes.bool,
     isSaving: PropTypes.bool,
+    maximumFractionDigits: PropTypes.number.isRequired,
+    minimumFractionDigits: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
     onMount: PropTypes.func,
     placeholder: PropTypes.string,
@@ -17,6 +21,7 @@ class PriceInputWithAverage extends PureComponent {
   static defaultProps = {
     average: 0,
     disabled: false,
+    decrypted: false,
     isSaving: false,
     onMount: (_input) => {},
     placeholder: '',
@@ -31,7 +36,8 @@ class PriceInputWithAverage extends PureComponent {
   });
 
   render() {
-    const { average, currencyLabel, disabled, isSaving, onChange, onMount, placeholder, value } = this.props;
+    const { average, currencyLabel, disabled, decrypted, isSaving, onChange, onMount, placeholder, value } = this.props;
+
     const help = this.format(
       'price-input.average-help',
       'Średnio: {value} {currency}',
@@ -39,8 +45,8 @@ class PriceInputWithAverage extends PureComponent {
     );
 
     return (
-      <PriceInput disabled={disabled} isSaving={isSaving} onChange={onChange} onMount={onMount} value={value}
-                  placeholder={placeholder} help={help} />
+      <PriceInput disabled={disabled} decrypted={decrypted} isSaving={isSaving} value={value} placeholder={placeholder}
+                  help={help} onChange={onChange} onMount={onMount} />
     );
   }
 }

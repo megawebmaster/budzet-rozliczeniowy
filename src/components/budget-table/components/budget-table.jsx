@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell,
 
 import AddSubcategoryButton from './add-subcategory-button';
 import CategoryName from './category-name.container';
-import { EditableText } from '../../editable-text';
 import './budget-table.css';
 
 class BudgetTable extends Component {
@@ -17,15 +16,11 @@ class BudgetTable extends Component {
       saving: PropTypes.bool.isRequired,
       error: PropTypes.string.isRequired,
     }),
-    // saving: PropTypes.bool,
-    // type: PropTypes.string.isRequired,
     categories: PropTypes.array.isRequired,
     className: PropTypes.string,
     currency: PropTypes.string.isRequired,
     editableRealValues: PropTypes.bool.isRequired,
-    // label: PropTypes.string.isRequired,
     manageableCategories: PropTypes.bool,
-    // error: PropTypes.string,
     onAdd: PropTypes.func.isRequired,
     onEdit: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     onRemove: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
@@ -58,15 +53,13 @@ class BudgetTable extends Component {
       manageableCategories, onEdit, onRemove, PlannedInput, RealInput
     } = this.props;
 
-    // TODO: Replace EditableText with CategoryName?
     return (
       <Table className={`budget-table ${className ? className : ''}`} singleLine striped compact>
         <TableHeader>
           <TableRow>
             <TableHeaderCell width={4}>
-              <EditableText text={category.name} deletable={!!onRemove} editable={!!onEdit} onDelete={this.onRemove}
-                            onUpdate={this.onUpdate} onCancel={this.onCancel} saving={category.saving}
-                            error={category.error} />
+              <CategoryName category={category} deletable={!!onRemove} editable={!!onEdit} onRemove={this.onRemove}
+                            onEdit={this.onUpdate} onCancel={this.onCancel} />
             </TableHeaderCell>
             <TableHeaderCell width={4}>
               <span>{this.format('budget.table.header-planned', 'Planowane ({value})', { value: this.currency(summaryPlanned) })}</span>

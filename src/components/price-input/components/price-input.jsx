@@ -10,6 +10,7 @@ export default class extends Component {
     currencyLabel: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
     error: PropTypes.bool.isRequired,
+    decrypted: PropTypes.bool,
     help: PropTypes.string,
     isSaving: PropTypes.bool,
     maximumFractionDigits: PropTypes.number.isRequired,
@@ -25,6 +26,7 @@ export default class extends Component {
 
   static defaultProps = {
     disabled: false,
+    decrypted: false,
     help: '',
     isSaving: false,
     placeholder: '',
@@ -89,16 +91,25 @@ export default class extends Component {
   };
 
   componentDidMount() {
-    const { onMount, disabled } = this.props;
+    const { onMount, decrypted, disabled } = this.props;
 
-    if (!disabled) {
+    if (!disabled && decrypted) {
       onMount(this.input);
     }
   }
 
   render() {
-    const { currencyLabel, disabled, placeholder, help, error } = this.props;
+    const { currencyLabel, disabled, decrypted, placeholder, help, error } = this.props;
     const { focused } = this.state;
+
+    if (!decrypted) {
+      return (
+        <div className="input-price">
+          <Input fluid loading disabled label={{ basic: true, content: currencyLabel }} labelPosition="right"
+                 iconPosition="left"/>
+        </div>
+      );
+    }
 
     return (
       <div className="input-price">

@@ -10,6 +10,8 @@ const newRowState = {
   price: '',
   day: '',
   description: '',
+  encryptedPrice: false,
+  encryptedDescription: false,
   errors: {},
 };
 

@@ -8,13 +8,13 @@ export const expensesCategoriesForDropdown = createSelector(
   (categories, irregularCategories) => (
     flatMap(categories, category => (
       category.children.map(subcategory => ({
-        text: `${category.name} - ${subcategory.name}`,
+        text: category.encrypted || subcategory.encrypted ? '!ENCRYPTED!' : `${category.name} - ${subcategory.name}`,
         value: subcategory.id,
       }))
     )).concat(
       // TODO: Proper translations of `Nieregularne`
       irregularCategories.map(category => ({
-        text: `Nieregularne - ${category.name}`,
+        text: category.encrypted ? '!ENCRYPTED!' : `Nieregularne - ${category.name}`,
         value: category.id,
       }))
     )
