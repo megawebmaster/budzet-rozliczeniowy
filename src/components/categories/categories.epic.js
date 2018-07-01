@@ -35,7 +35,9 @@ const calculateAverageValue = async (budget, averageValues) => {
   }
 
   /** @var array */
-  const decryptedValues = await Promise.all(averageValues.map(async value => await Encryptor.decrypt(budget, value)));
+  const decryptedValues = await Promise.all(averageValues.map(async value =>
+    value ? await Encryptor.decrypt(budget, value) : 0
+  ));
 
   return decryptedValues.reduce((result, value) => result + parseFloat(value), 0.0) / averageValues.length;
 };
