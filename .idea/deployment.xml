@@ -23,7 +23,7 @@
       <paths name="budzet.megawebmaster.pl">
         <serverdata>
           <mappings>
-            <mapping deploy="/private_html" local="$PROJECT_DIR$/build" web="/" />
+            <mapping deploy="/public_html" local="$PROJECT_DIR$/build" web="/" />
           </mappings>
         </serverdata>
       </paths>
