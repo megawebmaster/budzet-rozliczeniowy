@@ -8,9 +8,11 @@ import {
   ROUTE_LOGIN
 } from './routes.actions';
 import { Authenticator } from '../App.auth';
+import { userLogIn } from '../components/login';
 
 const loginUnauthenticated = (dispatch) => {
   if (!Authenticator.isLoggedIn()) {
+    dispatch(userLogIn());
     dispatch(redirect({ type: ROUTE_LOGIN }));
   }
 };
