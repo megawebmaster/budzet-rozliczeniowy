@@ -7,6 +7,7 @@ import 'rxjs/add/operator/mergeAll';
 import { updateBudgets } from '../../components/configuration';
 import { fetchBudgets, ROUTE_BUDGET_MONTH } from '../../routes';
 import { USER_LOGGED_IN } from './login.actions';
+import { Authenticator } from '../../App.auth';
 
 const redirectToDefaultBudgetEpic = (action$) =>
   action$
@@ -17,6 +18,10 @@ const redirectToDefaultBudgetEpic = (action$) =>
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
       const budget = action.payload.budgets.find(b => b.isDefault);
+
+      if (Authenticator.restorePath()) {
+        return Observable.of();
+      }
 
       return Observable.of([
         action,

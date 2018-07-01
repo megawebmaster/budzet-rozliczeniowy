@@ -12,6 +12,7 @@ import { userLogIn } from '../components/login';
 
 const loginUnauthenticated = (dispatch) => {
   if (!Authenticator.isLoggedIn()) {
+    Authenticator.storeCurrentPath();
     dispatch(userLogIn());
     dispatch(redirect({ type: ROUTE_LOGIN }));
   }

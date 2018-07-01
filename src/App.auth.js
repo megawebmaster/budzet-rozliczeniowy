@@ -64,4 +64,21 @@ export class Authenticator {
       returnTo: process.env.REACT_APP_URL,
     });
   }
+
+  static storeCurrentPath() {
+    localStorage.setItem('referrer', window.location.href);
+  }
+
+  static restorePath() {
+    const referrer = localStorage.getItem('referrer');
+    localStorage.removeItem('referrer');
+
+    if (referrer === null) {
+      return false;
+    }
+
+    window.location.href = referrer;
+
+    return true;
+  }
 }
