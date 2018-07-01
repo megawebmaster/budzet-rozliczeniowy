@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import jump from 'jump.js';
 import { Table, TableBody } from 'semantic-ui-react';
 import { ExpensesRow } from '../../expenses-row';
 import { validate as expenseValidator } from '../../../validators/expense.validator';
@@ -27,6 +28,10 @@ export default class extends Component {
 
   state = { ...newRowState, id: Date.now() };
 
+  componentDidMount() {
+    this.container = document.querySelector('div.content-container.expenses');
+  }
+
   addItem = () => {
     const errors = expenseValidator(this.state);
 
@@ -35,6 +40,7 @@ export default class extends Component {
       return;
     }
 
+    jump(this.container, { duration: 300 });
     this.props.onAddItem(this.state);
     this.setState({ ...newRowState, id: Date.now() });
     this.categoryField.focus();
