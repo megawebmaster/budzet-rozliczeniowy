@@ -4,7 +4,7 @@ import { Input } from 'semantic-ui-react';
 
 import './day-field.css';
 
-export default class extends Component {
+export default class DayField extends Component {
   static propTypes = {
     disabled: PropTypes.bool,
     error: PropTypes.bool.isRequired,
@@ -26,10 +26,27 @@ export default class extends Component {
   onChange = (_event, data) => this.props.onChange(data.value, { year: this.props.year, month: this.props.month });
   onKeyDown = (event) => this.props.onKeyDown(event, { year: this.props.year, month: this.props.month });
 
+  mountInput = (props, input) => {
+    const { onInputMount, disabled } = props;
+
+    if (!disabled && input) {
+      onInputMount(input);
+    }
+  };
+
+  saveRef = (input) => {
+    this.input = input;
+    this.mountInput(this.props, input);
+  };
+
+  componentWillReceiveProps(nextProps) {
+    this.mountInput(nextProps, this.input);
+  }
+
   render() {
-    const { disabled, error, value, onBlur, onFocus, onInputMount } = this.props;
+    const { disabled, error, value, onBlur, onFocus } = this.props;
 
     return <Input fluid className="input-day" value={value} disabled={disabled} error={error} onChange={this.onChange}
-                  onFocus={onFocus} onBlur={onBlur} onKeyDown={this.onKeyDown} ref={onInputMount} />;
+                  onFocus={onFocus} onBlur={onBlur} onKeyDown={this.onKeyDown} ref={this.saveRef} />;
   }
 }

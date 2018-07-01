@@ -77,7 +77,6 @@ export default class extends Component {
   };
 
   updateValue = (_e, data) => this.props.onChange(data.value, { editing: this.state.focused });
-  saveRef = (input) => this.input = input;
 
   getLoadingProps = () => {
     if (this.props.isSaving) {
@@ -90,12 +89,21 @@ export default class extends Component {
     return {};
   };
 
-  componentDidMount() {
-    const { onMount, decrypted, disabled } = this.props;
+  mountInput = (props, input) => {
+    const { onMount, decrypted, disabled } = props;
 
-    if (!disabled && decrypted) {
-      onMount(this.input);
+    if (!disabled && decrypted && input) {
+      onMount(input);
     }
+  };
+
+  saveRef = (input) => {
+    this.input = input;
+    this.mountInput(this.props, input);
+  };
+
+  componentWillReceiveProps(nextProps) {
+    this.mountInput(nextProps, this.input);
   }
 
   render() {
@@ -106,7 +114,7 @@ export default class extends Component {
       return (
         <div className="input-price">
           <Input fluid loading disabled label={{ basic: true, content: currencyLabel }} labelPosition="right"
-                 iconPosition="left"/>
+                 iconPosition="left" value={''}/>
         </div>
       );
     }

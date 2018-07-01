@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownSearchInput, Input } from 'semantic-ui-react';
 
-export default class extends Component {
+export default class CategoryField extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
     disabled: PropTypes.bool,
@@ -46,8 +46,20 @@ export default class extends Component {
   hideOnKeyDown = (event) => event.stopPropagation();
   mountDropdown = (ref) => {
     this.dropdown = ref;
-    this.props.onInputMount({ inputRef: ref });
+    this.mountInput(this.props, ref);
   };
+
+  mountInput = (props, input) => {
+    const { onInputMount, disabled } = props;
+
+    if (!disabled && input) {
+      onInputMount({ inputRef: input });
+    }
+  };
+
+  componentWillReceiveProps(nextProps) {
+    this.mountInput(nextProps, this.dropdown);
+  }
 
   render() {
     const { categories, disabled, error, value } = this.props;
