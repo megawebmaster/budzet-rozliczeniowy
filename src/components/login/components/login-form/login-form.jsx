@@ -6,8 +6,13 @@ import { Authenticator } from '../../../../App.auth';
 
 export default class extends PureComponent {
   static propTypes = {
+    error: PropTypes.string,
     intl: PropTypes.any.isRequired,
     magicMessageSent: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    error: '',
   };
 
   format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
@@ -29,6 +34,7 @@ export default class extends PureComponent {
   };
 
   render() {
+    const { error } = this.props;
     const { email, sending } = this.state;
 
     return (
@@ -37,6 +43,7 @@ export default class extends PureComponent {
           {this.translate('views.login.title', 'Zaloguj się do swojego konta')}
         </Header>
         <Form size="large">
+          {error && <Message error icon="warning circle" content={this.translate(error, '')} visible />}
           <Segment>
             <Form.Input fluid icon="user" iconPosition="left" onChange={this.updateEmail} value={email}
                         disabled={sending} placeholder={this.translate('views.login.form-email', 'Adres e-mail')} />

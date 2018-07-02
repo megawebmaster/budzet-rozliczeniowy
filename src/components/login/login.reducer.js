@@ -18,9 +18,11 @@ export const LoginReducer = (state = initialState, action) => {
     case Actions.SET_ENCRYPTION_PASSWORD:
       return { ...state, status: STATUS_ENCRYPTION_PASSWORD, error: action.error };
     case Actions.USER_LOGGED_IN:
-      return { ...state, status: STATUS_LOGGING_IN };
+      return { ...state, status: STATUS_LOGGING_IN, error: '' };
     case Actions.USER_LOGIN:
-      return { ...state, status: STATUS_NEW };
+      return { ...state, status: STATUS_NEW, error: '' };
+    case Actions.LOGIN_ERROR:
+      return { ...state, error: action.error };
     default:
       return state;
   }

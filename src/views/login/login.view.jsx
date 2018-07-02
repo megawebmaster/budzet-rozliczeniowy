@@ -12,16 +12,15 @@ import {
 } from '../../components/login';
 import './login.css';
 
-export default class extends PureComponent {
+export default class LoginView extends PureComponent {
   static propTypes = {
+    addLoginError: PropTypes.func.isRequired,
     status: PropTypes.string.isRequired,
     userLoggedIn: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    Authenticator.validateLogin(() => {
-      this.props.userLoggedIn();
-    });
+    Authenticator.validateLogin(() => this.props.userLoggedIn(), (error) => this.props.addLoginError(error));
   }
 
   renderComponent = () => {

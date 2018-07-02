@@ -9,7 +9,6 @@ const auth = new WebAuth({
   scope: 'openid profile email'
 });
 
-// TODO: Improve this class to work with promises (or maybe even Redux?)
 export class Authenticator {
   static login(email, callback) {
     auth.passwordlessStart({
@@ -19,15 +18,14 @@ export class Authenticator {
     }, callback);
   }
 
-  static validateLogin(callback) {
+  static validateLogin(callback, errorCallback) {
     if (this.isLoggedIn()) {
       return callback();
     }
 
     auth.parseHash({ hash: window.location.hash }, (error, authentication) => {
       if (error) {
-        // TODO: Handle errors
-        console.error('error', error);
+        errorCallback(`errors.login.${error.error}`);
       }
       if (!authentication) {
         return;
