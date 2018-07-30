@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { addCategory } from '../../categories';
-import AddCategoryButton from './add-category-button';
+import { AddCategoryButton } from '../../add-button';
 
 const mapDispatchToProps = (dispatch) => ({
   onSave: (name) => dispatch(addCategory('expense', name)),

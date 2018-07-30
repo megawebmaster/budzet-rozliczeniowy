@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Table, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
+import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from 'semantic-ui-react';
 
-import AddSubcategoryButton from './add-subcategory-button';
 import CategoryName from './category-name.container';
 import './budget-table.css';
 
@@ -21,7 +20,6 @@ class BudgetTable extends Component {
     currency: PropTypes.string.isRequired,
     editableRealValues: PropTypes.bool.isRequired,
     manageableCategories: PropTypes.bool,
-    onAdd: PropTypes.func.isRequired,
     onEdit: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     onRemove: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     onInputMount: PropTypes.func,
@@ -29,10 +27,12 @@ class BudgetTable extends Component {
     summaryReal: PropTypes.number.isRequired,
     PlannedInput: PropTypes.func.isRequired,
     RealInput: PropTypes.func.isRequired,
+    children: PropTypes.any,
   };
 
   static defaultProps = {
-    onInputMount: (_type, _category, _input) => {},
+    onInputMount: (_type, _category, _input) => {
+    },
     onEdit: false,
     onRemove: false,
     manageableCategories: true,
@@ -49,8 +49,8 @@ class BudgetTable extends Component {
 
   render() {
     const {
-      category, categories, summaryPlanned, summaryReal, editableRealValues, className, onAdd, onInputMount,
-      manageableCategories, onEdit, onRemove, PlannedInput, RealInput
+      category, categories, summaryPlanned, summaryReal, editableRealValues, className, onInputMount,
+      manageableCategories, onEdit, onRemove, PlannedInput, RealInput, children
     } = this.props;
 
     return (
@@ -87,13 +87,7 @@ class BudgetTable extends Component {
             </TableRow>
           ))}
         </TableBody>
-        {manageableCategories && <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>
-              <AddSubcategoryButton onSave={onAdd} disabled={category.saving || category.error.length > 0} />
-            </TableCell>
-          </TableRow>
-        </TableFooter>}
+        {manageableCategories && children}
       </Table>
     );
   }
