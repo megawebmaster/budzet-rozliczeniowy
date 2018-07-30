@@ -29,7 +29,7 @@ const BudgetLayout = ({ children, year, budget }) => (
           </Menu>
           <MonthList baseRoute={{ type: ROUTE_BUDGET_MONTH, payload: { budget, year } }} />
         </GridColumn>
-        <GridColumn width={13}>
+        <GridColumn width={13} style={{paddingBottom: 0}}>
           {children}
         </GridColumn>
       </Grid>

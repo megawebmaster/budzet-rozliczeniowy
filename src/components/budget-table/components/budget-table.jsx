@@ -87,7 +87,7 @@ class BudgetTable extends Component {
             </TableRow>
           ))}
         </TableBody>
-        {manageableCategories && children}
+        {children}
       </Table>
     );
   }

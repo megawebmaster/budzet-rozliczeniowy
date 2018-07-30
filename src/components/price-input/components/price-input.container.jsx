@@ -13,3 +13,11 @@ const mapStateToProps = (state) => ({
 });
 
 export const PriceInputContainer = connect(mapStateToProps)(injectIntl(ErrorField(PriceInput, { validator: PriceValidator })));
+
+const simpleMapStateToProps = (state) => ({
+  ...mapStateToProps(state),
+  decrypted: true,
+  isSaving: false,
+  onChange: () => {},
+});
+export const SimplePriceInputContainer = connect(simpleMapStateToProps)(injectIntl(ErrorField(PriceInput, { validator: PriceValidator })));

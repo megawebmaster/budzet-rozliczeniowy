@@ -81,6 +81,8 @@ const messages = {
   'budget.table.add-subcategory': 'Dodaj podkategorię',
   'budget.table.header-planned': 'Planowane ({value})',
   'budget.table.header-real': 'Rzeczywiste ({value})',
+  'budget.irregular-table.add-to-account': 'Dodaj do konta nieregularnych:',
+  'budget.irregular-table.remove-from-account': 'Odejmij z konta nieregularnych:',
   'budget.summary.label': 'Podsumowanie',
   'budget.summary.planned': 'Planowane: {value}',
   'budget.summary.real': 'Rzeczywiste: {value}',
