@@ -27,6 +27,16 @@ export class Encryptor {
     localStorage.setItem('encryption-passwords-budgets', JSON.stringify(storedBudgetsPasswords));
   }
 
+  static movePassword(oldBudget, newBudget) {
+    const storedBudgetsPasswords = JSON.parse(localStorage.getItem('encryption-passwords-budgets') || '[]');
+    const password = localStorage.getItem(`encryption-password-${oldBudget}`);
+    storedBudgetsPasswords.splice(storedBudgetsPasswords.findIndex(b => b === oldBudget), 1);
+    storedBudgetsPasswords.push(newBudget);
+    localStorage.removeItem(`encryption-password-${oldBudget}`);
+    localStorage.setItem(`encryption-password-${newBudget}`, password);
+    localStorage.setItem('encryption-passwords-budgets', JSON.stringify(storedBudgetsPasswords));
+  }
+
   static removePasswords() {
     const storedBudgetsPasswords = JSON.parse(localStorage.getItem('encryption-passwords-budgets') || '[]');
     storedBudgetsPasswords.forEach(this.removePassword);

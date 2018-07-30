@@ -4,3 +4,10 @@
 .main-menu .ui.dropdown.active > .text {
 	font-weight: normal;
 }
+.ui.tabular.menu .ui.item.dropdown.settings {
+	padding: .92857143em .42857143em;
+	margin-right: 1em;
+}
+.ui.tabular.menu .ui.item.dropdown {
+	padding: .92857143em;
+}

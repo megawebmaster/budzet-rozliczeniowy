@@ -1,10 +1,21 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'redux-first-router-link';
-import { Button, Dropdown, DropdownItem, DropdownMenu, Icon, Menu, MenuItem } from 'semantic-ui-react';
+import { Link, NavLink } from 'redux-first-router-link';
+import {
+  Button,
+  Dropdown,
+  DropdownHeader,
+  DropdownItem,
+  DropdownMenu,
+  Icon,
+  Menu,
+  MenuItem
+} from 'semantic-ui-react';
 
 import { ROUTE_BUDGET, ROUTE_EXPENSES_MONTH } from '../../../routes';
 import { ScrollUp } from '../../scroll-up';
+import { RenameBudget } from './rename-budget';
+
 import './header.css';
 
 const budgetShape = PropTypes.shape({
@@ -46,15 +57,6 @@ export default class Header extends PureComponent {
       <div ref={this.saveRef}>
         <Menu tabular size="large" className="main-menu">
           <MenuItem header>SimplyBudget</MenuItem>
-          <Dropdown item loading={!budget.name}
-                    text={this.format('header.budget', 'Budżet {value}', { value: budget.name })}>
-            <DropdownMenu>
-              {budgets.map(b =>
-                <DropdownItem key={`budget-${b.id}`} text={b.name} as={NavLink}
-                              to={{ type: page, payload: { budget: b.slug, year, month } }} />
-              )}
-            </DropdownMenu>
-          </Dropdown>
           <MenuItem name="budget" as={NavLink} activeClassName="active" to={{ type: ROUTE_BUDGET, payload }}>
             {this.translate('header.menu.budget', 'Budżet')}
           </MenuItem>
@@ -62,12 +64,43 @@ export default class Header extends PureComponent {
             {this.translate('header.menu.expenses', 'Wydatki')}
           </MenuItem>
           <Menu.Menu position="right">
-            <Dropdown item loading={!years} text={this.format('header.year', 'Rok: {value}', { value: year.toString() })}>
+            <Dropdown
+              item
+              loading={!years}
+              text={this.format('header.year', 'Rok: {value}', { value: year.toString() })}
+            >
               <DropdownMenu>
                 {years.map(y =>
-                  <DropdownItem key={`year-${y}`} text={y} as={NavLink}
-                                to={{ type: page, payload: { budget: budgetSlug, year: y, month: 1 } }} />
+                  <DropdownItem
+                    key={`year-${y}`}
+                    text={y}
+                    as={NavLink}
+                    to={{ type: page, payload: { budget: budgetSlug, year: y, month: 1 } }}
+                  />
                 )}
+              </DropdownMenu>
+            </Dropdown>
+            <Dropdown
+              item
+              loading={!budget.name}
+              text={this.format('header.budget', 'Budżet: {value}', { value: budget.name })}
+            >
+              <DropdownMenu>
+                <DropdownHeader>{this.format('header.budgets', 'Twoje budżety')}</DropdownHeader>
+                {budgets.map(b =>
+                  <DropdownItem
+                    key={`budget-${b.id}`}
+                    text={b.name}
+                    as={Link}
+                    to={{ type: page, payload: { budget: b.slug, year, month } }}
+                  />
+                )}
+              </DropdownMenu>
+            </Dropdown>
+            <Dropdown item icon="settings" className="settings">
+              <DropdownMenu>
+                <DropdownHeader>{this.format('header.budget-settings.header', 'Ustawienia budżetu')}</DropdownHeader>
+                <RenameBudget />
               </DropdownMenu>
             </Dropdown>
             <MenuItem name="logout" as={Button} onClick={onLogout}>

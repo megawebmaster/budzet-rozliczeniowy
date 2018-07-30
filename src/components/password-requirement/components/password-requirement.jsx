@@ -40,8 +40,8 @@ export default class PasswordRequirement extends Component {
     return (
       <Dimmer.Dimmable as="div" dimmed={requirePassword}>
         {children}
-        <Dimmer inverted active={requirePassword}>
-          <Segment className="password-requirement">
+        <Dimmer inverted active={requirePassword} className="password-requirement" verticalAlign="top">
+          <Segment>
             <Header as="h2" color="teal" textAlign="center">
               {this.translate('views.login.encryption-password', 'Podaj hasło szyfrujące')}
             </Header>

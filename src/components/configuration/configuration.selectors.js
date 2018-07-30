@@ -18,3 +18,13 @@ export const currentBudget = createSelector(
     return items[0];
   }
 );
+
+export const savingCurrentBudget = createSelector(
+  [currentBudget],
+  (budget) => budget ? budget.saving : false,
+);
+
+export const currentBudgetError = createSelector(
+  [currentBudget],
+  (budget) => budget ? budget.error : '',
+);
