@@ -2,7 +2,7 @@ import React, { Fragment, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Segment } from 'semantic-ui-react';
 
-export default class extends PureComponent {
+export default class LoggingIn extends PureComponent {
   static propTypes = {
     intl: PropTypes.any.isRequired,
   };

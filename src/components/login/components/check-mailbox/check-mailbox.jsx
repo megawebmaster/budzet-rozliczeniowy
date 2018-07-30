@@ -51,7 +51,7 @@ const systemMap = {
   'onet.pl': 'Onet',
 };
 
-export default class extends PureComponent {
+export default class CheckMailbox extends PureComponent {
   static propTypes = {
     intl: PropTypes.any.isRequired,
     domain: PropTypes.string.isRequired,

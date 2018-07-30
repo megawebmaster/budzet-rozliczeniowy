@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'semantic-ui-react';
 
-export default class extends PureComponent {
+export default class EditField extends PureComponent {
   static propTypes = {
     error: PropTypes.bool.isRequired,
     inputRef: PropTypes.func,

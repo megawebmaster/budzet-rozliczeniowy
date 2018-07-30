@@ -8,7 +8,7 @@ import { DayField } from './day-field';
 import { DescriptionField } from './description-field';
 import { ErrorRow } from './error-row';
 
-export default class extends Component {
+export default class ExpensesRow extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
     debounceTime: PropTypes.number,

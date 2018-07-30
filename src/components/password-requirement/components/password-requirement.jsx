@@ -5,7 +5,7 @@ import { Button, Dimmer, Form, Header, Message, Segment } from 'semantic-ui-reac
 import { Encryptor } from '../../../App.encryption';
 import './password-requirement.css';
 
-export default class extends Component {
+export default class PasswordRequirement extends Component {
   static propTypes = {
     budget: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,

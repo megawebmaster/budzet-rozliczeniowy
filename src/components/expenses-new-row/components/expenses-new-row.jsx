@@ -9,14 +9,13 @@ import './expenses-new-row.css';
 const newRowState = {
   category: '',
   price: '',
-  day: '',
   description: '',
   encryptedPrice: false,
   encryptedDescription: false,
   errors: {},
 };
 
-export default class extends Component {
+export default class ExpensesNewRow extends Component {
   static propTypes = {
     onAddItem: PropTypes.func.isRequired,
     onInputMount: PropTypes.func,
@@ -26,7 +25,7 @@ export default class extends Component {
     onInputMount: (_type, _item, _input) => {},
   };
 
-  state = { ...newRowState, id: Date.now() };
+  state = { ...newRowState, id: Date.now(), day: new Date().getDate().toString() };
 
   componentDidMount() {
     this.container = document.querySelector('div.content-container.expenses');
@@ -42,7 +41,7 @@ export default class extends Component {
 
     jump(this.container, { duration: 300 });
     this.props.onAddItem(this.state);
-    this.setState({ ...newRowState, id: Date.now() });
+    this.setState({ ...newRowState, id: Date.now(), day: new Date().getDate().toString() });
     this.categoryField.focus();
   };
 

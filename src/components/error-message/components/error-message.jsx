@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'semantic-ui-react';
 
-export default class extends PureComponent {
+export default class ErrorMessage extends PureComponent {
   static propTypes = {
     error: PropTypes.string.isRequired,
     intl: PropTypes.object.isRequired,

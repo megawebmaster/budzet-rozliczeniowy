@@ -6,7 +6,7 @@ import jump from 'jump.js';
 
 import './scroll-up.css';
 
-export default class extends PureComponent {
+export default class ScrollUp extends PureComponent {
   static propTypes = {
     anchor: PropTypes.object.isRequired,
     time: PropTypes.number,

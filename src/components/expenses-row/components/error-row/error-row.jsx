@@ -4,7 +4,7 @@ import { Message, TableCell, TableRow } from 'semantic-ui-react';
 
 import './error-row.css';
 
-export default class extends Component {
+export default class ErrorRow extends Component {
   static propTypes = {
     error: PropTypes.string,
   };

@@ -1,3 +1,6 @@
 .input-day.ui.input input {
 	text-align: right;
 }
+.DayPickerInput {
+	width: 100%;
+}

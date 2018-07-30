@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const DebounceField = (WrappedComponent) => class extends Component {
+const DebounceField = (WrappedComponent) => class DebounceField extends Component {
   static propTypes = {
     error: PropTypes.string,
     onChange: PropTypes.func.isRequired,

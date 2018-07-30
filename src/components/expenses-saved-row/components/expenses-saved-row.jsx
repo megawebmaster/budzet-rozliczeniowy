@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { ExpensesRow } from '../../expenses-row';
 
-export default class extends Component {
+export default class ExpensesSavedRow extends Component {
   static propTypes = {
     onSaveItem: PropTypes.func.isRequired,
     onRemoveItem: PropTypes.func.isRequired,
@@ -17,7 +17,7 @@ export default class extends Component {
   state = {
     category: '',
     price: '',
-    day: '',
+    day: new Date().getDate(),
     description: '',
     errors: {},
   };

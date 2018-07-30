@@ -5,7 +5,7 @@ import { Input, Label } from 'semantic-ui-react';
 
 import './price-input.css';
 
-export default class extends Component {
+export default class PriceInput extends Component {
   static propTypes = {
     currencyLabel: PropTypes.string.isRequired,
     disabled: PropTypes.bool,

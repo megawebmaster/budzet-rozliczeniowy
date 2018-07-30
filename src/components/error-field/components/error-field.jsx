@@ -4,7 +4,7 @@ import { Label } from 'semantic-ui-react';
 
 import './error-field.css';
 
-const ErrorField = (WrappedComponent, { validator }) => class extends Component {
+const ErrorField = (WrappedComponent, { validator }) => class ErrorField extends Component {
   static propTypes = {
     error: PropTypes.string,
     errorPosition: PropTypes.oneOf(['left', 'right']),

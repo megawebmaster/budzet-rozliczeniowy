@@ -4,7 +4,7 @@ import { Button, Form, Header, Message, Segment } from 'semantic-ui-react';
 
 import { Authenticator } from '../../../../App.auth';
 
-export default class extends PureComponent {
+export default class LoginForm extends PureComponent {
   static propTypes = {
     error: PropTypes.string,
     intl: PropTypes.any.isRequired,
