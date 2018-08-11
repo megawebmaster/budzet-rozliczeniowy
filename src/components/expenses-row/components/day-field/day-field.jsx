@@ -49,9 +49,9 @@ export default class DayField extends PureComponent {
     if (day < 1 || day > 31) {
       return undefined;
     }
-    const date = new Date();
-    date.setDate(day);
-    return date;
+    const { year, month } = this.props;
+
+    return new Date(year, month - 1, day);
   };
   formatDate = (date) => date.getDate().toString();
 
