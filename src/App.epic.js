@@ -8,6 +8,7 @@ import { categoriesEpic } from './components/categories';
 import { loginEpic } from './components/login';
 import { passwordRequirementEpic } from './components/password-requirement';
 import { configurationEpic } from './components/configuration';
+import { shareBudgetEpic } from './components/share-budget';
 
 export const appEpic = combineEpics(
   routesEpic,
@@ -18,4 +19,5 @@ export const appEpic = combineEpics(
   loginEpic,
   passwordRequirementEpic,
   configurationEpic,
+  shareBudgetEpic,
 );

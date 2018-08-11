@@ -4,6 +4,7 @@ import { Link, NavLink } from 'redux-first-router-link';
 import {
   Button,
   Dropdown,
+  DropdownDivider,
   DropdownHeader,
   DropdownItem,
   DropdownMenu,
@@ -17,6 +18,7 @@ import { ScrollUp } from '../../scroll-up';
 import { RenameBudget } from './rename-budget';
 
 import './header.css';
+import { ShareBudget } from '../../share-budget';
 
 const budgetShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
@@ -94,12 +96,15 @@ export default class Header extends PureComponent {
                     to={{ type: page, payload: { budget: b.slug, year, month } }}
                   />
                 )}
+                <DropdownDivider />
+                <DropdownItem text={this.format('header.new-budget', 'Nowy budżet')} icon="plus" />
               </DropdownMenu>
             </Dropdown>
             <Dropdown item icon="settings" className="settings">
               <DropdownMenu>
                 <DropdownHeader>{this.format('header.budget-settings.header', 'Ustawienia budżetu')}</DropdownHeader>
                 <RenameBudget />
+                <ShareBudget />
               </DropdownMenu>
             </Dropdown>
             <MenuItem name="logout" as={Button} onClick={onLogout}>

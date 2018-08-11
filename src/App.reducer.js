@@ -11,6 +11,7 @@ import { IrregularBudgetReducer } from './components/irregular-budget';
 import { ExpensesReducer } from './components/expenses';
 import { LoginReducer } from './components/login';
 import { PasswordRequirementReducer } from './components/password-requirement';
+import { ShareBudgetReducer } from './components/share-budget';
 
 const history = createHistory();
 const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = connectRoutes(history, routesMap);
@@ -25,4 +26,5 @@ export const appReducer = combineReducers({
   configuration: ConfigurationReducer,
   login: LoginReducer,
   passwordRequirement: PasswordRequirementReducer,
+  shareBudget: ShareBudgetReducer
 });

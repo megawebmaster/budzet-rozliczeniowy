@@ -28,7 +28,6 @@ export default class RenameBudget extends PureComponent {
   };
 
   translate = (id, message) => this.props.intl.formatMessage({ id, defaultMessage: message });
-  format = (id, message, params) => this.props.intl.formatMessage({ id, defaultMessage: message }, params);
 
   updateName = (e) => this.setState({ name: e.target.value });
   open = () => this.setState({ visible: true });
@@ -53,19 +52,19 @@ export default class RenameBudget extends PureComponent {
   }
 
   render() {
-    const { name, saving, visible } = this.state;
-    const { error } = this.props;
+    const { name, visible } = this.state;
+    const { error, saving } = this.props;
 
     return (
       <Modal
         open={visible}
         onClose={this.close}
         size="tiny"
-        trigger={<DropdownItem text={this.format('header.budget-settings.rename', 'Zmień nazwę')} onClick={this.open}/>}
+        trigger={<DropdownItem text={this.translate('header.budget-settings.rename', 'Zmień nazwę')} onClick={this.open}/>}
       >
         <ModalHeader>{this.translate('rename-budget.header', 'Zmiana nazwy budżetu')}</ModalHeader>
         <ModalContent>
-          <Form>
+          <Form onSubmit={this.save}>
             <FormInput
               disabled={saving}
               error={!!error}
@@ -87,7 +86,7 @@ export default class RenameBudget extends PureComponent {
           <Button
             color="green"
             content={this.translate('rename-budget.save-action', 'Zapisz')}
-            icon={!saving ? "save" : null}
+            icon="save"
             onClick={this.save}
             loading={saving}
           />

@@ -1,0 +1,6 @@
+.ui.form .field {
+	margin-bottom: 0;
+}
+.ui.list .list > .item .description.red, .ui.list > .item .description.red {
+	color: #D95C5C;
+}

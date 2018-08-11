@@ -1,4 +1,5 @@
 import { WebAuth } from 'auth0-js';
+import jwtDecode from 'jwt-decode';
 import { Encryptor } from './App.encryption';
 
 const auth = new WebAuth({
@@ -43,6 +44,12 @@ export class Authenticator {
 
   static getToken() {
     return localStorage.getItem('jwt');
+  }
+
+  static getUsername() {
+    const payload = jwtDecode(this.getToken());
+
+    return payload.name;
   }
 
   static isLoggedIn() {

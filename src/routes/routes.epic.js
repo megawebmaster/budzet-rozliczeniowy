@@ -7,6 +7,7 @@ import 'rxjs/add/operator/throttleTime';
 import { updateBudgets, updateYears } from '../components/configuration';
 import { ROUTE_BUDGET, ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from './routes.actions';
 import { Authenticator } from '../App.auth';
+import { Encryptor } from '../App.encryption';
 
 const halfHour = 30*60*1000;
 
@@ -32,6 +33,26 @@ const fetchAvailableYears = (budgetSlug) => (
     method: 'GET'
   }).then(response => response.json())
 );
+const updateBudgetRecipientAction = async (budget, accessId, email) => {
+  const recipient = await Encryptor.encrypt(budget, email);
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/budgets/${budget}`, {
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    headers: new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Authenticator.getToken()}`,
+    }),
+    body: JSON.stringify({ recipient }),
+    method: 'PATCH',
+  });
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error);
+  }
+
+  return result;
+};
 
 const fetchBudgetsEpic = (action$) =>
   action$
@@ -40,6 +61,13 @@ const fetchBudgetsEpic = (action$) =>
     .mergeMap(() => (
       Observable.from(fetchBudgets()).map(updateBudgets)
     ))
+    .do((action) => {
+      action.payload.budgets.forEach(async (budget) => {
+        if ((budget.recipient === null || budget.recipient.length === 0) && Encryptor.hasEncryptionPassword(budget.slug)) {
+          await updateBudgetRecipientAction(budget.slug, budget.id, Authenticator.getUsername());
+        }
+      });
+    })
 ;
 
 // TODO: Figure out how to throttle requests until budget changes
