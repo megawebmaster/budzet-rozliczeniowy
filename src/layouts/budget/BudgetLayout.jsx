@@ -19,7 +19,7 @@ const BudgetLayout = ({ children, year, budget }) => (
   <Fragment>
     <Header year={year} />
     <PasswordRequirement>
-      <Grid padded="horizontally">
+      <Grid padded="horizontally" className="content">
         <GridColumn width={3} className="menu-column">
           <Menu vertical fluid>
             <MenuItem name="irregular" as={NavLink} activeClassName="active"

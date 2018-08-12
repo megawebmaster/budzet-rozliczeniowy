@@ -15,7 +15,7 @@
 	text-decoration: underline;
 }
 .expenses-table-header {
-	top: 0;
+	top: 3.285714286rem;
 	position: -webkit-sticky;
 	position: sticky;
 	z-index: 2;

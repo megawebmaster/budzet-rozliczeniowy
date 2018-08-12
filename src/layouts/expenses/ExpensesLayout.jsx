@@ -18,7 +18,7 @@ const ExpensesLayout = ({ children, budget, year }) => (
   <Fragment>
     <Header year={year} />
     <PasswordRequirement>
-      <Grid padded="horizontally">
+      <Grid padded="horizontally" className="content">
         <GridColumn width={3} className="menu-column">
           <MonthList baseRoute={{ type: ROUTE_EXPENSES_MONTH, payload: { budget, year } }} />
         </GridColumn>

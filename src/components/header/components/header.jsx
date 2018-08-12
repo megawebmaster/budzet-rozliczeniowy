@@ -52,10 +52,9 @@ export default class Header extends PureComponent {
     const { budgets, budget, budgetSlug, years, year, month, page, onLogout } = this.props;
     const payload = { budget: budgetSlug, year, month: month || (new Date()).getMonth() + 1 };
 
-    // TODO: Get rid of surrounding <div> - it messes up HMR
     return (
       <div ref={this.saveRef}>
-        <Menu tabular size="large" className="main-menu">
+        <Menu tabular fixed="top" size="large" className="main-menu">
           <MenuItem header>SimplyBudget</MenuItem>
           <MenuItem name="budget" as={NavLink} activeClassName="active" to={{ type: ROUTE_BUDGET, payload }}>
             {this.translate('header.menu.budget', 'Budżet')}

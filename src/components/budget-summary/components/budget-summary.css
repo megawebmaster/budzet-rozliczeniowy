@@ -1,6 +1,6 @@
 .budget-summary {
-	margin: 0 -1px;
-	padding: 10px 0;
+	margin: -1em -1px 0;
+	padding: 1em 0;
 	bottom: 0;
 	position: -webkit-sticky;
 	position: sticky;

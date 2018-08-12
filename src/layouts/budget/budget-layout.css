@@ -1,3 +1,12 @@
 .ui.attached.item.menu {
 	margin: 0!important;
 }
+.ui.grid.content {
+	padding-top: 4.285714286rem;
+}
+.ui.grid .column.menu-column.menu-column {
+	top: 3.285714286rem;
+	position: -webkit-sticky;
+	position: sticky;
+	align-self: flex-start;
+}
