@@ -13,8 +13,17 @@ import { NotFound } from './views/errors';
 import { MonthBudget } from './views/month-budget';
 import { IrregularBudget } from './views/irregular-budget';
 import { Expenses } from './views/expenses';
+import { AccessBudget } from './views/access-budget';
 
-import { ROUTE_BUDGET_IRREGULAR, ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH, ROUTE_HOME, ROUTE_LOGIN } from './routes';
+import {
+  ROUTE_ACCESS_BUDGET,
+  ROUTE_BUDGET_IRREGULAR,
+  ROUTE_BUDGET_MONTH,
+  ROUTE_EXPENSES_MONTH,
+  ROUTE_HOME,
+  ROUTE_LOGIN
+} from './routes';
+import SimpleLayout from './layouts/simple/simple.layout';
 
 const mapStateToProps = (state) => ({
   page: state.location.type,
@@ -38,6 +47,11 @@ const pages = {
     <ExpensesLayout>
       <Expenses />
     </ExpensesLayout>
+  ),
+  [ROUTE_ACCESS_BUDGET]: () => (
+    <SimpleLayout>
+      <AccessBudget />
+    </SimpleLayout>
   ),
 };
 

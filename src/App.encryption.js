@@ -68,8 +68,13 @@ export class Encryptor {
   }
 
   static async decrypt(budget, encryptedText) {
+    const password = this.getPassword(budget);
+
+    return this.decryptWithPassword(password, encryptedText);
+  }
+
+  static async decryptWithPassword(password, encryptedText) {
     try {
-      const password = this.getPassword(budget);
       const sourceArray = util.b64_to_Uint8Array(encryptedText);
       const plaintext = await openpgp.decrypt({
         message: message.read(sourceArray),

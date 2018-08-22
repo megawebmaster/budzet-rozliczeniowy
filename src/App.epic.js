@@ -9,6 +9,7 @@ import { loginEpic } from './components/login';
 import { passwordRequirementEpic } from './components/password-requirement';
 import { configurationEpic } from './components/configuration';
 import { shareBudgetEpic } from './components/share-budget';
+import { budgetAccessEpic } from './components/budget-access-form';
 
 export const appEpic = combineEpics(
   routesEpic,
@@ -20,4 +21,5 @@ export const appEpic = combineEpics(
   passwordRequirementEpic,
   configurationEpic,
   shareBudgetEpic,
+  budgetAccessEpic,
 );

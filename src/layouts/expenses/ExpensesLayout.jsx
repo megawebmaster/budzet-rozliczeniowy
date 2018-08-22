@@ -16,7 +16,7 @@ const mapStateToProps = (state) => ({
 
 const ExpensesLayout = ({ children, budget, year }) => (
   <Fragment>
-    <Header year={year} />
+    <Header />
     <PasswordRequirement>
       <Grid padded="horizontally" className="content">
         <GridColumn width={3} className="menu-column">

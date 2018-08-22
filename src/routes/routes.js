@@ -1,5 +1,6 @@
 import { redirect } from 'redux-first-router';
 import {
+  ROUTE_ACCESS_BUDGET,
   ROUTE_BUDGET,
   ROUTE_BUDGET_IRREGULAR,
   ROUTE_BUDGET_MONTH,
@@ -33,6 +34,10 @@ export default {
   [ROUTE_LOGIN]: {
     path: '/login'
   },
+  [ROUTE_ACCESS_BUDGET]: {
+    path: '/budget/shared/:budgetAccessId',
+    thunk: loginUnauthenticated
+  },
   [ROUTE_BUDGET]: {
     path: '/:budget/:year/budget',
     thunk: loginUnauthenticated
@@ -48,5 +53,5 @@ export default {
   [ROUTE_EXPENSES_MONTH]: {
     path: '/:budget/:year/expenses/:month',
     thunk: loginUnauthenticated
-  },
+  }
 };

@@ -65,6 +65,8 @@ const messages = {
   'errors.login.access_denied': 'Dostęp zabroniony',
   'errors.budget-share.invalid-email': 'Nieprawidłowy adres e-mail',
   'errors.budget-share.failure': 'Nie udało się wysłać powiadomienia - spróbuj ponownie',
+  'errors.budget-access.invalid-recipient': 'Nie masz dostępu do tego budżetu. Nie możesz go dodać.',
+  'errors.budget-access.name.empty': 'Musisz nadać własną nazwę temu budżetowi',
   'header.budget': 'Budżet: {value}',
   'header.new-budget': 'Nowy budżet',
   'header.menu.budget': 'Budżet',
@@ -74,6 +76,7 @@ const messages = {
   'header.budget-settings.header': 'Ustawienia budżetu',
   'header.budget-settings.rename': 'Zmień nazwę',
   'header.budget-settings.share': 'Udostępnianie',
+  'header.budget-settings.not-selected-budget': 'Nie wybrany',
   'header.logout': 'Wyloguj się',
   'expenses-grid.headers.category': 'Kategoria',
   'expenses-grid.headers.price': 'Cena',
@@ -115,6 +118,9 @@ const messages = {
   'share-budget.access.new': 'Podaj adres e-mail',
   'share-budget.access.add': 'Udostępnij',
   'share-budget.access.remove': 'Usuń',
+  'budget-access-form.budget-name': 'Nazwa budżetu',
+  'budget-access-form.encryption-password': 'Hasło szyfrujące',
+  'budget-access-form.save': 'Zapisz',
   'validation.required': 'Wymagany',
   'validation.day': 'Nieprawidłowy dzień: {value}',
   'validation.price.invalid': 'Nieprawidłowa wartość lub formuła',
@@ -137,6 +143,7 @@ const messages = {
   'views.login.encryption-password': 'Podaj hasło szyfrujące',
   'views.login.encryption-button': 'Odszyfruj dane',
   'views.landing.login': 'Zaloguj się',
+  'views.access-budget.title': 'Zatwierdź udostępniony budżet',
 };
 
 const composeApp = (AppComponent, store, messages) => (

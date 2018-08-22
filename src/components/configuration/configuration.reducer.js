@@ -29,6 +29,8 @@ export const ConfigurationReducer = (state = initialState, action) => {
       return { ...state, years: action.payload.years };
     case Actions.BUDGETS_UPDATED:
       return { ...state, budgets: action.payload.budgets };
+    case Actions.ADD_BUDGET:
+      return { ...state, budgets: [...state.budgets, action.payload.budget] };
     case Actions.RENAME_BUDGET:
       return {
         ...state,
