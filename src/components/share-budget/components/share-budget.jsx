@@ -90,7 +90,7 @@ export default class ShareBudget extends PureComponent {
           <List relaxed="very" divided>
             {members && members.map(member => (
               <ListItem key={member.name}>
-                {budget.userId !== member.userId && (
+                {budget.userId !== member.userId && budget.ownerId !== member.userId && (
                   <ListContent floated="right">
                     <Button
                       icon="remove user"
@@ -101,7 +101,7 @@ export default class ShareBudget extends PureComponent {
                     />
                   </ListContent>
                 )}
-                {budget.userId === member.userId && (
+                {budget.ownerId === member.userId && (
                   <ListContent floated="right">
                     <Button
                       icon="user secret"
