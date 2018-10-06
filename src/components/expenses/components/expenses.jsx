@@ -69,7 +69,7 @@ class Expenses extends Component {
 
 const NavigableExpenses = NavigableTable(Expenses, {
   getItems: ({ rows }) => rows.map(row => row.id),
-  topMargin: 120,
+  topMargin: 0,
   bottomMargin: 0
 });
 export default injectIntl(NavigableExpenses);

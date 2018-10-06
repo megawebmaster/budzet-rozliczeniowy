@@ -39,10 +39,31 @@ export default class ExpensesNewRow extends Component {
       return;
     }
 
-    jump(this.container, { duration: 300 });
     this.props.onAddItem(this.state);
     this.setState({ ...newRowState, id: Date.now(), day: new Date().getDate().toString() });
     this.categoryField.focus();
+
+    let offsetTop = 0;
+    let elem = this.container;
+    do {
+      if (!isNaN(elem.offsetLeft)) {
+        offsetTop += elem.offsetTop;
+      }
+      elem = elem.offsetParent;
+    } while(elem);
+
+    const scrollPosition = window.pageYOffset;
+    if (this.scroll) {
+      this.scroll.cancel();
+      this.scroll = null;
+    }
+
+    const marginTop = 179;
+    const offset = scrollPosition - (marginTop - offsetTop);
+    if (offset > 0) {
+      const durationMultiplier = Math.max(scrollPosition / 400.0, 1);
+      this.scroll = jump(-offset, { duration: durationMultiplier * 300 });
+    }
   };
 
   mountInput = (type, item, input) => {

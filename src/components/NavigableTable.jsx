@@ -63,11 +63,12 @@ const NavigableTable = (WrappedTable, { getItems, bottomMargin = 0, topMargin = 
       this.setState({ hasFooter: true });
     };
     onKeyDown = (e) => {
+      const { hasHeader, hasFooter } = this.state;
       if ([ENTER, ARROW_UP, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
-        if ([ENTER, ARROW_DOWN].indexOf(e.keyCode) !== -1) {
+        if (e.keyCode === ARROW_DOWN || (hasFooter && e.keyCode === ENTER)) {
           this.moveFocus(1);
         }
-        if ([ARROW_UP].indexOf(e.keyCode) !== -1) {
+        if (e.keyCode === ARROW_UP || (hasHeader && e.keyCode === ENTER)) {
           this.moveFocus(-1);
         }
       }
