@@ -1,5 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="MessDetector">
+    <phpmd_settings>
+      <MessDetectorConfiguration tool_path="$PROJECT_DIR$/../WebLINK/api/vendor/bin/phpmd" />
+    </phpmd_settings>
+  </component>
+  <component name="PhpCodeSniffer">
+    <phpcs_settings>
+      <PhpCSConfiguration tool_path="$PROJECT_DIR$/../step.auto.pl/vendor/squizlabs/php_codesniffer/scripts/phpcs" />
+    </phpcs_settings>
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/framework-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/composer" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/doctrine-cache-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/annotations" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/doctrine-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/ocramius/package-versions" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/common" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/ocramius/proxy-manager" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/collections" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/doctrine-migrations-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/willdurand/jsonp-callback-validator" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/willdurand/negotiation" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/orm" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/sensiolabs/security-checker" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/migrations" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/zendframework/zend-code" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/zendframework/zend-eventmanager" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/security-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/dependency-injection" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/validator" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/serializer" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/orm-pack" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/templating" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/routing" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/security" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/property-access" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/flex" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/monolog-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/property-info" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/sensio/framework-extra-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/jdorn/sql-formatter" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/cache" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/serializer-pack" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/debug" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/doctrine-bridge" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/friendsofsymfony/rest-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/http-kernel" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/web-server-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/maker-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/dotenv" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/translation" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/inflector" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/monolog-bridge" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/config" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/cocur/slugify" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/persistence" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/reflection" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/swiftmailer/swiftmailer" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/swiftmailer-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/expertcoder/swiftmailer-send-grid-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/sendgrid/php-http-client" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/sendgrid/sendgrid" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/twig-bundle" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/../budzet-rozliczeniowy-api/vendor/symfony/twig-bridge" />
+    </include_path>
+  </component>
   <component name="PhpInterpreters">
     <interpreters>
       <interpreter home="docker-compose://[/home/adi/Projects/budzet-rozliczeniowy-api/docker-compose.yml]:app/php" id="efa8ff10-b2b9-4d57-93c8-39fc1a439345" name="app" debugger_id="php.debugger.XDebug">
