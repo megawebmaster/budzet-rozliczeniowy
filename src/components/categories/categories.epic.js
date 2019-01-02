@@ -16,7 +16,7 @@ import {
   setCategoryError,
   UPDATE_CATEGORY,
 } from './categories.actions';
-import { budget as budgetSelector, budget, month, year } from '../location';
+import { budget as budgetSelector, budget, month, year as yearSelector } from '../location';
 import { Authenticator } from '../../App.auth';
 import { Encryptor, handleEncryptionError } from '../../App.encryption';
 import { ROUTE_BUDGET_MONTH, ROUTE_EXPENSES_MONTH } from '../../routes/routes.actions';
@@ -230,16 +230,17 @@ const addCategoryEpic = (action$, store) =>
     .mergeMap(action => {
       const state = store.getState();
       const { id, name, type, parentId } = action.payload;
+      const year = yearSelector(state);
       const category = findCategory(state, id, name, type, parentId);
       let promise;
-      if (category) {
+      if (category && (new Date(category.startedAt)).getFullYear() === year) {
         promise = updateCategoryAction(type, budget(state), category.id, {
-          name: name,
-          year: year(state),
+          name,
+          year,
           month: month(state),
         });
       } else {
-        promise = saveCategoryAction(type, name, budget(state), year(state), month(state), parentId);
+        promise = saveCategoryAction(type, name, budget(state), year, month(state), parentId);
       }
 
       return Observable.from(promise)
@@ -260,12 +261,12 @@ const updateCategoryEpic = (action$, store) =>
       if (existingCategory || category.saved) {
         promise = updateCategoryAction(type, budget(state), category.id, {
           ...values,
-          year: year(state),
+          year: yearSelector(state),
           month: month(state)
         });
       } else {
         const parent = (category.parent || { id: null }).id;
-        promise = saveCategoryAction(type, values.name, budget(state), year(state), month(state), parent);
+        promise = saveCategoryAction(type, values.name, budget(state), yearSelector(state), month(state), parent);
       }
 
       return Observable.from(promise)
@@ -282,7 +283,7 @@ const removeCategoryEpic = (action$, store) =>
       const { type, category } = action.payload;
 
       return Observable
-        .from(deleteCategoryAction(type, budget(state), category.id, year(state), month(state)))
+        .from(deleteCategoryAction(type, budget(state), category.id, yearSelector(state), month(state)))
         .catch(error => Observable.of(removeCategoryError(category, error.message)));
     })
 ;
