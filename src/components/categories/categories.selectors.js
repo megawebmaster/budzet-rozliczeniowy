@@ -22,7 +22,7 @@ const accessibleCategories = createSelector(
     );
     const deleted = new Date(category.deletedAt);
     const deletionMatched = category.deletedAt === null || (
-      deleted.getFullYear() >= year && deleted.getMonth() + 1 > month
+      deleted.getFullYear() > year || deleted.getMonth() + 1 > month
     );
 
     return startMatched && deletionMatched;
