@@ -85,6 +85,7 @@ const messages = {
   'expenses-row.category': 'Wybierz kategorię',
   'expenses-row.price': 'Cena',
   'budget.income': 'Przychody',
+  'budget.savings': 'Oszczędności',
   'budget.expenses': 'Wydatki',
   'budget.irregular': 'Nieregularne wydatki',
   'budget.table.add-category': 'Dodaj kategorię',

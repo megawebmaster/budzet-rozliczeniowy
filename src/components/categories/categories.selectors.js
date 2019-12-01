@@ -64,6 +64,10 @@ export const irregularCategories = createSelector(
   [yearCategories],
   (categories) => parseChildrenCategories(categories.filter(category => category.type === 'irregular'))
 );
+export const savingsCategories = createSelector(
+  [accessibleCategories],
+  (categories) => parseChildrenCategories(categories.filter(category => category.type === 'saving'))
+);
 
 export const expenseCategory = createCachedSelector(
   accessibleCategories, categoryId,
