@@ -82,7 +82,8 @@ const NavigableBudget = NavigableTable(Budget, {
     const expensesCategories = [].concat(...props.expensesCategories.map(category =>
       category.children.map(subcategory => subcategory.id)
     ));
-    return incomeCategories.concat(expensesCategories);
+    const savingsCategories = props.savingsCategories.map(category => category.id);
+    return incomeCategories.concat(expensesCategories).concat(savingsCategories);
   },
   bottomMargin: 130
 });
