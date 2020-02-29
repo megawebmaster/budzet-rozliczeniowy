@@ -53,7 +53,6 @@ export class Authenticator {
   }
 
   static isLoggedIn() {
-		return true;
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
 
     return expiresAt !== null && new Date().getTime() < expiresAt;
