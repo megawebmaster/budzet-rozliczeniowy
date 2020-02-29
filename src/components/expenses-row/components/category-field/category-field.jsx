@@ -42,11 +42,13 @@ export default class CategoryField extends Component {
   };
   onChange = (_event, data) => this.props.onChange(data.value);
 
-  renderInput = () => <DropdownSearchInput inputRef={this.mountDropdown} onKeyDown={this.hideOnKeyDown} />;
+  renderInput = () => <DropdownSearchInput onKeyDown={this.hideOnKeyDown} />;
   hideOnKeyDown = (event) => event.stopPropagation();
   mountDropdown = (ref) => {
-    this.dropdown = ref;
-    this.mountInput(this.props, ref);
+    if (ref && ref.searchRef) {
+      this.dropdown = ref.searchRef.current;
+      this.mountInput(this.props, ref.searchRef.current);
+    }
   };
 
   mountInput = (props, input) => {
@@ -73,7 +75,7 @@ export default class CategoryField extends Component {
       <Dropdown fluid selection search className="category-field" value={value} options={categories} upward={upward}
                 openOnFocus={false} placeholder={this.translate('expenses-row.category', 'Wybierz kategorię')}
                 error={error} disabled={disabled} onChange={this.onChange} onOpen={this.onOpen} onClose={this.onClose}
-                searchInput={this.renderInput()}
+                searchInput={this.renderInput()} ref={this.mountDropdown}
       />
     );
   }

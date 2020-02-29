@@ -60,7 +60,9 @@ export default class PriceInput extends Component {
   focus = () => {
     this.setState({ focused: true });
     this.props.onFocus();
-    this.input.inputRef.select();
+    if (this.input) {
+      this.input.select();
+    }
   };
 
   blur = () => {
@@ -93,13 +95,15 @@ export default class PriceInput extends Component {
     const { onMount, decrypted, disabled } = props;
 
     if (!disabled && decrypted && input) {
-      onMount(input);
+      onMount({ inputRef: input });
     }
   };
 
   saveRef = (input) => {
-    this.input = input;
-    this.mountInput(this.props, input);
+    if (input && input.inputRef) {
+      this.input = input.inputRef.current;
+      this.mountInput(this.props, input.inputRef.current);
+    }
   };
 
   componentWillReceiveProps(nextProps) {

@@ -25,13 +25,15 @@ export default class DescriptionField extends Component {
     const { onInputMount, disabled } = props;
 
     if (!disabled && input) {
-      onInputMount(input);
+      onInputMount({ inputRef: input });
     }
   };
 
   saveRef = (input) => {
-    this.input = input;
-    this.mountInput(this.props, input);
+    if (input && input.inputRef) {
+      this.input = input.inputRef.current;
+      this.mountInput(this.props, input.inputRef.current);
+    }
   };
 
   componentWillReceiveProps(nextProps) {
