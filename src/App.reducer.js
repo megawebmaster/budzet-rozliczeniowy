@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { connectRoutes } from 'redux-first-router';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 
 import { routesMap } from './routes';
 
@@ -14,8 +14,10 @@ import { PasswordRequirementReducer } from './components/password-requirement';
 import { ShareBudgetReducer } from './components/share-budget';
 import { BudgetAccessReducer } from './components/budget-access-form';
 
-const history = createHistory();
-const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = connectRoutes(history, routesMap);
+const { reducer: locationReducer, middleware: locationMiddleware, enhancer } = connectRoutes(
+  createBrowserHistory(),
+  routesMap
+);
 
 export { locationMiddleware, enhancer };
 export const appReducer = combineReducers({
