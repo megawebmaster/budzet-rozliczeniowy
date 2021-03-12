@@ -43,7 +43,7 @@
     "react": "16.4.2",
     "react-async-component": "^1.0.2",
     "react-day-picker": "^7.1.10",
-    "react-dev-utils": "^4.2.3",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "16.4.2",
     "react-helmet": "^5.2.1",
     "react-intl": "^2.4.0",
